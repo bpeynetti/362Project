@@ -1,0 +1,73 @@
+#! /vol/ece303/bin/vvp
+:ivl_version "0.9.5 " "(v0_9_5)";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x2699a40 .scope module, "testbench" "testbench" 2 1;
+ .timescale 0 0;
+v0x26bbac0_0 .var "A", 0 0;
+v0x26bbb60_0 .var "B", 0 0;
+v0x26bbc10_0 .var "CIN", 0 0;
+v0x26bbcc0_0 .net "COUT", 0 0, L_0x26bc310; 1 drivers
+v0x26bbda0_0 .net "SUM", 0 0, L_0x26bbf80; 1 drivers
+S_0x2692750 .scope module, "FA" "fa" 2 8, 3 1, S_0x2699a40;
+ .timescale 0 0;
+L_0x26bbe50 .functor XOR 1, v0x26bbac0_0, v0x26bbb60_0, C4<0>, C4<0>;
+L_0x26bbf80 .functor XOR 1, L_0x26bbe50, v0x26bbc10_0, C4<0>, C4<0>;
+L_0x26bc0d0 .functor AND 1, v0x26bbac0_0, v0x26bbb60_0, C4<1>, C4<1>;
+L_0x26bc130 .functor XOR 1, v0x26bbac0_0, v0x26bbb60_0, C4<0>, C4<0>;
+L_0x26bc2b0 .functor AND 1, v0x26bbc10_0, L_0x26bc130, C4<1>, C4<1>;
+L_0x26bc310 .functor XOR 1, L_0x26bc0d0, L_0x26bc2b0, C4<0>, C4<0>;
+v0x2692840_0 .net *"_s0", 0 0, L_0x26bbe50; 1 drivers
+v0x26bb520_0 .net *"_s4", 0 0, L_0x26bc0d0; 1 drivers
+v0x26bb5c0_0 .net *"_s6", 0 0, L_0x26bc130; 1 drivers
+v0x26bb660_0 .net *"_s8", 0 0, L_0x26bc2b0; 1 drivers
+v0x26bb710_0 .net "a", 0 0, v0x26bbac0_0; 1 drivers
+v0x26bb7b0_0 .net "b", 0 0, v0x26bbb60_0; 1 drivers
+v0x26bb890_0 .net "cin", 0 0, v0x26bbc10_0; 1 drivers
+v0x26bb930_0 .alias "cout", 0 0, v0x26bbcc0_0;
+v0x26bba20_0 .alias "sum", 0 0, v0x26bbda0_0;
+    .scope S_0x2699a40;
+T_0 ;
+    %vpi_call 2 11 "$monitor", "A=%b B=%b CIN=%b SUM=%b COUT=%b", v0x26bbac0_0, v0x26bbb60_0, v0x26bbc10_0, v0x26bbda0_0, v0x26bbcc0_0;
+    %delay 0, 0;
+    %set/v v0x26bbac0_0, 0, 1;
+    %set/v v0x26bbb60_0, 0, 1;
+    %set/v v0x26bbc10_0, 0, 1;
+    %delay 1, 0;
+    %set/v v0x26bbac0_0, 0, 1;
+    %set/v v0x26bbb60_0, 0, 1;
+    %set/v v0x26bbc10_0, 1, 1;
+    %delay 1, 0;
+    %set/v v0x26bbac0_0, 0, 1;
+    %set/v v0x26bbb60_0, 1, 1;
+    %set/v v0x26bbc10_0, 0, 1;
+    %delay 1, 0;
+    %set/v v0x26bbac0_0, 0, 1;
+    %set/v v0x26bbb60_0, 1, 1;
+    %set/v v0x26bbc10_0, 1, 1;
+    %delay 1, 0;
+    %set/v v0x26bbac0_0, 1, 1;
+    %set/v v0x26bbb60_0, 0, 1;
+    %set/v v0x26bbc10_0, 0, 1;
+    %delay 1, 0;
+    %set/v v0x26bbac0_0, 1, 1;
+    %set/v v0x26bbb60_0, 0, 1;
+    %set/v v0x26bbc10_0, 1, 1;
+    %delay 1, 0;
+    %set/v v0x26bbac0_0, 1, 1;
+    %set/v v0x26bbb60_0, 1, 1;
+    %set/v v0x26bbc10_0, 0, 1;
+    %delay 1, 0;
+    %set/v v0x26bbac0_0, 1, 1;
+    %set/v v0x26bbb60_0, 1, 1;
+    %set/v v0x26bbc10_0, 1, 1;
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "tests/adder_test.v";
+    "adder.v";
