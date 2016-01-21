@@ -1,0 +1,53 @@
+#! /usr/local/bin/vvp
+:ivl_version "10.0 (stable)" "(v10_0-12-g7b7231c)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0xbdeee0 .scope module, "testbench" "testbench" 2 1;
+ .timescale 0 0;
+v0xbef2a0_0 .var "X", 0 0;
+v0xbef370_0 .var "Y", 0 0;
+v0xbef440_0 .net "Z", 0 0, L_0xbef540;  1 drivers
+S_0xbdf060 .scope module, "XOR_1" "xor_1" 2 6, 3 1 0, S_0xbdeee0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0xbef540 .functor XOR 1, v0xbef2a0_0, v0xbef370_0, C4<0>, C4<0>;
+v0xbb9a20_0 .net "x", 0 0, v0xbef2a0_0;  1 drivers
+v0xbef090_0 .net "y", 0 0, v0xbef370_0;  1 drivers
+v0xbef150_0 .net "z", 0 0, L_0xbef540;  alias, 1 drivers
+    .scope S_0xbdeee0;
+T_0 ;
+    %vpi_call 2 9 "$monitor", "x=%b y=%b z=%b", v0xbef2a0_0, v0xbef370_0, v0xbef440_0 {0 0 0};
+    %delay 0, 0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0xbef2a0_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0xbef370_0, 0, 1;
+    %delay 1, 0;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0xbef2a0_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xbef370_0, 0, 1;
+    %delay 1, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xbef2a0_0, 0, 1;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0xbef370_0, 0, 1;
+    %delay 1, 0;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xbef2a0_0, 0, 1;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0xbef370_0, 0, 1;
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "tests/xor1_test.v";
+    "xor.v";
