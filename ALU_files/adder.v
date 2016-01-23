@@ -7,12 +7,13 @@ module fa(a, b, cin, sum, cout);
 endmodule // fa
 
 // Simple n-bit ripple-carry adder
-module fa_nbit(A, B, cin, Sum, cout);
+module fa_nbit(A, B, cin, Sum, cout, of);
     parameter WIDTH=32;
     input [0:(WIDTH-1)] A, B;
     input cin;
     output [0:(WIDTH-1)] Sum;
     output cout;
+    output of;
 
     // Carry will need WIDTH+1 bits total
     wire [0:(WIDTH)] carry;
@@ -35,16 +36,6 @@ module fa_nbit(A, B, cin, Sum, cout);
     // cin & cout wiring
     assign cout = carry[0];
     assign carry[WIDTH] = cin;
-endmodule
-
-// Simple n-bit adder
-module adder(A, B, cin, Sum, cout);
-    parameter WIDTH=32;
-    input [0:(WIDTH-1)] A, B;
-    input cin;
-    output [0:(WIDTH-1)] Sum;
-    output cout;
-
-		assign {cout, Sum} = A + B + cin;
-
+    assign of = carry[0] ^ carry[1];
+    
 endmodule

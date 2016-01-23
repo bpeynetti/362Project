@@ -12,6 +12,7 @@ module alu(A, B, ctrl, ALUout, zero);
     
     wire [0:4] shift_amount;
     wire add_sub_cout;
+    wire add_of;
     
     and_32 AND_32(A, B, and_out);
     or_32 OR_32(A, B, or_out);
@@ -20,7 +21,7 @@ module alu(A, B, ctrl, ALUout, zero);
     //for now ctrl[3] distinguishes add and subtract
     not_32 NEGATE_B(B, b_not);
     mux2to1_32bit ADD_OR_SUB(B, b_not, ctrl[3], add_sub_in);
-    fa_nbit FULL_ADDER(A, add_sub_in, ctrl[3], add_sub_out, add_sub_cout);
+    fa_nbit FULL_ADDER(A, add_sub_in, ctrl[3], add_sub_out, add_sub_cout,add_of);
     
     //for now ctrl[1] is 1 for arithmetic shift
     //and ctrl[2] is 1 for right shift
