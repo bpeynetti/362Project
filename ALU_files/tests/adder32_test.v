@@ -11,7 +11,7 @@ module testbench;
         .B(B),
         .cin(cin),
         .Sum(Sum),
-        .cout(cout)
+        .cout(cout),
         .of(of)
     );
 
@@ -26,5 +26,6 @@ module testbench;
         #1 A=32'hFFFFFFFF; B=32'h00000001; cin=1'b0;
         #1 A=32'hFFFFFFFF; B=32'h00000000; cin=1'b1;
         #1 A=32'hFFFFFFFE; B=32'h00000001; cin=1'b1;
+        #1 A=32'h7fffffff; B=32'h00000001; cin=1'b0;
     end
 endmodule

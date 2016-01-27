@@ -8,7 +8,7 @@ module extend_1to32(x, sign, Z);
     
     wire bit_to_extend;
     
-    mux1 SELECT_EXTEND(1'b0, x, sign, bit_to_extend);
+    mux_1 SELECT_EXTEND(1'b0, x, sign, bit_to_extend);
     
     assign Z = {bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,bit_to_extend,x};
     

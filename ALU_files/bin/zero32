@@ -1,0 +1,519 @@
+#! /usr/local/bin/vvp
+:ivl_version "10.0 (stable)" "(v10_0-12-g7b7231c)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0x189c3a0 .scope module, "testbench" "testbench" 2 1;
+ .timescale 0 0;
+v0x18dc550_0 .var "X", 0 31;
+v0x18dc610_0 .net "z", 0 0, L_0x18e3060;  1 drivers
+S_0x18b81b0 .scope module, "ZERO_32" "zero" 2 5, 3 2 0, S_0x189c3a0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 32 "X"
+    .port_info 1 /OUTPUT 1 "z"
+P_0x18b77e0 .param/l "WIDTH" 0 3 4, +C4<00000000000000000000000000100000>;
+L_0x18df520 .functor NOT 1, L_0x18df480, C4<0>, C4<0>, C4<0>;
+L_0x18df5e0 .functor AND 1, L_0x18e2fc0, L_0x18df520, C4<1>, C4<1>;
+L_0x18e3060 .functor NOT 1, L_0x18e3370, C4<0>, C4<0>, C4<0>;
+v0x18dbdb0_0 .net "X", 0 31, v0x18dc550_0;  1 drivers
+v0x18dbe90_0 .net *"_s132", 0 0, L_0x18e2fc0;  1 drivers
+v0x18dbf70_0 .net *"_s134", 0 0, L_0x18df480;  1 drivers
+v0x18dc060_0 .net *"_s135", 0 0, L_0x18df520;  1 drivers
+v0x18dc140_0 .net *"_s137", 0 0, L_0x18df5e0;  1 drivers
+v0x18dc270_0 .net *"_s140", 0 0, L_0x18e3370;  1 drivers
+v0x18dc350_0 .net "cascade", 0 32, L_0x18e1b90;  1 drivers
+v0x18dc430_0 .net "z", 0 0, L_0x18e3060;  alias, 1 drivers
+L_0x18dc7e0 .part v0x18dc550_0, 31, 1;
+L_0x18dc920 .part L_0x18e1b90, 32, 1;
+L_0x18dcab0 .part v0x18dc550_0, 30, 1;
+L_0x18dcba0 .part L_0x18e1b90, 31, 1;
+L_0x18dcd80 .part v0x18dc550_0, 29, 1;
+L_0x18dcf00 .part L_0x18e1b90, 30, 1;
+L_0x18dd050 .part v0x18dc550_0, 28, 1;
+L_0x18dd140 .part L_0x18e1b90, 29, 1;
+L_0x18dd360 .part v0x18dc550_0, 27, 1;
+L_0x18dd450 .part L_0x18e1b90, 28, 1;
+L_0x18dd640 .part v0x18dc550_0, 26, 1;
+L_0x18dd6e0 .part L_0x18e1b90, 27, 1;
+L_0x18dd8e0 .part v0x18dc550_0, 25, 1;
+L_0x18ddae0 .part L_0x18e1b90, 26, 1;
+L_0x18ddc00 .part v0x18dc550_0, 24, 1;
+L_0x18ddcf0 .part L_0x18e1b90, 25, 1;
+L_0x18ddfc0 .part v0x18dc550_0, 23, 1;
+L_0x18de060 .part L_0x18e1b90, 24, 1;
+L_0x18de1a0 .part v0x18dc550_0, 22, 1;
+L_0x18de290 .part L_0x18e1b90, 23, 1;
+L_0x18de430 .part v0x18dc550_0, 21, 1;
+L_0x18de520 .part L_0x18e1b90, 22, 1;
+L_0x18de6d0 .part v0x18dc550_0, 20, 1;
+L_0x18de7c0 .part L_0x18e1b90, 21, 1;
+L_0x18de980 .part v0x18dc550_0, 19, 1;
+L_0x18dea20 .part L_0x18e1b90, 20, 1;
+L_0x18dec20 .part v0x18dc550_0, 18, 1;
+L_0x18ded10 .part L_0x18e1b90, 19, 1;
+L_0x18deef0 .part v0x18dc550_0, 17, 1;
+L_0x18dd9d0 .part L_0x18e1b90, 18, 1;
+L_0x18df2f0 .part v0x18dc550_0, 16, 1;
+L_0x18df390 .part L_0x18e1b90, 17, 1;
+L_0x18df690 .part v0x18dc550_0, 15, 1;
+L_0x18df730 .part L_0x18e1b90, 16, 1;
+L_0x18df940 .part v0x18dc550_0, 14, 1;
+L_0x18df9e0 .part L_0x18e1b90, 15, 1;
+L_0x18dfc00 .part v0x18dc550_0, 13, 1;
+L_0x18dfca0 .part L_0x18e1b90, 14, 1;
+L_0x18dfb40 .part v0x18dc550_0, 12, 1;
+L_0x18dff20 .part L_0x18e1b90, 13, 1;
+L_0x18dfe30 .part v0x18dc550_0, 11, 1;
+L_0x18e01b0 .part L_0x18e1b90, 12, 1;
+L_0x18e00b0 .part v0x18dc550_0, 10, 1;
+L_0x18e0450 .part L_0x18e1b90, 11, 1;
+L_0x18e0340 .part v0x18dc550_0, 9, 1;
+L_0x18e0700 .part L_0x18e1b90, 10, 1;
+L_0x18e05e0 .part v0x18dc550_0, 8, 1;
+L_0x18e09c0 .part L_0x18e1b90, 9, 1;
+L_0x18e0860 .part v0x18dc550_0, 7, 1;
+L_0x18e0c40 .part L_0x18e1b90, 8, 1;
+L_0x18e0b50 .part v0x18dc550_0, 6, 1;
+L_0x18e0ed0 .part L_0x18e1b90, 7, 1;
+L_0x18e0dd0 .part v0x18dc550_0, 5, 1;
+L_0x18e1170 .part L_0x18e1b90, 6, 1;
+L_0x18e1060 .part v0x18dc550_0, 4, 1;
+L_0x18e1420 .part L_0x18e1b90, 5, 1;
+L_0x18e1300 .part v0x18dc550_0, 3, 1;
+L_0x18e16e0 .part L_0x18e1b90, 4, 1;
+L_0x18e1580 .part v0x18dc550_0, 2, 1;
+L_0x18e19b0 .part L_0x18e1b90, 3, 1;
+L_0x18e1870 .part v0x18dc550_0, 1, 1;
+L_0x18defe0 .part L_0x18e1b90, 2, 1;
+L_0x18df120 .part v0x18dc550_0, 0, 1;
+L_0x18e1aa0 .part L_0x18e1b90, 1, 1;
+LS_0x18e1b90_0_0 .concat8 [ 1 1 1 1], L_0x18df080, L_0x18e17d0, L_0x18e1510, L_0x18e1260;
+LS_0x18e1b90_0_4 .concat8 [ 1 1 1 1], L_0x18e0fc0, L_0x18e0d30, L_0x18e0ab0, L_0x18e07f0;
+LS_0x18e1b90_0_8 .concat8 [ 1 1 1 1], L_0x18e0540, L_0x18e02a0, L_0x18e0010, L_0x18dfd90;
+LS_0x18e1b90_0_12 .concat8 [ 1 1 1 1], L_0x18dfad0, L_0x18df820, L_0x18ddde0, L_0x18df1f0;
+LS_0x18e1b90_0_16 .concat8 [ 1 1 1 1], L_0x18dee00, L_0x18deb10, L_0x18de8b0, L_0x18de610;
+LS_0x18e1b90_0_20 .concat8 [ 1 1 1 1], L_0x18de380, L_0x18de100, L_0x18dd230, L_0x18ddef0;
+LS_0x18e1b90_0_24 .concat8 [ 1 1 1 1], L_0x18dd7d0, L_0x18dd840, L_0x18dd5a0, L_0x18dd2c0;
+LS_0x18e1b90_0_28 .concat8 [ 1 1 1 1], L_0x18dcfe0, L_0x18dcce0, L_0x18dca10, L_0x18dc6e0;
+LS_0x18e1b90_0_32 .concat8 [ 1 0 0 0], L_0x18df5e0;
+LS_0x18e1b90_1_0 .concat8 [ 4 4 4 4], LS_0x18e1b90_0_0, LS_0x18e1b90_0_4, LS_0x18e1b90_0_8, LS_0x18e1b90_0_12;
+LS_0x18e1b90_1_4 .concat8 [ 4 4 4 4], LS_0x18e1b90_0_16, LS_0x18e1b90_0_20, LS_0x18e1b90_0_24, LS_0x18e1b90_0_28;
+LS_0x18e1b90_1_8 .concat8 [ 1 0 0 0], LS_0x18e1b90_0_32;
+L_0x18e1b90 .concat8 [ 16 16 1 0], LS_0x18e1b90_1_0, LS_0x18e1b90_1_4, LS_0x18e1b90_1_8;
+L_0x18e2fc0 .part v0x18dc550_0, 31, 1;
+L_0x18df480 .part v0x18dc550_0, 31, 1;
+L_0x18e3370 .part L_0x18e1b90, 0, 1;
+S_0x18ac800 .scope generate, "CASCADE_ZERO[0]" "CASCADE_ZERO[0]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18b5ed0 .param/l "i" 0 3 16, +C4<00>;
+S_0x18ac470 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18ac800;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dc6e0 .functor OR 1, L_0x18dc7e0, L_0x18dc920, C4<0>, C4<0>;
+v0x189d120_0 .net "x", 0 0, L_0x18dc7e0;  1 drivers
+v0x18cc690_0 .net "y", 0 0, L_0x18dc920;  1 drivers
+v0x18cc750_0 .net "z", 0 0, L_0x18dc6e0;  1 drivers
+S_0x18cc8a0 .scope generate, "CASCADE_ZERO[1]" "CASCADE_ZERO[1]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18cca90 .param/l "i" 0 3 16, +C4<01>;
+S_0x18ccb50 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18cc8a0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dca10 .functor OR 1, L_0x18dcab0, L_0x18dcba0, C4<0>, C4<0>;
+v0x18ccd90_0 .net "x", 0 0, L_0x18dcab0;  1 drivers
+v0x18cce70_0 .net "y", 0 0, L_0x18dcba0;  1 drivers
+v0x18ccf30_0 .net "z", 0 0, L_0x18dca10;  1 drivers
+S_0x18cd080 .scope generate, "CASCADE_ZERO[2]" "CASCADE_ZERO[2]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18cd2a0 .param/l "i" 0 3 16, +C4<010>;
+S_0x18cd340 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18cd080;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dcce0 .functor OR 1, L_0x18dcd80, L_0x18dcf00, C4<0>, C4<0>;
+v0x18cd580_0 .net "x", 0 0, L_0x18dcd80;  1 drivers
+v0x18cd660_0 .net "y", 0 0, L_0x18dcf00;  1 drivers
+v0x18cd720_0 .net "z", 0 0, L_0x18dcce0;  1 drivers
+S_0x18cd870 .scope generate, "CASCADE_ZERO[3]" "CASCADE_ZERO[3]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18cda60 .param/l "i" 0 3 16, +C4<011>;
+S_0x18cdb20 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18cd870;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dcfe0 .functor OR 1, L_0x18dd050, L_0x18dd140, C4<0>, C4<0>;
+v0x18cdd60_0 .net "x", 0 0, L_0x18dd050;  1 drivers
+v0x18cde40_0 .net "y", 0 0, L_0x18dd140;  1 drivers
+v0x18cdf00_0 .net "z", 0 0, L_0x18dcfe0;  1 drivers
+S_0x18ce050 .scope generate, "CASCADE_ZERO[4]" "CASCADE_ZERO[4]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18ce290 .param/l "i" 0 3 16, +C4<0100>;
+S_0x18ce350 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18ce050;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dd2c0 .functor OR 1, L_0x18dd360, L_0x18dd450, C4<0>, C4<0>;
+v0x18ce590_0 .net "x", 0 0, L_0x18dd360;  1 drivers
+v0x18ce670_0 .net "y", 0 0, L_0x18dd450;  1 drivers
+v0x18ce730_0 .net "z", 0 0, L_0x18dd2c0;  1 drivers
+S_0x18ce850 .scope generate, "CASCADE_ZERO[5]" "CASCADE_ZERO[5]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18cea40 .param/l "i" 0 3 16, +C4<0101>;
+S_0x18ceb00 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18ce850;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dd5a0 .functor OR 1, L_0x18dd640, L_0x18dd6e0, C4<0>, C4<0>;
+v0x18ced40_0 .net "x", 0 0, L_0x18dd640;  1 drivers
+v0x18cee20_0 .net "y", 0 0, L_0x18dd6e0;  1 drivers
+v0x18ceee0_0 .net "z", 0 0, L_0x18dd5a0;  1 drivers
+S_0x18cf030 .scope generate, "CASCADE_ZERO[6]" "CASCADE_ZERO[6]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18cf220 .param/l "i" 0 3 16, +C4<0110>;
+S_0x18cf2e0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18cf030;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dd840 .functor OR 1, L_0x18dd8e0, L_0x18ddae0, C4<0>, C4<0>;
+v0x18cf520_0 .net "x", 0 0, L_0x18dd8e0;  1 drivers
+v0x18cf600_0 .net "y", 0 0, L_0x18ddae0;  1 drivers
+v0x18cf6c0_0 .net "z", 0 0, L_0x18dd840;  1 drivers
+S_0x18cf810 .scope generate, "CASCADE_ZERO[7]" "CASCADE_ZERO[7]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18cfa00 .param/l "i" 0 3 16, +C4<0111>;
+S_0x18cfac0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18cf810;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dd7d0 .functor OR 1, L_0x18ddc00, L_0x18ddcf0, C4<0>, C4<0>;
+v0x18cfd00_0 .net "x", 0 0, L_0x18ddc00;  1 drivers
+v0x18cfde0_0 .net "y", 0 0, L_0x18ddcf0;  1 drivers
+v0x18cfea0_0 .net "z", 0 0, L_0x18dd7d0;  1 drivers
+S_0x18cfff0 .scope generate, "CASCADE_ZERO[8]" "CASCADE_ZERO[8]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18ce240 .param/l "i" 0 3 16, +C4<01000>;
+S_0x18d02e0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18cfff0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18ddef0 .functor OR 1, L_0x18ddfc0, L_0x18de060, C4<0>, C4<0>;
+v0x18d0520_0 .net "x", 0 0, L_0x18ddfc0;  1 drivers
+v0x18d0600_0 .net "y", 0 0, L_0x18de060;  1 drivers
+v0x18d06c0_0 .net "z", 0 0, L_0x18ddef0;  1 drivers
+S_0x18d0810 .scope generate, "CASCADE_ZERO[9]" "CASCADE_ZERO[9]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d0a00 .param/l "i" 0 3 16, +C4<01001>;
+S_0x18d0ac0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d0810;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dd230 .functor OR 1, L_0x18de1a0, L_0x18de290, C4<0>, C4<0>;
+v0x18d0d00_0 .net "x", 0 0, L_0x18de1a0;  1 drivers
+v0x18d0de0_0 .net "y", 0 0, L_0x18de290;  1 drivers
+v0x18d0ea0_0 .net "z", 0 0, L_0x18dd230;  1 drivers
+S_0x18d0ff0 .scope generate, "CASCADE_ZERO[10]" "CASCADE_ZERO[10]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d11e0 .param/l "i" 0 3 16, +C4<01010>;
+S_0x18d12a0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d0ff0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18de100 .functor OR 1, L_0x18de430, L_0x18de520, C4<0>, C4<0>;
+v0x18d14e0_0 .net "x", 0 0, L_0x18de430;  1 drivers
+v0x18d15c0_0 .net "y", 0 0, L_0x18de520;  1 drivers
+v0x18d1680_0 .net "z", 0 0, L_0x18de100;  1 drivers
+S_0x18d17d0 .scope generate, "CASCADE_ZERO[11]" "CASCADE_ZERO[11]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d19c0 .param/l "i" 0 3 16, +C4<01011>;
+S_0x18d1a80 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d17d0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18de380 .functor OR 1, L_0x18de6d0, L_0x18de7c0, C4<0>, C4<0>;
+v0x18d1cc0_0 .net "x", 0 0, L_0x18de6d0;  1 drivers
+v0x18d1da0_0 .net "y", 0 0, L_0x18de7c0;  1 drivers
+v0x18d1e60_0 .net "z", 0 0, L_0x18de380;  1 drivers
+S_0x18d1fb0 .scope generate, "CASCADE_ZERO[12]" "CASCADE_ZERO[12]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d21a0 .param/l "i" 0 3 16, +C4<01100>;
+S_0x18d2260 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d1fb0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18de610 .functor OR 1, L_0x18de980, L_0x18dea20, C4<0>, C4<0>;
+v0x18d24a0_0 .net "x", 0 0, L_0x18de980;  1 drivers
+v0x18d2580_0 .net "y", 0 0, L_0x18dea20;  1 drivers
+v0x18d2640_0 .net "z", 0 0, L_0x18de610;  1 drivers
+S_0x18d2790 .scope generate, "CASCADE_ZERO[13]" "CASCADE_ZERO[13]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d2980 .param/l "i" 0 3 16, +C4<01101>;
+S_0x18d2a40 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d2790;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18de8b0 .functor OR 1, L_0x18dec20, L_0x18ded10, C4<0>, C4<0>;
+v0x18d2c80_0 .net "x", 0 0, L_0x18dec20;  1 drivers
+v0x18d2d60_0 .net "y", 0 0, L_0x18ded10;  1 drivers
+v0x18d2e20_0 .net "z", 0 0, L_0x18de8b0;  1 drivers
+S_0x18d2f70 .scope generate, "CASCADE_ZERO[14]" "CASCADE_ZERO[14]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d3160 .param/l "i" 0 3 16, +C4<01110>;
+S_0x18d3220 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d2f70;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18deb10 .functor OR 1, L_0x18deef0, L_0x18dd9d0, C4<0>, C4<0>;
+v0x18d3460_0 .net "x", 0 0, L_0x18deef0;  1 drivers
+v0x18d3540_0 .net "y", 0 0, L_0x18dd9d0;  1 drivers
+v0x18d3600_0 .net "z", 0 0, L_0x18deb10;  1 drivers
+S_0x18d3750 .scope generate, "CASCADE_ZERO[15]" "CASCADE_ZERO[15]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d3940 .param/l "i" 0 3 16, +C4<01111>;
+S_0x18d3a00 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d3750;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dee00 .functor OR 1, L_0x18df2f0, L_0x18df390, C4<0>, C4<0>;
+v0x18d3c40_0 .net "x", 0 0, L_0x18df2f0;  1 drivers
+v0x18d3d20_0 .net "y", 0 0, L_0x18df390;  1 drivers
+v0x18d3de0_0 .net "z", 0 0, L_0x18dee00;  1 drivers
+S_0x18d3f30 .scope generate, "CASCADE_ZERO[16]" "CASCADE_ZERO[16]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d01e0 .param/l "i" 0 3 16, +C4<010000>;
+S_0x18d4280 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d3f30;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18df1f0 .functor OR 1, L_0x18df690, L_0x18df730, C4<0>, C4<0>;
+v0x18d44a0_0 .net "x", 0 0, L_0x18df690;  1 drivers
+v0x18d4580_0 .net "y", 0 0, L_0x18df730;  1 drivers
+v0x18d4640_0 .net "z", 0 0, L_0x18df1f0;  1 drivers
+S_0x18d4790 .scope generate, "CASCADE_ZERO[17]" "CASCADE_ZERO[17]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d4980 .param/l "i" 0 3 16, +C4<010001>;
+S_0x18d4a40 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d4790;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18ddde0 .functor OR 1, L_0x18df940, L_0x18df9e0, C4<0>, C4<0>;
+v0x18d4c80_0 .net "x", 0 0, L_0x18df940;  1 drivers
+v0x18d4d60_0 .net "y", 0 0, L_0x18df9e0;  1 drivers
+v0x18d4e20_0 .net "z", 0 0, L_0x18ddde0;  1 drivers
+S_0x18d4f70 .scope generate, "CASCADE_ZERO[18]" "CASCADE_ZERO[18]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d5160 .param/l "i" 0 3 16, +C4<010010>;
+S_0x18d5220 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d4f70;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18df820 .functor OR 1, L_0x18dfc00, L_0x18dfca0, C4<0>, C4<0>;
+v0x18d5460_0 .net "x", 0 0, L_0x18dfc00;  1 drivers
+v0x18d5540_0 .net "y", 0 0, L_0x18dfca0;  1 drivers
+v0x18d5600_0 .net "z", 0 0, L_0x18df820;  1 drivers
+S_0x18d5750 .scope generate, "CASCADE_ZERO[19]" "CASCADE_ZERO[19]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d5940 .param/l "i" 0 3 16, +C4<010011>;
+S_0x18d5a00 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d5750;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dfad0 .functor OR 1, L_0x18dfb40, L_0x18dff20, C4<0>, C4<0>;
+v0x18d5c40_0 .net "x", 0 0, L_0x18dfb40;  1 drivers
+v0x18d5d20_0 .net "y", 0 0, L_0x18dff20;  1 drivers
+v0x18d5de0_0 .net "z", 0 0, L_0x18dfad0;  1 drivers
+S_0x18d5f30 .scope generate, "CASCADE_ZERO[20]" "CASCADE_ZERO[20]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d6120 .param/l "i" 0 3 16, +C4<010100>;
+S_0x18d61e0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d5f30;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18dfd90 .functor OR 1, L_0x18dfe30, L_0x18e01b0, C4<0>, C4<0>;
+v0x18d6420_0 .net "x", 0 0, L_0x18dfe30;  1 drivers
+v0x18d6500_0 .net "y", 0 0, L_0x18e01b0;  1 drivers
+v0x18d65c0_0 .net "z", 0 0, L_0x18dfd90;  1 drivers
+S_0x18d6710 .scope generate, "CASCADE_ZERO[21]" "CASCADE_ZERO[21]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d6900 .param/l "i" 0 3 16, +C4<010101>;
+S_0x18d69c0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d6710;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18e0010 .functor OR 1, L_0x18e00b0, L_0x18e0450, C4<0>, C4<0>;
+v0x18d6c00_0 .net "x", 0 0, L_0x18e00b0;  1 drivers
+v0x18d6ce0_0 .net "y", 0 0, L_0x18e0450;  1 drivers
+v0x18d6da0_0 .net "z", 0 0, L_0x18e0010;  1 drivers
+S_0x18d6ef0 .scope generate, "CASCADE_ZERO[22]" "CASCADE_ZERO[22]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d70e0 .param/l "i" 0 3 16, +C4<010110>;
+S_0x18d71a0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d6ef0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18e02a0 .functor OR 1, L_0x18e0340, L_0x18e0700, C4<0>, C4<0>;
+v0x18d73e0_0 .net "x", 0 0, L_0x18e0340;  1 drivers
+v0x18d74c0_0 .net "y", 0 0, L_0x18e0700;  1 drivers
+v0x18d7580_0 .net "z", 0 0, L_0x18e02a0;  1 drivers
+S_0x18d76d0 .scope generate, "CASCADE_ZERO[23]" "CASCADE_ZERO[23]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d78c0 .param/l "i" 0 3 16, +C4<010111>;
+S_0x18d7980 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d76d0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18e0540 .functor OR 1, L_0x18e05e0, L_0x18e09c0, C4<0>, C4<0>;
+v0x18d7bc0_0 .net "x", 0 0, L_0x18e05e0;  1 drivers
+v0x18d7ca0_0 .net "y", 0 0, L_0x18e09c0;  1 drivers
+v0x18d7d60_0 .net "z", 0 0, L_0x18e0540;  1 drivers
+S_0x18d7eb0 .scope generate, "CASCADE_ZERO[24]" "CASCADE_ZERO[24]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d80a0 .param/l "i" 0 3 16, +C4<011000>;
+S_0x18d8160 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d7eb0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18e07f0 .functor OR 1, L_0x18e0860, L_0x18e0c40, C4<0>, C4<0>;
+v0x18d83a0_0 .net "x", 0 0, L_0x18e0860;  1 drivers
+v0x18d8480_0 .net "y", 0 0, L_0x18e0c40;  1 drivers
+v0x18d8540_0 .net "z", 0 0, L_0x18e07f0;  1 drivers
+S_0x18d8690 .scope generate, "CASCADE_ZERO[25]" "CASCADE_ZERO[25]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d8880 .param/l "i" 0 3 16, +C4<011001>;
+S_0x18d8940 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d8690;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18e0ab0 .functor OR 1, L_0x18e0b50, L_0x18e0ed0, C4<0>, C4<0>;
+v0x18d8b80_0 .net "x", 0 0, L_0x18e0b50;  1 drivers
+v0x18d8c60_0 .net "y", 0 0, L_0x18e0ed0;  1 drivers
+v0x18d8d20_0 .net "z", 0 0, L_0x18e0ab0;  1 drivers
+S_0x18d8e70 .scope generate, "CASCADE_ZERO[26]" "CASCADE_ZERO[26]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d9060 .param/l "i" 0 3 16, +C4<011010>;
+S_0x18d9120 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d8e70;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18e0d30 .functor OR 1, L_0x18e0dd0, L_0x18e1170, C4<0>, C4<0>;
+v0x18d9360_0 .net "x", 0 0, L_0x18e0dd0;  1 drivers
+v0x18d9440_0 .net "y", 0 0, L_0x18e1170;  1 drivers
+v0x18d9500_0 .net "z", 0 0, L_0x18e0d30;  1 drivers
+S_0x18d9650 .scope generate, "CASCADE_ZERO[27]" "CASCADE_ZERO[27]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18d9840 .param/l "i" 0 3 16, +C4<011011>;
+S_0x18d9900 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d9650;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18e0fc0 .functor OR 1, L_0x18e1060, L_0x18e1420, C4<0>, C4<0>;
+v0x18d9b40_0 .net "x", 0 0, L_0x18e1060;  1 drivers
+v0x18d9c20_0 .net "y", 0 0, L_0x18e1420;  1 drivers
+v0x18d9ce0_0 .net "z", 0 0, L_0x18e0fc0;  1 drivers
+S_0x18d9e30 .scope generate, "CASCADE_ZERO[28]" "CASCADE_ZERO[28]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18da020 .param/l "i" 0 3 16, +C4<011100>;
+S_0x18da0e0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18d9e30;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18e1260 .functor OR 1, L_0x18e1300, L_0x18e16e0, C4<0>, C4<0>;
+v0x18da320_0 .net "x", 0 0, L_0x18e1300;  1 drivers
+v0x18da400_0 .net "y", 0 0, L_0x18e16e0;  1 drivers
+v0x18da4c0_0 .net "z", 0 0, L_0x18e1260;  1 drivers
+S_0x18da610 .scope generate, "CASCADE_ZERO[29]" "CASCADE_ZERO[29]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18da800 .param/l "i" 0 3 16, +C4<011101>;
+S_0x18da8c0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18da610;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18e1510 .functor OR 1, L_0x18e1580, L_0x18e19b0, C4<0>, C4<0>;
+v0x18dab00_0 .net "x", 0 0, L_0x18e1580;  1 drivers
+v0x18dabe0_0 .net "y", 0 0, L_0x18e19b0;  1 drivers
+v0x18daca0_0 .net "z", 0 0, L_0x18e1510;  1 drivers
+S_0x18dadf0 .scope generate, "CASCADE_ZERO[30]" "CASCADE_ZERO[30]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18dafe0 .param/l "i" 0 3 16, +C4<011110>;
+S_0x18db0a0 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18dadf0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18e17d0 .functor OR 1, L_0x18e1870, L_0x18defe0, C4<0>, C4<0>;
+v0x18db2e0_0 .net "x", 0 0, L_0x18e1870;  1 drivers
+v0x18db3c0_0 .net "y", 0 0, L_0x18defe0;  1 drivers
+v0x18db480_0 .net "z", 0 0, L_0x18e17d0;  1 drivers
+S_0x18db5d0 .scope generate, "CASCADE_ZERO[31]" "CASCADE_ZERO[31]" 3 16, 3 16 0, S_0x18b81b0;
+ .timescale 0 0;
+P_0x18db7c0 .param/l "i" 0 3 16, +C4<011111>;
+S_0x18db880 .scope module, "OR_1" "or_1" 3 17, 4 1 0, S_0x18db5d0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 1 "x"
+    .port_info 1 /INPUT 1 "y"
+    .port_info 2 /OUTPUT 1 "z"
+L_0x18df080 .functor OR 1, L_0x18df120, L_0x18e1aa0, C4<0>, C4<0>;
+v0x18dbac0_0 .net "x", 0 0, L_0x18df120;  1 drivers
+v0x18dbba0_0 .net "y", 0 0, L_0x18e1aa0;  1 drivers
+v0x18dbc60_0 .net "z", 0 0, L_0x18df080;  1 drivers
+    .scope S_0x189c3a0;
+T_0 ;
+    %vpi_call 2 8 "$monitor", "x=%h z=%h", v0x18dc550_0, v0x18dc610_0 {0 0 0};
+    %delay 0, 0;
+    %pushi/vec4 2868843263, 0, 32;
+    %store/vec4 v0x18dc550_0, 0, 32;
+    %delay 1, 0;
+    %pushi/vec4 4278190335, 0, 32;
+    %store/vec4 v0x18dc550_0, 0, 32;
+    %delay 1, 0;
+    %pushi/vec4 16711935, 0, 32;
+    %store/vec4 v0x18dc550_0, 0, 32;
+    %delay 1, 0;
+    %pushi/vec4 0, 0, 32;
+    %store/vec4 v0x18dc550_0, 0, 32;
+    %delay 1, 0;
+    %pushi/vec4 2147483648, 0, 32;
+    %store/vec4 v0x18dc550_0, 0, 32;
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 5;
+    "N/A";
+    "<interactive>";
+    "tests/zero32_test.v";
+    "src/zero.v";
+    "src/or.v";

@@ -10,6 +10,7 @@ module testbench;
         #0 X = 32'hAAFF12FF; 
         #1 X = 32'hFF0000FF;
         #1 X = 32'h00FF00FF; 
+        #1 X = 32'h80000000;
 
 
     end
