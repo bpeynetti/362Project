@@ -6,26 +6,26 @@
 :vpi_module "vhdl_sys";
 :vpi_module "v2005_math";
 :vpi_module "va_math";
-S_0x1f4f110 .scope module, "testbench" "testbench" 2 1;
+S_0x186c110 .scope module, "testbench" "testbench" 2 1;
  .timescale 0 0;
-v0x1f5f2e0_0 .var "X", 0 0;
-v0x1f5f3b0_0 .net "Z", 0 0, L_0x1f5f480;  1 drivers
-S_0x1f4f290 .scope module, "NOT_1" "not_1" 2 5, 3 1 0, S_0x1f4f110;
+v0x187c2e0_0 .var "X", 0 0;
+v0x187c3b0_0 .net "Z", 0 0, L_0x187c480;  1 drivers
+S_0x186c290 .scope module, "NOT_1" "not_1" 2 5, 3 1 0, S_0x186c110;
  .timescale 0 0;
     .port_info 0 /INPUT 1 "x"
     .port_info 1 /OUTPUT 1 "z"
-L_0x1f5f480 .functor NOT 1, v0x1f5f2e0_0, C4<0>, C4<0>, C4<0>;
-v0x1f2b690_0 .net "x", 0 0, v0x1f5f2e0_0;  1 drivers
-v0x1f5f1c0_0 .net "z", 0 0, L_0x1f5f480;  alias, 1 drivers
-    .scope S_0x1f4f110;
+L_0x187c480 .functor NOT 1, v0x187c2e0_0, C4<0>, C4<0>, C4<0>;
+v0x1848690_0 .net "x", 0 0, v0x187c2e0_0;  1 drivers
+v0x187c1c0_0 .net "z", 0 0, L_0x187c480;  alias, 1 drivers
+    .scope S_0x186c110;
 T_0 ;
-    %vpi_call 2 8 "$monitor", "x=%b z=%b", v0x1f5f2e0_0, v0x1f5f3b0_0 {0 0 0};
+    %vpi_call 2 8 "$monitor", "x=%b z=%b", v0x187c2e0_0, v0x187c3b0_0 {0 0 0};
     %delay 0, 0;
     %pushi/vec4 0, 0, 1;
-    %store/vec4 v0x1f5f2e0_0, 0, 1;
+    %store/vec4 v0x187c2e0_0, 0, 1;
     %delay 1, 0;
     %pushi/vec4 1, 0, 1;
-    %store/vec4 v0x1f5f2e0_0, 0, 1;
+    %store/vec4 v0x187c2e0_0, 0, 1;
     %end;
     .thread T_0;
 # The file index is used to find the file name in the following table.

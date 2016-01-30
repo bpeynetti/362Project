@@ -45,4 +45,4 @@ setter:
 	iverilog -o ./bin/setter -s testbench src/or.v src/mux.v src/not.v src/and.v src/xor.v src/adder.v src/zero.v src/setter.v tests/setter_test.v
 
 alu:
-	iverilog -o ./bin/alu -s testbench src/and.v src/or.v src/xor.v src/not.v src/mux.v src/shift.v src/zero.v src/extend_1to32.v tests/alu_test.v
+	iverilog -o ./bin/alu -s testbench src/*.v tests/alu_test.v

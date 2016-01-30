@@ -1,28 +1,28 @@
 import random
 
-# fileName = "ALU_test.v"
+fileName = "ALU_test.v"
 
 txt = """module testbench;
     
     reg [0:31] A, B;
     reg [0:3] ctrl;
     wire [0:31] ALUout;
-    wire zero,of;
+    wire zero;
     
-    alu ALU(A, B, ctrl, ALUout, zero,of);
+    alu ALU((A, B, ctrl, ALUout, zero);
     
     initial begin
-        $monitor("%h,%h,%b,%h,%h,%b",A,B,ctrl,ALUout,zero,of);
+        $monitor("A=%h, B=%h, ctrl=%h, ALUout=%h, zero=%h",A,B,ctrl,ALUout,zero);
 """
 tabs = 2
 
 
 
-for i in range(200):
+for i in range(100):
     
     bit32 = pow(2,32)-1
     bit4 = pow(2,4)-1
-    
+    f
     A = hex(random.randrange(bit32))[2:]
     A = '0'*(8-len(A)) + A
     B = hex(random.randrange(bit32))[2:]

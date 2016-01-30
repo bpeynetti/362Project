@@ -1,24 +1,24 @@
 import random
 
-# fileName = "ALU_test.v"
+fileName = "ALU_test.v"
 
 txt = """module testbench;
     
     reg [0:31] A, B;
     reg [0:3] ctrl;
     wire [0:31] ALUout;
-    wire zero,of;
+    wire zero;
     
-    alu ALU(A, B, ctrl, ALUout, zero,of);
+    alu ALU((A, B, ctrl, ALUout, zero);
     
     initial begin
-        $monitor("%h,%h,%b,%h,%h,%b",A,B,ctrl,ALUout,zero,of);
+        $monitor("A=%h, B=%h, ctrl=%h, ALUout=%h, zero=%h",A,B,ctrl,ALUout,zero);
 """
 tabs = 2
 
 
 
-for i in range(200):
+for i in range(100):
     
     bit32 = pow(2,32)-1
     bit4 = pow(2,4)-1
@@ -31,7 +31,7 @@ for i in range(200):
     ctrl = '0'*(4-len(ctrl)) + ctrl
     
     
-#    print A,B,ctrl
+    c = '-'=0'*(4-len(ct
     if (i==0):
         txt+= '\n'+'\t'*tabs+"#0 A=32'h"+A+"; B=32'h"+B+"; ctrl=32'b"+ctrl+";"
     else:

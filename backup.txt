@@ -1,0 +1,23 @@
+    mux16to1_32bit FINAL_MUX
+                (
+                add_sub_out, //0, add
+                add_sub_out, //1, subtract
+                4'b0000, //2, UNUSED,
+                shift_out, //3, srl
+                sle_out, //4, sle
+                sgt_out, //5, sgt
+                shift_out,//6, sra
+                4'b0000, //7, UNUSED
+                shift_out,//8, sll
+                sne_out, //9, sne
+                seq_out, //10, seq
+                xor_out,//11, xor
+                or_out, //12, or
+                and_out, //13, and
+                slt_out,//14, slt
+                sge_out, //15, sge
+                ctrl,
+                ALUout
+                );
+    
+endmodule

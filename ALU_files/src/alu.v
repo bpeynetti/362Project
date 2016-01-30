@@ -1,8 +1,9 @@
-module alu(A, B, ctrl, ALUout, zero);
+module alu(A, B, ctrl, ALUout, zero,of);
     input [0:31] A, B;
     input [0:3] ctrl;
     output [0:31] ALUout;
     output zero;
+    output of;
     
     //need a wire 
     wire [0:31] and_out, or_out, xor_out;
@@ -14,6 +15,8 @@ module alu(A, B, ctrl, ALUout, zero);
     wire [0:4] shift_amount;
     wire add_sub_cout;
     wire add_of;
+    
+    assign of = add_of;
     
     and_32 AND_32(A, B, and_out);
     or_32 OR_32(A, B, or_out);
@@ -41,13 +44,25 @@ module alu(A, B, ctrl, ALUout, zero);
     extend_1to32 EXTEND_SGT(sgt_1bit, 1'b0, sgt_out);
     
     mux16to1_32bit FINAL_MUX
-                (add_sub_out, add_sub_out, 
-                    slt_out, sle_out, sgt_out, 
-                    sge_out, and_out, shift_out, 
-                    and_out, shift_out, shift_out, 
-                    seq_out, sne_out, and_out, 
-                    or_out, xor_out, 
-                    ctrl,
-                    ALUout);
+                (
+                add_sub_out, //0, add
+                add_sub_out, //1 sub
+                slt_out, //2
+                sle_out, //3, 
+                sgt_out, //4
+                sge_out, //5
+                and_out,//6
+                shift_out, //7 sra
+                and_out,//8
+                shift_out, //9 sll
+                shift_out, //10 srl
+                seq_out,//11
+                sne_out, //12
+                and_out, //13
+                or_out,//14
+                xor_out, //15
+                ctrl,
+                ALUout
+                );
     
 endmodule
