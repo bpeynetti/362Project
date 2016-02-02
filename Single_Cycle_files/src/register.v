@@ -31,4 +31,3 @@ module register32(inData, clk, writeEnable, reset, outData);
     endgenerate
 
 endmodule
-    
