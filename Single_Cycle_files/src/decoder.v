@@ -39,3 +39,5 @@ module decoder_5to32(x, en, z);
     decoder_3to8 DECODE_BYTE_1(x[0:2], enable[1], z[8:15]);
     decoder_3to8 DECODE_BYTE_2(x[0:2], enable[2], z[16:23]);
     decoder_3to8 DECODE_BYTE_3(x[0:2], enable[2], z[24:31]);
+    
+endmodule
