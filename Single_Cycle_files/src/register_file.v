@@ -9,7 +9,7 @@ module register_file(
     
     busA, //value from register rs
     busB //value from register rt
-    ;
+    );
     
     input [0:4] rd, rs, rt;
     input [0:31] busW;
@@ -24,13 +24,13 @@ module register_file(
     
     genvar i;
     generate
-        for (i=0; i<32; i=i+1) begin: 32BIT_REGISTER_FILE
+        for (i=0; i<32; i=i+1) begin: REGISTER_FILE_32
             register32 REGISTER32 (
                 .inData(busW),
                 .clk(clk),
-                .writeEnable(writeEnable),
+                .writeEnable(reg_we[i]),
                 .reset(reset),
-                .outData(reg_out[i]);
+                .outData(reg_out[i]));
         end
     endgenerate
     

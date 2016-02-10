@@ -170,3 +170,76 @@ module mux16to1_32bit(in0,in1,in2,in3,in4,in5,in6,in7,in8,in9,in10,in11,in12,in1
     );
 
 endmodule
+
+
+// a 8:1 32bit mux
+module mux32to1_32bit(in0,in1,in2,in3,in4,in5,in6,in7,in8,
+                    in9,in10,in11,in12,in13,in14,in15,
+                    in16,in17,in18,in19,in20,in21,in22,in23,in24,
+                    in25,in26,in27,in28,in29,in30,in31,
+                    sel,Z);
+
+    parameter WIDTH=32;
+    parameter SEL=5;
+    input [0:(WIDTH-1)] in0,in1,in2,in3,in4,in5,in6,in7,in8,in9,in10,in11,in12,in13,in14,in15,in16,in17,in18,in19,in20,in21,in22,in23,in24,in25,in26,in27,in28,in29,in30,in31;
+    input [0:(SEL-1)] sel;
+    output [0:(WIDTH-1)] Z;
+    
+    //now route in1 and in2 through one mux, and in3,in4 through another mux
+    
+    //need a wire to carry signals into 3rd mux
+    wire [0:(WIDTH-1)] bus1;
+    wire [0:(WIDTH-1)] bus2;
+    
+    mux16to1_32bit MUX_BUS1 (
+        .in0(in0),
+        .in1(in1),
+        .in2(in2),
+        .in3(in3),
+        .in4(in4),
+        .in5(in5),
+        .in6(in6),
+        .in7(in7),
+        .in8(in8),
+        .in9(in9),
+        .in10(in10),
+        .in11(in11),
+        .in12(in12),
+        .in13(in13),
+        .in14(in14),
+        .in15(in15),
+        .sel(sel[1:4]),
+        .Z(bus1)
+    );
+    
+    mux16to1_32bit MUX_BUS2 (
+        .in0(in16),
+        .in1(in17),
+        .in2(in18),
+        .in3(in19),
+        .in4(in20),
+        .in5(in21),
+        .in6(in22),
+        .in7(in23),
+        .in8(in24),
+        .in9(in25),
+        .in10(in26),
+        .in11(in27),
+        .in12(in28),
+        .in13(in29),
+        .in14(in30),
+        .in15(in31),
+        .sel(sel[1:4]),
+        .Z(bus2)
+    );
+    
+    //now route it through mux with select sel[1]
+    
+    mux2to1_32bit MUX_OUT (
+        .X(bus1),
+        .Y(bus2),
+        .sel(sel[0]),
+        .Z(Z)
+    );
+
+endmodule

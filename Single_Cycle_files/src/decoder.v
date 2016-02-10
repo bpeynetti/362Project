@@ -29,12 +29,12 @@ module decoder_3to8(x, en, z);
     
 endmodule
 
-module decoder_5to32(x, en, z,enable_out);
+module decoder_5to32(x, en, z);
     
     input [0:4] x; //the five bit signal to decode
     input en;
     output [0:31] z; //the 32 bit output of the decoder
-    output [0:3] enable_out;
+    // output [0:3] enable_out;
     
     wire [0:3] enable; //the enable signals for the 4 3 to 8 decoders
     
@@ -46,6 +46,6 @@ module decoder_5to32(x, en, z,enable_out);
     decoder_3to8 DECODE_BYTE_2(x[2:4], enable[2], z[16:23]);
     decoder_3to8 DECODE_BYTE_3(x[2:4], enable[3], z[24:31]);
 
-    assign enable_out = enable;
+    // assign enable_out = enable;
 
 endmodule
