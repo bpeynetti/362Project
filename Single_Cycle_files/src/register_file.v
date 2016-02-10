@@ -8,7 +8,7 @@ module register_file(
     reset, //1 for reset
     
     busA, //value from register rs
-    busB //value from register rt)
+    busB //value from register rt
     ;
     
     input [0:4] rd, rs, rt;
