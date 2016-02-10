@@ -20,13 +20,15 @@ module register32(inData, clk, writeEnable, reset, outData);
     
     genvar i;
     generate
-        for (i=0; i<32; i=i+1) begin: 32BIT_REGISTER
+        for (i=0; i<32; i=i+1) begin: 32BIT_REG
+        
             register1 REGISTER1 (
                 .inData(inData[i]),
                 .clk(clk),
                 .writeEnable(writeEnable),
                 .reset(reset),
-                .outData(outData[i]);
+                .outData(outData[i]));
+                
         end
     endgenerate
 
