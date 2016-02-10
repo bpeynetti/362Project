@@ -1,6 +1,6 @@
 module register1(inData, clk, writeEnable, reset, outData);
     
-    input inData, clk, writeEnable;
+    input inData, clk, writeEnable,reset;
     output outData;
     
     wire ffOut;
@@ -12,16 +12,15 @@ module register1(inData, clk, writeEnable, reset, outData);
 
 endmodule
 
-module register32(inData, clk, writeEnable, reset, outData);
-
-    input clk, writeEnable, reset;
+module register32(inData,clk,writeEnable,reset,outData);
+    input clk,writeEnable,reset;
     input [0:31] inData;
     output [0:31] outData;
+    parameter WIDTH=32;
     
     genvar i;
     generate
-        for (i=0; i<32; i=i+1) begin: 32BIT_REG
-        
+        for (i=0; i<32; i=i+1) begin: REG_32BIT //names begin with alpha (not numeric)
             register1 REGISTER1 (
                 .inData(inData[i]),
                 .clk(clk),
