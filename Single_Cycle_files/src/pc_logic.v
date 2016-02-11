@@ -1,8 +1,9 @@
-module pc_logic(imm16, imm26, alu_out,reg_out, branch, branchOrJmp, regToPC, clk,reset, instruction);
+module pc_logic(imm16, imm26, alu_out,reg_out, branch,leap, regToPC, clk,reset, instruction);
     input [0:15] imm16;
     input [0:25] imm26;
     input [0:31] alu_out,reg_out;
-    input branch, branchOrJmp, regToPC; //control signals
+    input branch, regToPC; //control signals
+    input leap; //when you need to branch or jump and the branching condition is true 
     input clk; //clock signal
     input reset; //reset signal
     output [0:31] instruction;
@@ -25,14 +26,13 @@ module pc_logic(imm16, imm26, alu_out,reg_out, branch, branchOrJmp, regToPC, clk
     
     extend_16to32 EXTEND_IMM16(imm16, 1'b0, imm16_32);
     extend_26to32 EXTEND_IMM26(imm26, 1'b0, imm26_32);
-    mux2to1_32bit CHOOSE_IMMEDIATE(imm16_32, imm26_32, branchOrJmp, imm_final);
+    mux2to1_32bit CHOOSE_IMMEDIATE(imm26_32, imm16_32, branch, imm_final);
     
     fa_nbit ADD_FOUR(pc_out, 32'h0004, 1'b0, pc_plus4, sum1_cout, sum1_of);
     fa_nbit ADD_IMM(imm_final, pc_plus4, 1'b0, jmp_address, sum2_cout, sum2_of);
     
     //THINK THIS MIGHT BE WRONG, the second line specifically (first mux)
-    and_1 BRANCH_CONDITION(branch, alu_out[31], branch_cond);
-    mux2to1_32bit JMP_OR_PLUS_FOUR(pc_plus4, jmp_address, branch_cond, pc_nonreg);
+    mux2to1_32bit LEAP_OR_PLUS_FOUR(pc_plus4, jmp_address, leap, pc_nonreg);
     mux2to1_32bit IMM_OR_REG(pc_nonreg, reg_out, regToPC, pc_new);
 
     assign instruction = pc_new;
