@@ -35,7 +35,8 @@ module pc_logic(imm16, imm26, reg_out, branch,leap, regToPC, clk,reset, instruct
     mux2to1_32bit LEAP_OR_PLUS_FOUR(pc_plus4, jmp_address, leap, pc_nonreg);
     mux2to1_32bit IMM_OR_REG(pc_nonreg, reg_out, regToPC, pc_new);
 
-    assign instruction = pc_new;
+    //changed to pc_out since it's before you calculate the new address
+    assign instruction = pc_out;
     
     
 endmodule

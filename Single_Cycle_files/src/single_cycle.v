@@ -59,6 +59,47 @@ module single_cycle(clk,busWout,instructionOut);
     
     
     //input to the register file 
+    wire [0:4] r2OrRd,rw;
+    //mux with selector which is rType=1, else=0
+    mux2to1_5bit r2_rd(
+        .X(r2),
+        .Y(rd),
+        .sel(rType),
+        .Z(r2OrRd)
+    );
+    
+    //now the one that works with jar/jal (save pc to register 31)
+    mux2to1_5bit SAVE_PC(
+        .X(r2OrRd),
+        .Y(5'd31),
+        .sel(pcToReg),
+        .Z(rw)
+    );
+    
+    //mux to determine if it's busW or the current PC going into as busW
+    wire [0:31] busWin;
+    mux2to1_32bit DETERMINE_BUSW(
+        .X(busW),
+        .Y(instructionAddr),
+        .sel(pcToReg),
+        .Z(busWin)
+    );
+    
+    //now wire things into and out of the register file
+    register_file REGFILE(
+        .rd(rw), //destination register number
+        .rs(rs), //source 1 register number (goes to busA)
+        .rt(rt), //source 2 register number (goes to busB)
+        .busW(busWin), //value to write into rd
+        .clk(clk), //clock
+        .writeEnable(regWrite), //1 to write
+        .reset(reset), //1 for reset
+        .busA(busA), //value from register rs
+        .busB(busB) //value from register rt
+    );
+        
+        
+        
     
     
     
