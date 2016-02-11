@@ -1,7 +1,7 @@
-module pc_logic(imm16, imm26, alu_out,reg_out, branch,leap, regToPC, clk,reset, instruction);
+module pc_logic(imm16, imm26, reg_out, branch,leap, regToPC, clk,reset, instruction);
     input [0:15] imm16;
     input [0:25] imm26;
-    input [0:31] alu_out,reg_out;
+    input [0:31] reg_out;
     input branch, regToPC; //control signals
     input leap; //when you need to branch or jump and the branching condition is true 
     input clk; //clock signal

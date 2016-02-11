@@ -12,14 +12,22 @@ module single_cycle(clk,busWout,instructionOut);
     //output (for testing purposes) is busW and instruction
     output [0:(WIDTH-1)] busW,instruction;
     
+    //
+    //
     // all intermediate signals
+    //
+    //
     
-    //pc logic related
-    wire [0:(WIDTH-1)] alu_out;
-    wire [0:15] imm16;
-    wire [0:25] imm26;
+    // Signals directly from the instruction
     wire [0:(WIDTH-1)] instructionAddr;
     wire [0:(WIDTH-1)] instruction;
+    wire [0:5] r1,r2,rd;
+    wire [0:15] imm16;
+    wire [0:25] imm26;
+    
+    
+    //pc logic related
+    wire leap;
     
     
     //control signals
@@ -30,21 +38,13 @@ module single_cycle(clk,busWout,instructionOut);
     wire [0:(WIDTH-1)] regA,regB;
     
     
-    //into ALU and execution stage
-    wire [0:(WIDTH-1)] aluA,aluB;
-    wire [0:(WIDTH-1)] extender
-    
-
-    
-    
     //pc logic
-    pc_logic(
+    pc_logic PCLOGIC (
         .imm16(imm16),
         .imm26(imm26),
-        .alu_out(alu_out),
         .reg_out(reg_out),
         .branch(branch),
-        .branchOrJmp(branchOrJmp),
+        .leap(leap),
         .regToPC(regToPC),
         .clk(clk),
         .reset(reset),
@@ -54,6 +54,73 @@ module single_cycle(clk,busWout,instructionOut);
     
     
     //wiring pclogic to instruction memory
+    
+    
+    
+    
+    //input to the register file 
+    
+    
+    
+    
+    
+    //extender stuff
+    //we signextend imm16
+    wire [0:31] imm16Extended;
+    wire [0:31] busBImmediate;
+    
+    extend_16to32 EXTEND_IMM(
+        .x(imm16),
+        .sign(extOp),
+        .Z(imm16Extended)
+    );
+
+        //and now put it through a mux that takes 16 as the alternative
+    
+    mux2to1_32bit EXTEND_16(
+        .X(imm16Extended),
+        .Y(32'h00000010),
+        .sel(LhiOp),
+        .Z(busBImmediate)
+    );
+    
+    
+    
+    //execution (out of register file and into alu)
+    wire [0:(WIDTH-1)] aluA,aluB;
+    
+    //put bus B through a mux that selects 1 if it's rtype instruction
+    mux2to1_32bit WIRE_ALU_B(
+        .X(busBImmediate),
+        .Y(regB),
+        .sel(rType),
+        .Z(aluB)
+    );
+    
+    //put bus A into a mux that selects imm16 extended or not (for lhi)
+    wire [0:31] imm16_aluA;
+    extend_16to32 EXTEND_IMM_A(
+        .x(imm16),
+        .sign(1'b0),
+        .Z(imm16_aluA)
+    );
+    
+    mux2to1_32bit WIRE_ALU_A(
+        .X(busA),
+        .Y(imm16_aluA),
+        .sel(LhiOp),
+        .Z(aluA)
+    );
+    
+    wire [0:31] aluOut;
+    //wire into the alu
+    alu ALU(
+        .A(aluA),
+        .B(aluB),
+        .ctrl(AluCtrl),
+        .ALUout(aluOut)
+    );
+        
     
     
 
