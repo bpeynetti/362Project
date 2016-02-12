@@ -10,7 +10,7 @@ module single_cycle(clk,busWout,instructionOut);
     input clk;
     
     //output (for testing purposes) is busW and instruction
-    output [0:(WIDTH-1)] busW,instruction;
+    output [0:(WIDTH-1)] busWout,instructionOut;
     
     //
     //
@@ -25,6 +25,7 @@ module single_cycle(clk,busWout,instructionOut);
     wire [0:15] imm16;
     wire [0:25] imm26;
     
+    wire [0:31] busW;
     
     //pc logic related
     wire leap;
@@ -161,8 +162,42 @@ module single_cycle(clk,busWout,instructionOut);
         .ctrl(AluCtrl),
         .ALUout(aluOut)
     );
-        
     
+    wire [0:31] multOut;
+    multiplier MULT(
+        .X(aluA),
+        .Y(aluB),
+        .Z(multOut)
+    );
+    
+    //and mux the output to either an alu or a multiplier
+    wire [0:31] aluOrMultOut;
+    mux2to1_32bit MUX_MULT_ALU (
+        .X(aluOut),
+        .Y(multOut),
+        .sel(mul),
+        .Z(aluOrMultOut)
+    );
+    
+    //this should be wired now to the address for data  memory
+    
+    //
+    wire [0:31] dataOut;
+
+    
+    
+    //output of data memory is in dataOut
+    
+    
+    
+    
+    //mem to register (if writing or not to register)
+    mux2to1_32bit ALU_MEMORY(
+        .X(aluOrMultOut),
+        .Y(dataOut),
+        .sel(memToReg),
+        .Z(busW)
+    );
     
 
 
