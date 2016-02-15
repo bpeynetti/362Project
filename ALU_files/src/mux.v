@@ -11,6 +11,27 @@ module mux_1(x,y,sel,z);
 
 endmodule
 
+module mux2to1_5bit(X,Y,sel,Z);
+    
+    parameter WIDTH=5;
+    input [0:(WIDTH-1)] X, Y;
+    input sel;
+    output [0:(WIDTH-1)] Z;
+    
+    genvar i;
+    generate
+        for (i=0; i<WIDTH; i=i+1) begin: MUX2TO1_32BIT
+            // Do a mux 2 to 1 for given width in generate loop
+            mux_1 MUX (
+                .x(X[i]),
+                .y(Y[i]),
+                .sel(sel),
+                .z(Z[i]));
+        end
+    endgenerate
+endmodule
+
+
 // a simple 2-1 32bit mux
 module mux2to1_32bit(X,Y,sel,Z);
     
