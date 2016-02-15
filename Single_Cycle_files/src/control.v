@@ -13,6 +13,7 @@ module control(
     DSize,
     MemToReg, //all loads
     MemWrite, //all stores
+    loadSign, //1 for LB and LH (for sign extend)
     //ALU/Execution Stage Controls
     ALUCtrl,
     mul,
@@ -32,6 +33,12 @@ module control(
     wire [0:15] imm16;
     wire [0:25] imm26;
     wire FPRType, jumpNotLink;
+    //wires for ALU controls below
+    wire sub; //don't need an add wire, because add has ALU control 0000
+    wire slt, sle, sgt, sge seq, sne;
+    wire sra, srl, sll;
+    wire andwire, orwire, xorwire;
+    
     assign opcode = instruction[0:5];
     assign func = instruction[26:31];
     assign fpfunc = instruction[27:31];
@@ -52,6 +59,7 @@ module control(
     assign RegWrite = (~MemWrite) & (~jumpNotLink) & (~branch);
     assign MemToReg = opcode[0] & (~opcode[1]) & (~opcode[2]) & ((~opcode[4]) | ((~opcode[3]) & opcode[4] & opcode[5]));
     assign MemWrite = opcode[0] & (~opcode[1]) & opcode[2] & (~opcode[3]) & ((~opcode[4]) | (opcode[4] & opcode[5]));
+    assign loadSign = opcode[0] & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]);
     assign mul = FPRType & fpfunc[2] & fpfunc[3] & (~fpfunc[4]) & (fpfunc[0] ^ fpfunc[1]);
     assign extOp = opcode[0] & opcode[1] & (~opcode[2]) & opcode[3] & (~opcode[5]); //the opposite of the opcodes for ADDUI and SUBUI, so that it is zero for these operations
     assign LHIOp = (~opcode[0]) & (~opcode[1]) & opcode[2] & opcode[3] & opcode[4] & opcode[5];
@@ -59,9 +67,23 @@ module control(
     assign DSize[0] = opcode[0] & (~opcode[1]) & (~opcode[3]) & opcode[4] & opcode[5];
     assign DSize[1] = (opcode[0] & (~opcode[1]) & (~opcode[3]) & opcode[5]) | (opcode[0] & (~opcode[1]) & (~opcode[2]) & opcode[3] & (~opcode[4]) & opcode[5]);
     
-    assign ALUCtrl[0] = 1'b1;
-    assign ALUCtrl[1] = 1'b0;
-    assign ALUCtrl[2] = 1'b1;
-    assign ALUCtrl[3] = 1'b0;
+    assign sub = ((~opcode[0]) & (~opcode[1]) & opcode[2] & (~opcode[3]) & opcode[4]) | (RType & func[0] & (~func[1]) & (~func[2]) & (~func[3]) & func[4]);
+    assign slt = ((~opcode[0]) & opcode[1] & opcode[2] & (~opcode[3]) & opcode[4] & (~opcode[5])) | (RType & func[0] & (~func[1]) & func[2] & (~func[3]) & func[4] & (~func[5]));
+    assign sle = ((~opcode[0]) & opcode[1] & opcode[2] & opcode[3] & (~opcode[4]) & (~opcode[5])) | (RType & func[0] & (~func[1]) & func[2] & func[3] & (~func[4]) & (~func[5]));
+    assign sgt = ((~opcode[0]) & opcode[1] & opcode[2] & (~opcode[3]) & opcode[4] & opcode[5]) | (RType & func[0] & (~func[1]) & func[2] & (~func[3]) & func[4] & func[5]);
+    assign sge = ((~opcode[0]) & opcode[1] & opcode[2] & opcode[3] & (~opcode[4]) & opcode[5]) | (RType & func[0] & (~func[1]) & func[2] & func[3] & (~func[4]) & func[5]);
+    assign seq = ((~opcode[0]) & opcode[1] & opcode[2] & (~opcode[3]) & (~opcode[4]) & (~opcode[5])) | (RType & func[0] & (~func[1]) & func[2] & (~func[3]) & (~func[4]) & (~func[5]));
+    assign sne = ((~opcode[0]) & opcode[1] & opcode[2] & (~opcode[3]) & (~opcode[4]) & opcode[5]) | (RType & func[0] & (~func[1]) & func[2] & (~func[3]) & (~func[4]) & func[5]);
+    assign sra = ((~opcode[0]) & opcode[1] & (~opcode[2]) & opcode[3] & opcode[4] & opcode[5]) | (RType & (~func[0]) & (~func[1]) & (~func[2]) & func[3] & func[4] & func[5]);
+    assign srl = 
+    assign sll = 
+    assign andwire = 
+    assign orwire = 
+    assign xorwire = 
+    
+    assign ALUCtrl[0] = sll | srl | seq | sne | andwire | orwire | xorwire;
+    assign ALUCtrl[1] = sgt | sge | sra | sne | andwire | orwire | xorwire;
+    assign ALUCtrl[2] = slt | sle | sra | srl | seq | orwire | xorwire;
+    assign ALUCtrl[3] = sub | sle | sge | sra | sll | seq | andwire | xorwire;
     
 endmodule

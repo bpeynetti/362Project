@@ -24,20 +24,39 @@ module single_cycle(clk,busWout,instructionOut);
     wire [0:5] r1,r2,rd;
     wire [0:15] imm16;
     wire [0:25] imm26;
+    //and assign these as needed
+    assign r1 = instruction[6:10];
+    assign r2 = instruction[11:15];
+    assign rd = instruction[16:20];
+    assign imm16 = instruction[16:31];
+    assign imm26 = instruction[6:31];
+    
     
     wire [0:31] busW;
     
-    //pc logic related
+    
     wire leap;
     
     
     //control signals
+    wire PCtoReg, regToPC, jump, branch, branchZero, RType, RegWrite, MemToReg, MemWrite, mul, extOp, LHIOp;
+    wire [0:1] DSize;
+    wire [0:3] ALUCtrl;
     
     
     
     //out of reg file
     wire [0:(WIDTH-1)] regA,regB;
     
+    
+    //check_branch to see if we need to branch/jump or not
+    check_branch CHECK_BRNCH_JMP (
+        .busA(busA),
+        .branchZero(branchZero),
+        .branch(branch),
+        .jump(jump),
+        .lead(leap)
+    );
     
     //pc logic
     pc_logic PCLOGIC (
@@ -51,29 +70,26 @@ module single_cycle(clk,busWout,instructionOut);
         .reset(reset),
         .instruction(instructionAddr)
     );
-        
-    
     
     //wiring pclogic to instruction memory
     imem I_MEM (.addr(instructionAddr),.instr(instruction));
     
     
-    
     //input to the register file 
     wire [0:4] r2OrRd,rw;
     //mux with selector which is rType=1, else=0
-    mux2to1_5bit r2_rd(
+    mux2to1_5bit R2_OR_RD(
         .X(r2),
         .Y(rd),
-        .sel(rType),
+        .sel(RType),
         .Z(r2OrRd)
     );
     
     //now the one that works with jar/jal (save pc to register 31)
-    mux2to1_5bit SAVE_PC(
+    mux2to1_5bit SAVE_TO_PC(
         .X(r2OrRd),
         .Y(5'd31),
-        .sel(pcToReg),
+        .sel(PCtoReg),
         .Z(rw)
     );
     
@@ -82,24 +98,22 @@ module single_cycle(clk,busWout,instructionOut);
     mux2to1_32bit DETERMINE_BUSW(
         .X(busW),
         .Y(instructionAddr),
-        .sel(pcToReg),
+        .sel(PCtoReg),
         .Z(busWin)
     );
     
     //now wire things into and out of the register file
     register_file REGFILE(
         .rd(rw), //destination register number
-        .rs(rs), //source 1 register number (goes to busA)
-        .rt(rt), //source 2 register number (goes to busB)
+        .ra(r1), //source 1 register number (goes to busA)
+        .rb(r2), //source 2 register number (goes to busB)
         .busW(busWin), //value to write into rd
         .clk(clk), //clock
-        .writeEnable(regWrite), //1 to write
+        .writeEnable(), //1 to write
         .reset(reset), //1 for reset
         .busA(busA), //value from register rs
         .busB(busB) //value from register rt
     );
-    
-    
     
     
     
@@ -179,6 +193,7 @@ module single_cycle(clk,busWout,instructionOut);
     //this should be wired now to the address for data  memory
     
     //
+    wire [0:31] rawMemOut;
     wire [0:31] dataOut;
     wire [0:31] dataIn;
     
@@ -189,14 +204,20 @@ module single_cycle(clk,busWout,instructionOut);
     //wire data memory
     dmem DATA_MEM (
         .addr(aluOrMultOut),
-        .rData(dataOut),
+        .rData(rawMemOut),
         .wData(dataIn),
         .writeEnable(MemWrite),
         .dsize(DSize),
         .clk(clk)
     );
         
-    //need to add extender here? maybe?
+    //extender/shifter here to load correct data
+    outData SELECT_CORRECT_SEGMENTS (
+        .rawMemOut(rawMemOut),
+        .DSize(DSize),
+        .loadSign(loadSign),
+        .dataOut(dataOut)
+    );
     
     
     //mem to register (if writing or not to register)

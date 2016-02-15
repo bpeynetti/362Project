@@ -1,17 +1,17 @@
 module register_file(
     rd, //destination register number
-    rs, //source 1 register number (goes to busA)
-    rt, //source 2 register number (goes to busB)
+    ra, //source 1 register number (goes to busA)
+    rb, //source 2 register number (goes to busB)
     busW, //value to write into rd
     clk, //clock
     writeEnable, //1 to write
     reset, //1 for reset
     
-    busA, //value from register rs
-    busB //value from register rt
+    busA, //value from register ra
+    busB //value from register rb
     );
     
-    input [0:4] rd, rs, rt;
+    input [0:4] rd, ra, rb;
     input [0:31] busW;
     input clk, writeEnable, reset;
     
@@ -43,7 +43,7 @@ module register_file(
         reg_out[20], reg_out[21], reg_out[22], reg_out[23],
         reg_out[24], reg_out[25], reg_out[26], reg_out[27],
         reg_out[28], reg_out[29], reg_out[30], reg_out[31],
-        rs,
+        ra,
         busA
     );
     
@@ -56,7 +56,7 @@ module register_file(
         reg_out[20], reg_out[21], reg_out[22], reg_out[23],
         reg_out[24], reg_out[25], reg_out[26], reg_out[27],
         reg_out[28], reg_out[29], reg_out[30], reg_out[31],
-        rt,
+        rb,
         busB
     );
     
