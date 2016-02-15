@@ -43,7 +43,28 @@ module single_cycle(clk,busWout,instructionOut);
     wire [0:1] DSize;
     wire [0:3] ALUCtrl;
     
-    
+    //wire control signals
+    control CONTROL(
+            .instruction(instruction), //input
+            .PCtoReg(PCtoReg), 
+            .regToPC(regToPC), 
+            .jump(jump), 
+            .branch(branch),
+            .branchZero(branchZero), 
+            //Register Controls
+            .RType(RType), //inclues all RType instructions, replaces RegDst and ALUSrc in Datapath
+            .RegWrite(RegWrite), //all RTypes are included, plus JAL, JALR, LB, LH, LW, LBU, LHU
+            //Data Memory Controls
+            .DSize(DSize),
+            .MemToReg(MemToReg), //all loads
+            .MemWrite(MemWrite), //all stores
+            .loadSign(loadSign), //1 for LB and LH (for sign extend)
+            //ALU/Execution Stage Controls
+            .ALUCtrl(ALUCtrl),
+            .mul(mul),
+            .extOp(extOp), //0 for unsigned immediate instructions
+            .LHIOp(LHIOp) //1 for LHI
+    );
     
     //out of reg file
     wire [0:(WIDTH-1)] regA,regB;
@@ -109,7 +130,7 @@ module single_cycle(clk,busWout,instructionOut);
         .rb(r2), //source 2 register number (goes to busB)
         .busW(busWin), //value to write into rd
         .clk(clk), //clock
-        .writeEnable(), //1 to write
+        .writeEnable(RegWrite), //1 to write
         .reset(reset), //1 for reset
         .busA(busA), //value from register rs
         .busB(busB) //value from register rt
@@ -133,7 +154,7 @@ module single_cycle(clk,busWout,instructionOut);
     mux2to1_32bit EXTEND_16(
         .X(imm16Extended),
         .Y(32'h00000010),
-        .sel(LhiOp),
+        .sel(LHIOp),
         .Z(busBImmediate)
     );
     
@@ -145,8 +166,8 @@ module single_cycle(clk,busWout,instructionOut);
     //put bus B through a mux that selects 1 if it's rtype instruction
     mux2to1_32bit WIRE_ALU_B(
         .X(busBImmediate),
-        .Y(regB),
-        .sel(rType),
+        .Y(busB),
+        .sel(RType),
         .Z(aluB)
     );
     
@@ -161,7 +182,7 @@ module single_cycle(clk,busWout,instructionOut);
     mux2to1_32bit WIRE_ALU_A(
         .X(busA),
         .Y(imm16_aluA),
-        .sel(LhiOp),
+        .sel(LHIOp),
         .Z(aluA)
     );
     
@@ -183,7 +204,7 @@ module single_cycle(clk,busWout,instructionOut);
     
     //and mux the output to either an alu or a multiplier
     wire [0:31] aluOrMultOut;
-    mux2to1_32bit MUX_MULT_ALU (
+    mux2to1_32bit MULT_OR_ALU (
         .X(aluOut),
         .Y(multOut),
         .sel(mul),

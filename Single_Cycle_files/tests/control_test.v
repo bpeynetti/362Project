@@ -129,10 +129,6 @@ module testbench;
 		instruction = {opcode,r1,rd,imm16};
 		#1;
 		
-		
-		
-		
-		
 		//load and store instructions
 		$display("\n ----- LOAD AND STORE ");
 		$display("lb");

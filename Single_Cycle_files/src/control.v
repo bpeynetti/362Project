@@ -75,11 +75,11 @@ module control(
     assign seq = ((~opcode[0]) & opcode[1] & opcode[2] & (~opcode[3]) & (~opcode[4]) & (~opcode[5])) | (RType & func[0] & (~func[1]) & func[2] & (~func[3]) & (~func[4]) & (~func[5]));
     assign sne = ((~opcode[0]) & opcode[1] & opcode[2] & (~opcode[3]) & (~opcode[4]) & opcode[5]) | (RType & func[0] & (~func[1]) & func[2] & (~func[3]) & (~func[4]) & func[5]);
     assign sra = ((~opcode[0]) & opcode[1] & (~opcode[2]) & opcode[3] & opcode[4] & opcode[5]) | (RType & (~func[0]) & (~func[1]) & (~func[2]) & func[3] & func[4] & func[5]);
-    assign srl = ((~opcode[0]) & opcode[1] & (~opcode[2]) & opcode[3] & opcode[4] & (~opcode[5]) | (RType & (~func[0]) & (~func[1]) & (~func[2]) & func[3] & func[4] & func[5]);
-    assign sll = 
-    assign andwire = 
-    assign orwire = 
-    assign xorwire = 
+    assign srl = ((~opcode[0]) & opcode[1] & (~opcode[2]) & opcode[3] & opcode[4] & (~opcode[5])) | (RType & (~func[0]) & (~func[1]) & (~func[2]) & func[3] & func[4] & (~func[5]));
+    assign sll = ((~opcode[0]) & (~opcode[1]) & opcode[2] & opcode[3] & opcode[4] & opcode[5]) | ((~opcode[0]) & opcode[1] & (~opcode[2]) & opcode[3] & (~opcode[4]) & (~opcode[5])) | (RType & (~func[0]) & (~func[1]) & (~func[2]) & func[3] & (~func[4]) & (~func[5]));
+    assign andwire = ((~opcode[0]) & (~opcode[1]) & opcode[2] & opcode[3] & (~opcode[4]) & (~opcode[5])) | (RType & func[0] & (~func[1]) & (~func[2]) & func[3] & (~func[4]) & (~func[5]));
+    assign orwire = ((~opcode[0]) & (~opcode[1]) & opcode[2] & opcode[3] & (~opcode[4]) & opcode[5]) | (RType & func[0] & (~func[1]) & (~func[2]) & func[3] & (~func[4]) & func[5]);
+    assign xorwire = ((~opcode[0]) & (~opcode[1]) & opcode[2] & opcode[3] & opcode[4] & (~opcode[5])) | (RType & func[0] & (~func[1]) & (~func[2]) & func[3] & func[4] & (~func[5]));
     
     assign ALUCtrl[0] = sll | srl | seq | sne | andwire | orwire | xorwire;
     assign ALUCtrl[1] = sgt | sge | sra | sne | andwire | orwire | xorwire;
