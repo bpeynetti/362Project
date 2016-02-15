@@ -55,7 +55,7 @@ module single_cycle(clk,busWout,instructionOut);
     
     
     //wiring pclogic to instruction memory
-    
+    imem I_MEM (.addr(instructionAddr),.instr(instruction));
     
     
     
@@ -98,9 +98,6 @@ module single_cycle(clk,busWout,instructionOut);
         .busA(busA), //value from register rs
         .busB(busB) //value from register rt
     );
-        
-        
-        
     
     
     
@@ -183,12 +180,23 @@ module single_cycle(clk,busWout,instructionOut);
     
     //
     wire [0:31] dataOut;
-
+    wire [0:31] dataIn;
     
+    assign dataIn = busB;
     
-    //output of data memory is in dataOut
+    //add extenders for data in?
     
-    
+    //wire data memory
+    dmem DATA_MEM (
+        .addr(aluOrMultOut),
+        .rData(dataOut),
+        .wData(dataIn),
+        .writeEnable(MemWrite),
+        .dsize(DSize),
+        .clk(clk)
+    );
+        
+    //need to add extender here? maybe?
     
     
     //mem to register (if writing or not to register)

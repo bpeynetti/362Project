@@ -24,7 +24,7 @@ module extend_26to32(x, sign, Z);
     //x is the bit to extend
     //sign is 1 if it is a sign extend
     //0 if it is a zero extend
-    input [0:25] x;
+    input [0:25] x; 
     input sign;
     output [0:31] Z;
     

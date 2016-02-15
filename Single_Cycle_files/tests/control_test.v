@@ -1,7 +1,4 @@
 
-
-
-
 //-------------
 // File: control_test.v
 // Purpose: Verilog Test Control Module  - Simulation
