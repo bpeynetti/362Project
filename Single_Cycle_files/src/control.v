@@ -59,7 +59,9 @@ module control(
     assign DSize[0] = opcode[0] & (~opcode[1]) & (~opcode[3]) & opcode[4] & opcode[5];
     assign DSize[1] = (opcode[0] & (~opcode[1]) & (~opcode[3]) & opcode[5]) | (opcode[0] & (~opcode[1]) & (~opcode[2]) & opcode[3] & (~opcode[4]) & opcode[5]);
     
-    assign ALUCtrl[0] = 
-    assign ALUCtrl[1] = 
-    assign ALUCtrl[2] = 
-    assign ALUCtrl[3] = 
+    assign ALUCtrl[0] = 1'b1;
+    assign ALUCtrl[1] = 1'b0;
+    assign ALUCtrl[2] = 1'b1;
+    assign ALUCtrl[3] = 1'b0;
+    
+endmodule

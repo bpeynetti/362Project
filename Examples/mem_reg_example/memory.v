@@ -84,8 +84,8 @@ module memload_example();
         $readmemh(filename, DMEM.mem);
 
         //// Debug: dump memory
-        //$writememh("imem", IMEM.mem);
-        //$writememh("dmem", DMEM.mem);
+        $writememh("imem", IMEM.mem);
+        $writememh("dmem", DMEM.mem);
 
         // Read out some values. Note clock ticks between setting values
         // & reading values in tests.
