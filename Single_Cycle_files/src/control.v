@@ -22,7 +22,7 @@ module control(
     input [0:31] instruction;
     output PCtoReg, regToPC, jump, branch, branchZero, RType, RegWrite, MemToReg, MemWrite, mul, extOp, LHIOp;
     output [0:1] DSize;
-    output [0:4] ALUCtrl;
+    output [0:3] ALUCtrl;
     
     //NOTE: for I-type instructions, rd is located where rs2 is located for R-type instructions
     //This will simply be called rs2 for the purposes of our processor
@@ -31,7 +31,7 @@ module control(
     wire [0:4] rs1, rs2, rd;
     wire [0:15] imm16;
     wire [0:25] imm26;
-    wire FPRType;
+    wire FPRType, jumpNotLink;
     assign opcode = instruction[0:5];
     assign func = instruction[26:31];
     assign fpfunc = instruction[27:31];
@@ -46,9 +46,10 @@ module control(
     assign jump = (~opcode[0]) & (~opcode[2]) & (~opcode[3]) & opcode[4];
     assign branch = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & opcode[3] & (~opcode[4]);
     assign branchZero = branch & (~opcode[5]);
+    assign jumpNotLink = jump & (~PCtoReg);
     assign RType = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & (~opcode[5]);
     assign FPRType = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & opcode[5];
-    assign RegWrite = 
+    assign RegWrite = (~MemWrite) & (~jumpNotLink) & (~branch);
     assign MemToReg = opcode[0] & (~opcode[1]) & (~opcode[2]) & ((~opcode[4]) | ((~opcode[3]) & opcode[4] & opcode[5]));
     assign MemWrite = opcode[0] & (~opcode[1]) & opcode[2] & (~opcode[3]) & ((~opcode[4]) | (opcode[4] & opcode[5]));
     assign mul = FPRType & fpfunc[2] & fpfunc[3] & (~fpfunc[4]) & (fpfunc[0] ^ fpfunc[1]);
@@ -62,4 +63,3 @@ module control(
     assign ALUCtrl[1] = 
     assign ALUCtrl[2] = 
     assign ALUCtrl[3] = 
-    assign ALUCtrl[4] = 
