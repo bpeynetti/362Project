@@ -1,4 +1,4 @@
-module pc_logic(imm16, imm26, reg_out, branch,leap, regToPC, clk,reset, instruction);
+module pc_logic(imm16, imm26, reg_out, branch,leap, regToPC, clk,reset, instruction,save_addr);
     input [0:15] imm16;
     input [0:25] imm26;
     input [0:31] reg_out;
@@ -6,7 +6,7 @@ module pc_logic(imm16, imm26, reg_out, branch,leap, regToPC, clk,reset, instruct
     input leap; //when you need to branch or jump and the branching condition is true 
     input clk; //clock signal
     input reset; //reset signal
-    output [0:31] instruction;
+    output [0:31] instruction,save_addr;
     
     wire [0:31] imm16_32, imm26_32, imm_final;
     wire [0:31] pc_out, pc_new, pc_nonreg;
@@ -14,13 +14,13 @@ module pc_logic(imm16, imm26, reg_out, branch,leap, regToPC, clk,reset, instruct
     wire branch_cond;
     
     wire sum1_cout, sum2_cout, sum1_of, sum2_of;
-    
+    assign save_addr = pc_plus4;
 
     register32 PC_REG(
         .inData(pc_new),
         .clk(clk),
         .writeEnable(1'b1),
-        .reset(~reset),
+        .reset(reset),
         .outData(pc_out)
     );
     

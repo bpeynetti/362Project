@@ -20,16 +20,20 @@ module check_branch(busA,branchZero,branch,jump,leap);
     zero ZERO_A (.X(busA),.z(zeroBit));
     
     //check if beqz and 0 
-    and_1(.x(zeroBit),.y(branchZero),.z(andZeroBEQZ));
+    assign andZeroBEQZ = zeroBit & branchZero;
+    // and_1(.x(zeroBit),.y(branchZero),.z(andZeroBEQZ));
     //check if bneqz and not zero
-    and_1(.x(~zeroBit),.y(~branchZero),.z(andNotZeroNotBNEQZ));
+    assign andNotZeroNotBNEQZ = (~zeroBit)&(~branchZero);
+    // and_1(.x(~zeroBit),.y(~branchZero),.z(andNotZeroNotBNEQZ));
     
     //or the stuff to get true branch condition
-    or_1(.x(andZeroBEQZ),.y(andNotZeroNotBNEQZ),.z(branchConditionTrue));
+    // or_1(.x(andZeroBEQZ),.y(andNotZeroNotBNEQZ),.z(branchConditionTrue));
+    assign branchConditionTrue = andZeroBEQZ | andNotZeroNotBNEQZ;
     
-    and_1(.x(branchConditionTrue),.y(branch),.z(branchTrue));
-    
+    // and_1(.x(branchConditionTrue),.y(branch),.z(branchTrue));
+    assign branchTrue = branchConditionTrue & branch;
     //now or this with a jump signal to make the leap
-    or_1(.x(branchTrue),.y(jump),.z(leap));
+    // or_1(.x(branchTrue),.y(jump),.z(leap));
+    assign leap = branchTrue | jump;
     
 endmodule

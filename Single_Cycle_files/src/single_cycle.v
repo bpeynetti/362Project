@@ -4,24 +4,19 @@
 // --------------------
 
 
-module single_cycle(clk,busWout,instructionOut);
+module single_cycle(clk,reset,busWout,instructionOut);
     parameter WIDTH=32;
     //only input is the clock
     input clk;
+    input reset;
     
     //output (for testing purposes) is busW and instruction
     output [0:(WIDTH-1)] busWout,instructionOut;
     
-    //
-    //
-    // all intermediate signals
-    //
-    //
-    
     // Signals directly from the instruction
     wire [0:(WIDTH-1)] instructionAddr;
     wire [0:(WIDTH-1)] instruction;
-    wire [0:5] r1,r2,rd;
+    wire [0:4] r1,r2,rd;
     wire [0:15] imm16;
     wire [0:25] imm26;
     //and assign these as needed
@@ -33,7 +28,7 @@ module single_cycle(clk,busWout,instructionOut);
     
     
     wire [0:31] busW;
-    
+    wire [0:31] busA,busB;
     
     wire leap;
     
@@ -76,9 +71,11 @@ module single_cycle(clk,busWout,instructionOut);
         .branchZero(branchZero),
         .branch(branch),
         .jump(jump),
-        .lead(leap)
+        .leap(leap)
     );
     
+    wire [0:31] save_addr; //pc+4 to be saved in  a register
+    wire [0:31] reg_out;
     //pc logic
     pc_logic PCLOGIC (
         .imm16(imm16),
@@ -89,7 +86,8 @@ module single_cycle(clk,busWout,instructionOut);
         .regToPC(regToPC),
         .clk(clk),
         .reset(reset),
-        .instruction(instructionAddr)
+        .instruction(instructionAddr),
+        .save_addr(save_addr)
     );
     
     //wiring pclogic to instruction memory
@@ -118,11 +116,11 @@ module single_cycle(clk,busWout,instructionOut);
     wire [0:31] busWin;
     mux2to1_32bit DETERMINE_BUSW(
         .X(busW),
-        .Y(instructionAddr),
+        .Y(save_addr),
         .sel(PCtoReg),
         .Z(busWin)
     );
-    
+    assign busWout = busWin;
     //now wire things into and out of the register file
     register_file REGFILE(
         .rd(rw), //destination register number
@@ -178,20 +176,21 @@ module single_cycle(clk,busWout,instructionOut);
         .sign(1'b0),
         .Z(imm16_aluA)
     );
-    
+
     mux2to1_32bit WIRE_ALU_A(
         .X(busA),
         .Y(imm16_aluA),
         .sel(LHIOp),
         .Z(aluA)
     );
+    assign reg_out = aluA;
     
     wire [0:31] aluOut;
     //wire into the alu
     alu ALU(
         .A(aluA),
         .B(aluB),
-        .ctrl(AluCtrl),
+        .ctrl(ALUCtrl),
         .ALUout(aluOut)
     );
     
@@ -245,10 +244,10 @@ module single_cycle(clk,busWout,instructionOut);
     mux2to1_32bit ALU_MEMORY(
         .X(aluOrMultOut),
         .Y(dataOut),
-        .sel(memToReg),
+        .sel(MemToReg),
         .Z(busW)
     );
     
 
 
-endmodule;
+endmodule

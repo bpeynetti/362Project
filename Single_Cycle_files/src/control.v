@@ -21,7 +21,7 @@ module control(
     LHIOp //1 for LHI
 );
     input [0:31] instruction;
-    output PCtoReg, regToPC, jump, branch, branchZero, RType, RegWrite, MemToReg, MemWrite, mul, extOp, LHIOp;
+    output PCtoReg, regToPC, jump, branch, branchZero, RType, RegWrite, MemToReg, MemWrite, mul, extOp, LHIOp,loadSign;
     output [0:1] DSize;
     output [0:3] ALUCtrl;
     
@@ -35,7 +35,7 @@ module control(
     wire FPRType, jumpNotLink;
     //wires for ALU controls below
     wire sub; //don't need an add wire, because add has ALU control 0000
-    wire slt, sle, sgt, sge seq, sne;
+    wire slt, sle, sgt, sge, seq, sne;
     wire sra, srl, sll;
     wire andwire, orwire, xorwire;
     
@@ -55,13 +55,13 @@ module control(
     assign branchZero = branch & (~opcode[5]);
     assign jumpNotLink = jump & (~PCtoReg);
     assign RType = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & (~opcode[5]);
-    assign FPRType = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & opcode[5];
+    assign FPRType = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & opcode[5]; //if opcode ==1
     assign RegWrite = (~MemWrite) & (~jumpNotLink) & (~branch);
     assign MemToReg = opcode[0] & (~opcode[1]) & (~opcode[2]) & ((~opcode[4]) | ((~opcode[3]) & opcode[4] & opcode[5]));
     assign MemWrite = opcode[0] & (~opcode[1]) & opcode[2] & (~opcode[3]) & ((~opcode[4]) | (opcode[4] & opcode[5]));
     assign loadSign = opcode[0] & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]);
-    assign mul = FPRType & fpfunc[2] & fpfunc[3] & (~fpfunc[4]) & (fpfunc[0] ^ fpfunc[1]);
-    assign extOp = opcode[0] & opcode[1] & (~opcode[2]) & opcode[3] & (~opcode[5]); //the opposite of the opcodes for ADDUI and SUBUI, so that it is zero for these operations
+    assign mul = FPRType & fpfunc[2] & fpfunc[3] & (~fpfunc[4]) & (fpfunc[0] ^ fpfunc[1]); //it's either 0x0e or 0x16
+    assign extOp = opcode[0] | opcode[1] | (~opcode[2]) | opcode[3] | (~opcode[5]); //the opposite of the opcodes for ADDUI and SUBUI, so that it is zero for these operations
     assign LHIOp = (~opcode[0]) & (~opcode[1]) & opcode[2] & opcode[3] & opcode[4] & opcode[5];
     
     assign DSize[0] = opcode[0] & (~opcode[1]) & (~opcode[3]) & opcode[4] & opcode[5];
