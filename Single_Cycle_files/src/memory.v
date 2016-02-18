@@ -49,6 +49,8 @@ module dmem(addr, rData, wData, writeEnable, dsize, clk);
     end
     // Read
     assign rData = {mem[addr], mem[addr+1], mem[addr+2], mem[addr+3]};
+    // $display("reading from mem at %x val %x",addr,rData);
+
 endmodule // dmem
 
 // Test module. Loads data files

@@ -39,7 +39,7 @@ module decoder_5to32(x, en, z);
     wire [0:3] enable; //the enable signals for the 4 3 to 8 decoders
     
     
-    decoder_2to4 GENERATE_ENABLE(x[0:1], 1'b1, enable[0:3]);
+    decoder_2to4 GENERATE_ENABLE(x[0:1], en, enable[0:3]);
     
     decoder_3to8 DECODE_BYTE_0(x[2:4], enable[0], z[0:7]);
     decoder_3to8 DECODE_BYTE_1(x[2:4], enable[1], z[8:15]);

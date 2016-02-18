@@ -24,8 +24,8 @@ module pc_logic(imm16, imm26, reg_out, branch,leap, regToPC, clk,reset, instruct
         .outData(pc_out)
     );
     
-    extend_16to32 EXTEND_IMM16(imm16, 1'b0, imm16_32);
-    extend_26to32 EXTEND_IMM26(imm26, 1'b0, imm26_32);
+    extend_16to32 EXTEND_IMM16(imm16, 1'b1, imm16_32);
+    extend_26to32 EXTEND_IMM26(imm26, 1'b1, imm26_32);
     mux2to1_32bit CHOOSE_IMMEDIATE(imm26_32, imm16_32, branch, imm_final);
     
     fa_nbit ADD_FOUR(pc_out, 32'h0004, 1'b0, pc_plus4, sum1_cout, sum1_of);

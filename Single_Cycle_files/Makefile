@@ -1,6 +1,6 @@
 SRC = ./tests/test.asm
 IVERILOG = iverilog
-DLXASM = ~/workspace/dlxasm
+DLXASM = ./../dlxasm
 
 default: register1 register32 registerFile multiplier pclogic single_cycle
 
