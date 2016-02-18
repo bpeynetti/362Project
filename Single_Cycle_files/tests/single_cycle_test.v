@@ -32,12 +32,13 @@ initial begin
       filename = "tests/data.hex";
   end
   $writememh("imem", top.I_MEM.mem);
-   $readmemh(filename, top.DATA_MEM.mem);
+  $readmemh(filename, top.DATA_MEM.mem);
+  $writememh("datamem",top.DATA_MEM.mem);
 
 //   $monitor("Instruction = %h  PC = %h\n\tIFU\n\t\tTarget = %h\n\t\ttakeBranch = %b\n\t\tjType = %b\n\t\treset = %b\n\t\tregJump = %b\n\t\tlinkTarget = %h\n\tDECODER\n\t\trs1 = %d\n\t\trs2 = %d\n\t\trd = %d\n\t\timmediate = %h\n\t\talu_signals = %b\n\t\tmem_size = %b\n\t\tmem_write = %b\n\t\tmem_ext = %b\n\t\treg_write = %b\n\t\tbranch_instr = %b\n\t\tjump_instr = %b\n\t\treg_data = %b\n\t\tI_type = %b\n\t\tbne = %b\n\t\tbeq = %b\n\t\tlink = %b\n\tREGISTERS\n\t\treg_data_in = %h\n\t\twrite_en = %b\n\t\taddr1 = %d\n\t\taddr2 = %d\n\t\twraddr = %d\n\t\tregA = %h\n\t\tregB = %h\n\tALU\n\t\tA = (HEX)%h   (DEC)%d\n\t\tB = (HEX)%h    (DEC)%d\n\t\talu_controls = %b\n\t\tzero = %b\n\t\talu_out = (HEX)%h    (DEC)%d\n\tDATA_MEMORY\n\t\taddr = %h\n\t\twData = %h\n\t\twriteEnable = %b\n\t\tdsize = %b\n\t\tmem_ext = %b\n\t\tdata_mem_out = %h\n\n",top.instruction,top.instructionfetch.PCout,top.instruction,top.Branch,top.jump_instruction,top.rst,top.Jump,top.instruction,top.RS,top.RT,top.RD,top.immed,top.ALUCtr,top.tmp,top.MemWr,top.tmp,top.RegWr,top.branch_instruction,top.jump_instruction,top.busWr,top.tmp,top.Branch_NotEqual,top.Branch,top.tmp,top.busWr,top.RegWr,top.RS,top.RT,top.WrAddr,top.busA,top.busB,top.busA,top.busA,top.bIN,top.bIN,top.ALUCtr,top.Zero,top.ALUOut,top.ALUOut,top.ALUOut,top.busB,top.MemWr,top.tmp,top.tmp,top.MemOut);
 // $monitor("Clock = %b; Instruction = %h PC = %h imm=%h addrout=%h target=%h rs=%d rt=%d rd = %d", top.clk, top.instruction, top.instructionfetch.PCout, top.instructionfetch.immediate26, top.instructionfetch.jumpMUXout,  top.instructionfetch.PCin, top.RS, top.RT, top.RD); 
-    $monitor("clk=%b reset=%b; busW=%h instruction=%h pc=%h r0=%d reg1=%d reg2=%d reg3=%d reg4=%d reg5=%d reg6=%d reg7=%d reg8=%d imm16=%h aluout=%h aluOrMultOut=%h busW=%h",
-            clock,reset,busWout,top.instruction,top.instructionAddr,
+    $monitor("\n clk=%b reset=%b instruction=%h pc=%h r0=%x r1=%x r2=%x r3=%x r4=%x r5=%x r6=%x r7=%x r8=%x imm16=%h aluout=%h aluOrMultOut=%h busW=%h",
+            clock,reset,top.instruction,top.instructionAddr,
             top.REGFILE.reg_out[0],top.REGFILE.reg_out[1],top.REGFILE.reg_out[2],top.REGFILE.reg_out[3],
             top.REGFILE.reg_out[4],top.REGFILE.reg_out[5],top.REGFILE.reg_out[6],top.REGFILE.reg_out[7],top.REGFILE.reg_out[8],
             top.imm16,top.aluOut,top.aluOrMultOut,top.busW);
@@ -49,7 +50,7 @@ initial begin
    #2 reset=0;
    #2 reset=1;
 
-   #10 ;
+   #300 ; 
    $finish;
 end
 
