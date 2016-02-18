@@ -1,8 +1,8 @@
-
+SRC = ./tests/test.asm
 IVERILOG = iverilog
+DLXASM = ~/workspace/dlxasm
 
-
-default: register1 register32 registerFile multiplier pclogic
+default: register1 register32 registerFile multiplier pclogic single_cycle
 
 # decoder:
 
@@ -21,3 +21,7 @@ multiplier:
 
 pclogic:
 	iverilog -o ./bin/test_pclogic -s testbench src/dff.v src/register.v ../ALU_files/src/mux.v src/extender.v ../ALU_files/src/adder.v ../ALU_files/src/and.v src/pc_logic.v tests/pclogic_test.v
+	
+single_cycle:
+	$(DLXASM) -C ./tests/instr.hex -D ./tests/data.hex $(SRC)
+	$(IVERILOG) -o ./bin/single_cycle -s testbench src/*.v ../ALU_files/src/*.v tests/single_cycle_test.v
