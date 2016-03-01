@@ -1,0 +1,31 @@
+makefile
+
+#team name 
+
+TESTFILES = $(wildcard verilog_files/*.v)
+testbenches = $(wildcard tests/*_tb.v)
+executables = $(wildcard bin/*)
+verilogFiles = ./verilog_files/*.v
+IVERILOG = iverilog 
+
+TARGETS = $(VERILOGFILES)
+
+
+.PHONY : all clean
+
+#default target when make 
+all : $(TARGETS)
+
+test_% : $(VERILOGFILES) testbenches/%_tb.v
+    $(IVERILOG) -o $@ $^
+    
+clean :
+    rm -f $(EXECUTABLES)
+    
+    
+------
+
+and_32b : and_1b (and all dependencies)
+    iverilog -o $@ $(@:=.v) $(^:=.v) $(@:=_tb.v)
+    
+------
