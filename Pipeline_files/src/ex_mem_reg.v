@@ -9,16 +9,13 @@ module ex_mem_reg(in, out clk, reset);
     wire [0:31] aluResult = in[69:100]
     wire PCtoReg = in[101];
     wire RegToPC = in[102];
-    wire jump = in[103];
-    wire branch = in[104];
-    wire branchZero = in[105];
-    wire RegWrite = in[106];
-    wire MemToReg = in[107];
-    wire MemWrite = in[108];
-    wire loadSign = in[109];
-    wire [0:1] DSize = in[110:111];
+    wire RegWrite = in[103];
+    wire MemToReg = in[104];
+    wire MemWrite = in[105];
+    wire loadSign = in[106];
+    wire [0:1] DSize = in[107:108];
     
-    PipeCtlRegN #(112) (
+    PipeCtlRegN #(width) (
         .in(in),
         .ctl(flush),
         .clk(clk),

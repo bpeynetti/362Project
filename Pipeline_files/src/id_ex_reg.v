@@ -24,7 +24,7 @@ module id_ex_reg(in, out, clk, reset);
     wire [0:1] DSize = in[160:161];
     wire [0:3] ALUCtrl = in[162:165];
     
-    PipeCtlRegN #(166) (
+    PipeCtlRegN #(width) (
         .in(in),
         .ctl(flush),
         .clk(clk),

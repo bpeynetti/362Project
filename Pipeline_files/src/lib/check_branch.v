@@ -1,4 +1,4 @@
-module check_branch(busA,branchZero,branch,jump,leap);
+module check_branch(busA,aluZero,branchZero,branch,jump,leap);
 
     //branchZero: 1 if beqz and 0 otherwise
     //jump: 1 if jal,jmp,j,jar... 0 otherwise
@@ -17,7 +17,7 @@ module check_branch(busA,branchZero,branch,jump,leap);
     wire branchTrue;
     
     
-    zero ZERO_A (.X(busA),.z(zeroBit));
+    assign zeroBit = aluZero;
     
     //check if beqz and 0 
     assign andZeroBEQZ = zeroBit & branchZero;

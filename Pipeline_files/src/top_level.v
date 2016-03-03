@@ -1,6 +1,17 @@
-module pipeline_processor(clk,reset,imem_addr,imem_data,dmem_addr,dmem_data);
+module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_BUS_IN);
 
+    parameter DMEM_BUS_OUT_SIZE = 65; //this is the input of the memory stage
+    parameter DMEM_BUS_IN_SIZE = 32;
+    parameter IMEM_BUS_OUT_SIZE = 32;
+    parameter IMEM_BUS_IN_SIZE = 32;
+    
     input clk,reset;
+    input [0:DMEM_BUS_IN_SIZE-1] DMEM_BUS_IN; //this is data coming in from memory
+    input [0:IMEM_BUS_IN_SIZE-1] IMEM_BUS_IN; //this is the data coming in from imem
+    
+    output [0:DMEM_BUS_OUT_SIZE-1] DMEM_BUS_OUT; //this carries the data/address to be stored (and writeEnable)
+    output [0:IMEM_BUS_OUT_SIZE-1] IMEM_BUS_OUT; //this carries the address of next instruction
+    
     
     
     
@@ -202,6 +213,7 @@ module pipeline_processor(clk,reset,imem_addr,imem_data,dmem_addr,dmem_data);
     
     
     //output signals of the execute stage
+    wire [0:31] nextPC_ex_out;
     wire [0:31] aluResult_ex_out;
     wire [0:31] leapAddr_ex_out;
     wire [0:4] destReg_ex_out;
@@ -265,7 +277,7 @@ module pipeline_processor(clk,reset,imem_addr,imem_data,dmem_addr,dmem_data);
         .mul_in(mul_ex_in),
         
         // outputs 
-        
+        .nextPC_out(nextPC_ex_out),
         .aluResult_out(aluResult_ex_out),
         .leapAddr_out(leapAddr_ex_out),
         .destReg_out(destReg_ex_out),
@@ -273,11 +285,13 @@ module pipeline_processor(clk,reset,imem_addr,imem_data,dmem_addr,dmem_data);
         .RegToPC_out(RegToPC_ex_out),
         .RegWrite_out(RegWrite_ex_out),
         .MemToReg_out(MemToReg_ex_out),
-        
-        
-        
-    
+        .MemWrite_out(MemWrite_ex_out),
+        .loadSign_out(loadSign_ex_out),
+        .DSize_out(DSize_ex_out)
     );
+    
+    wire [0:31] opB_ex_out;
+    assign opB_ex_out = opB_ex_in;
     
     /////////////////////////////////////////
     //
@@ -286,6 +300,25 @@ module pipeline_processor(clk,reset,imem_addr,imem_data,dmem_addr,dmem_data);
     //
     /////////////////////////////////////////
     
+    
+    wire [0:111] EXEC_MEM_IN,EXEC_MEM_OUT;
+    assign EXEC_MEM_IN = 
+    {
+           nextPC_ex_out,opB_ex_out,
+           destReg_ex_out,aluResult_ex_out,
+           PCtoReg_ex_out,RegToPC_ex_out,
+           RegWrite_ex_out,MemToReg_ex_out,
+           MemWrite_ex_out,loadSign_ex_out,
+           DSize_ex_out
+    };
+    
+            
+    id_ex_reg EX_MEM_REGISTER(
+        .in(EXEC_MEM_IN),
+        .clk(clk),
+        .reset(reset),
+        .out(EXEC_MEM_OUT)
+    );
     
     /////////////////////////////////////////
     //                                     //
@@ -300,7 +333,53 @@ module pipeline_processor(clk,reset,imem_addr,imem_data,dmem_addr,dmem_data);
     //// SIGNALS 
 
 
+    //DECLARATIONS
+    wire [0:31] nextPC_mem_in;
+    wire [0:31] opB_mem_in;
+    wire [0:4] destReg_mem_in;
+    wire [0:31] aluResult_mem_in;
+    wire PCtoReg_mem_in;
+    wire RegToPC_mem_in;
+    wire RegWrite_mem_in;
+    wire MemToReg_mem_in;
+    wire MemWrite_mem_in;
+    wire loadSign_mem_in;
+    wire [0:1] DSize_mem_in;
+    
+    //get signals out of the register file
+    wire [0:31] nextPC_mem_in = EXEC_MEM_OUT[0:31];
+    wire [0:31] opB_mem_in = EXEC_MEM_OUT[32:63];
+    wire [0:4] destReg_mem_in = EXEC_MEM_OUT[64:68];
+    wire [0:31] aluResult_mem_in = EXEC_MEM_OUT[69:100]
+    wire PCtoReg_mem_in = EXEC_MEM_OUT[101];
+    wire RegToPC_mem_in = EXEC_MEM_OUT[102];
+    wire RegWrite_mem_in = EXEC_MEM_OUT[103];
+    wire MemToReg_mem_in = EXEC_MEM_OUT[104];
+    wire MemWrite_mem_in = EXEC_MEM_OUT[105];
+    wire loadSign_mem_in = EXEC_MEM_OUT[106];
+    wire [0:1] DSize_mem_in = EXEC_MEM_OUT[107:108];
+    
+    //what we do here:
+    ////    get the signals that go to the Memory (MemBus)
+    ////    and put those all the way out othe top level pipeline processor
+    ////
+    wire [0:64] DMEM_BUS_OUT;
+    wire [0:31] DMEM_BUS_IN;
+    assign DMEM_BUS_OUT = {aluResult_mem_in,opB_mem_in,MemWrite_mem_in};
 
+    //result of this
+    assign dataOut = DMEM_BUS_IN;
+    
+    
+    
+    ////////////////////////////////
+    //////
+    /////   WIRE IT INTO THE MEM COMPONENT
+    /////
+    /////
+    ///////////////////////////////////
+    
+    
     
     /////////////////////////////////////////
     //

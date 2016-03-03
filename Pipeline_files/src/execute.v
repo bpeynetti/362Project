@@ -6,9 +6,8 @@ module execute (
     //basic clk, reset input
     clk,reset,
     //outputs
-    aluResult_out, leapAddr_out, destReg_out, leap_out,
+    nextPC_out, aluResult_out, leapAddr_out, destReg_out, leap_out,
     PCtoReg_out, RegToPC_out, 
-    // jump_out, branch_out, branchZero_out,
     RegWrite_out, MemToReg_out, MemWrite_out, loadSign_out, DSize_out
     );
     
@@ -58,11 +57,12 @@ module execute (
     assign MemWrite_out = MemWrite_in;
     assign loadSign_out = loadSign_in;
     assign DSize_out = DSize_in;
+    assign nextPC_out = nextPC_in;
     
     alu alu_ex(
-       .A(opA),
-       .B(opB),
-       .ctrl(ALUCtrl),
+       .A(opA_in),
+       .B(opB_in),
+       .ctrl(ALUCtrl_in),
        .ALUout(not_mul_result),
        .zero(zero),
        .of(of)
@@ -77,24 +77,26 @@ module execute (
     mux2to1_32bit choose_result(
         .X(not_mul_result),
         .Y(mul_result),
-        .sel(mul),
-        .Z(aluResult)
+        .sel(mul_in),
+        .Z(aluResult_out)
     );
     
     check_branch decide_if_leap(
         .busA(not_mul_result),
-        .branchZero(branchZero),
-        .branch(branch),
-        .jump(jump),
-        .leap(leap)
+        .aluZero(zero),
+        .branchZero(branchZero_in),
+        .branch(branch_in),
+        .jump(jump_in),
+        .leap(leap_out)
     );
     
     //SHOULDN'T THESE BY SIGN EXTEND? RIGHT NOW THEY ARE BOTH ZERO EXTEND (taken from PC LOGIC)
-    extend_16to32 EXTEND_IMM16(offset16, 1'b0, imm16_32);
-    extend_26to32 EXTEND_IMM26(offset26, 1'b0, imm26_32);
-    mux2to1_32bit CHOOSE_IMMEDIATE(imm26_32, imm16_32, branch, imm_final);
+    //STILL NEED TO TEST THISSSS!!!!!!
+    extend_16to32 EXTEND_IMM16(offset16_in, 1'b0, imm16_32);
+    extend_26to32 EXTEND_IMM26(offset26_in, 1'b0, imm26_32);
+    mux2to1_32bit CHOOSE_IMMEDIATE(imm26_32, imm16_32, branch_in, imm_final);
     
-    fa_nbit ADD_IMM(imm_final, nextPC, 1'b0, pc_nonreg, sum_cout, sum_of);
-    mux2to1_32bit IMM_OR_REG(pc_nonreg, opA, regToPC, leapAddr);
+    fa_nbit ADD_IMM(imm_final, nextPC_in, 1'b0, pc_nonreg, sum_cout, sum_of);
+    mux2to1_32bit IMM_OR_REG(pc_nonreg, opA_in, regToPC_in, leapAddr_out);
         
 endmodule
