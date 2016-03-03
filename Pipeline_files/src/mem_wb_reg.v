@@ -1,5 +1,5 @@
 module mem_wb_reg(in, out,clk,reset);
-    parameter width = 72;
+    parameter width = 73;
     input [0:width-1] in;
     input clk, rst;
     output [0:width-1] out;
@@ -10,6 +10,7 @@ module mem_wb_reg(in, out,clk,reset);
     wire PCtoReg = in[69];
     wire RegWrite = in[70];
     wire MemToReg = in[71];
+    wire loadSign = in[72];
     
     PipeCtlRegN #(72) (
         .in(in),

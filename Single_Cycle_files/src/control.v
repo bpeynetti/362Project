@@ -8,7 +8,7 @@ module control(
     branchZero, 
     //Register Controls
     RType, //inclues all RType instructions, replaces RegDst and ALUSrc in Datapath
-    RegWrite, //all RTypes are included, plus JAL, JALR, LB, LH, LW, LBU, LHU
+    RegWrite, //all RTypes are included, plus JAL, JALR, LB, LH, LW, LBU, LHU, and all ITypes
     //Data Memory Controls
     DSize,
     MemToReg, //all loads

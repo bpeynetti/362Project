@@ -1,41 +1,63 @@
 module execute (
     //inputs
-    nextPC,opA,opB,offset26,offset16,opCode,destReg,PCtoReg,
-    RegToPC,jump,branch,branchZero,RType,RegWrite,MemToReg,
-    MemWrite,loadSign,mul,DSize,ALUCtrl,clk,reset,
+    nextPC_in,opA_in,opB_in,offset26_in,offset16_in,destReg_in,PCtoReg_in,
+    RegToPC_in,jump_in,branch_in,branchZero_in,RType_in,RegWrite_in,MemToReg_in,
+    MemWrite_in,loadSign_in,mul_in,DSize_in,ALUCtrl_in,
+    //basic clk, reset input
+    clk,reset,
     //outputs
-    aluResult, leapAddr, leap
+    aluResult_out, leapAddr_out, destReg_out, leap_out,
+    PCtoReg_out, RegToPC_out, 
+    // jump_out, branch_out, branchZero_out,
+    RegWrite_out, MemToReg_out, MemWrite_out, loadSign_out, DSize_out
     );
-
-    input [0:31] nextPC;
-    input [0:31] opA;
-    input [0:31] opB;
-    input [0:25] offset_26;
-    input [0:15] offset_16;
-    input [0:5] opCode;
-    input [0:4] destReg;
-    input PCtoReg;
-    input RegToPC;
-    input jump;
-    input branch;
-    input branchZero;
-    input RType;
-    input RegWrite;
-    input MemToReg;
-    input MemWrite;
-    input loadSign;
-    input mul;
-    input [0:1] DSize;
-    input [0:3] ALUCtrl;
+    
+    input [0:31] nextPC_in;
+    input [0:31] opA_in;
+    input [0:31] opB_in;
+    input [0:25] offset_26_in;
+    input [0:15] offset_16_in;
+    input [0:4] destReg_in;
+    input PCtoReg_in;
+    input RegToPC_in;
+    input jump_in;
+    input branch_in;
+    input branchZero_in;
+    input RType_in;
+    input RegWrite_in;
+    input MemToReg_in;
+    input MemWrite_in;
+    input loadSign_in;
+    input mul_in;
+    input [0:1] DSize_in;
+    input [0:3] ALUCtrl_in;
     input clk,reset;
-    output [0:31] aluResult;
-    output [0:31] leapAddr;
-    output leap;
+    
+    output [0:31] nextPC_out;
+    output [0:31] aluResult_out;
+    output [0:31] leapAddr_out;
+    output [0:4] destReg_out;
+    output leap_out;
+    output PCtoReg_out;
+    output RegToPC_out;
+    output RegWrite_out;
+    output MemToReg_out;
+    output MemWrite_out;
+    output loadSign_out;
+    output [0:1] DSize_out;
     
     wire [0:31] imm16_32, imm26_32, imm_final;
     wire sum_cout, sum_of;
     wire zero, of;
     wire not_mul_result, mul_result;
+    
+    assign PCtoReg_out = PCtoReg_in;
+    assign RegToPC_out = RegToPC_in;
+    assign RegWrite_out = RegWrite_in;
+    assign MemToReg_out = MemToReg_in;
+    assign MemWrite_out = MemWrite_in;
+    assign loadSign_out = loadSign_in;
+    assign DSize_out = DSize_in;
     
     alu alu_ex(
        .A(opA),

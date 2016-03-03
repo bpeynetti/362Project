@@ -1,4 +1,4 @@
-module pipeline_processor(clk,reset);
+module pipeline_processor(clk,reset,imem_addr,imem_data,dmem_addr,dmem_data);
 
     input clk,reset;
     
@@ -72,6 +72,9 @@ module pipeline_processor(clk,reset);
     //these go into the register file (and out of)
     wire [0:4] r1_id,r2_id; 
     wire [0:31] reg1_id,reg2_id; 
+    
+    assign r1_id = instruction_id[6:10];
+    assign r2_id = instruction_id[11:15];
 
     //these go in and out of the ID stage
     
@@ -97,6 +100,8 @@ module pipeline_processor(clk,reset);
     wire LHIOp_id;
     wire [0:1] DSize_id;
     wire [0:3] ALUCtrl_id;
+    wire [0:25] imm26_id;
+    wire [0:15] imm16_id;
     
     
     
@@ -124,7 +129,12 @@ module pipeline_processor(clk,reset);
         .extOp_out(extOp_id),
         .LHIOp_out(LHIOp_id),
         .DSize_out(DSize_id),
-        .ALUCtrl_out(ALUCtrl_id)
+        .ALUCtrl_out(ALUCtrl_id),
+        .busA_out(opA_id),
+        .busB_out(opB_id),
+        .imm16_out(offset_16_id),
+        .imm26_out(offset_26_id),
+        .destReg(destReg_id)
     );
     
     
@@ -169,7 +179,105 @@ module pipeline_processor(clk,reset);
     //////////////////////////////////////////
 
     //// SIGNALS 
+    wire [0:31] nextPC_ex_in,nextPC_ex_out;
+    wire [0:31] opA_ex_in;
+    wire [0:31] opB_ex_in;
+    wire [0:25] offset_26_ex_in;
+    wire [0:15] offset_16_ex_in;
+    wire [0:5] opCode_ex_in;
+    wire [0:4] destReg_ex_in;
+    wire PCtoReg_ex_in;
+    wire RegToPC_ex_in;
+    wire jump_ex_in;
+    wire branch_ex_in;
+    wire branchZero_ex_in;
+    wire RType_ex_in;
+    wire RegWrite_ex_in;
+    wire MemToReg_ex_in;
+    wire MemWrite_ex_in;
+    wire loadSign_ex_in;
+    wire mul_ex_in;
+    wire [0:1] DSize_ex_in;
+    wire [0:3] ALUCtrl_ex_in;
+    
+    
+    //output signals of the execute stage
+    wire [0:31] aluResult_ex_out;
+    wire [0:31] leapAddr_ex_out;
+    wire [0:4] destReg_ex_out;
+    wire leap_ex_out;
+    wire PCtoReg_ex_out;
+    wire RegToPC_ex_out;
+    wire jump_ex_out;
+    wire branch_ex_out;
+    wire branchZero_ex_out;
+    wire RegWrite_ex_out;
+    wire MemToReg_ex_out;
+    wire MemWrite_ex_out;
+    wire loadSign_ex_out;
+    wire [0:1] DSize_ex_out;
+    
+    
+    assign [0:31] nextPC_ex_in = ID_EXEC_OUT[0:31];
+    assign [0:31] opA_ex_in = ID_EXEC_OUT[32:63];
+    assign [0:31] opB_ex_in = ID_EXEC_OUT[64:95];
+    assign [0:25] offset_26_ex_in = ID_EXEC_OUT[96:121];
+    assign [0:15] offset_16_ex_in = ID_EXEC_OUT[122:137];
+    assign [0:5] opCode_ex_in = ID_EXEC_OUT[138:143];
+    assign [0:4] destReg_ex_in = ID_EXEC_OUT[144:148];
+    assign PCtoReg_ex_in = ID_EXEC_OUT[149];
+    assign RegToPC_ex_in = ID_EXEC_OUT[150];
+    assign jump_ex_in = ID_EXEC_OUT[151];
+    assign branch_ex_in = ID_EXEC_OUT[152];
+    assign branchZero_ex_in = ID_EXEC_OUT[153];
+    assign RType_ex_in = ID_EXEC_OUT[154];
+    assign RegWrite_ex_in = ID_EXEC_OUT[155];
+    assign MemToReg_ex_in = ID_EXEC_OUT[156];
+    assign MemWrite_ex_in = ID_EXEC_OUT[157];
+    assign loadSign_ex_in = ID_EXEC_OUT[158];
+    assign mul_ex_in = ID_EXEC_OUT[159];
+    assign [0:1] DSize_ex_in = ID_EXEC_OUT[160:161];
+    assign [0:3] ALUCtrl_ex_in = ID_EXEC_OUT[162:165];
 
+
+
+    execute EXEC_STAGE(
+        //inputs 
+        .clk(clk),
+        .reset(reset),
+        .nextPC_in(nextPC_ex_in),
+        .opA_in(opA_ex_in),
+        .opB_in(opB_ex_in),
+        .offset_26_in(offset_26_ex_in),
+        .offset_16_in(offset_16_ex_in),
+        // .opCode(opCode_ex_in),
+        .destReg(destReg_ex_in),
+        .PCtoReg_in(PCtoReg_ex_in),
+        .RegToPC_in(RegToPC_ex_in),
+        .jump_in(jump_ex_in),
+        .branch_in(branch_ex_in),
+        .branchZero_in(branchZero_ex_in),
+        .RType_in(RType_ex_in),
+        .RegWrite_in(RegWrite_ex_in),
+        .MemToReg_in(MemToReg_ex_in),
+        .MemWrite_in(MemWrite_ex_in),
+        .loadSign_in(loadSign_ex_in),
+        .mul_in(mul_ex_in),
+        
+        // outputs 
+        
+        .aluResult_out(aluResult_ex_out),
+        .leapAddr_out(leapAddr_ex_out),
+        .destReg_out(destReg_ex_out),
+        .PCtoReg_out(PCtoReg_ex_out),
+        .RegToPC_out(RegToPC_ex_out),
+        .RegWrite_out(RegWrite_ex_out),
+        .MemToReg_out(MemToReg_ex_out),
+        
+        
+        
+    
+    );
     
     /////////////////////////////////////////
     //

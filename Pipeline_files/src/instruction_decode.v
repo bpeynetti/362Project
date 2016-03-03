@@ -21,6 +21,12 @@ module instruction_decode(
     LHIOp_out,
     DSize_out,
     ALUCtrl_out
+    // and instruction decoded
+    imm16_out,
+    imm26_out,
+    busA_out,
+    busB_out,
+    destReg
     );
     
     //inputs 
@@ -35,6 +41,10 @@ module instruction_decode(
     output [0:1] DSize_out;
     output [0:3] ALUCtrl_out;
     
+    output [0:SIZE-1] busA_out,busB_out;
+    output [0:15] imm16_out;
+    output [0:26] imm26_out;
+    output [0:4] destReg;
     //what happens in here:
     
     //instruction and nextPC come as inputs
@@ -46,9 +56,15 @@ module instruction_decode(
     ////////////////////////////
     ////
     ////
-    ////    ALL SIGNALS THAT GET IGNORED AND SIMPLY PASSED ALONG IN=OUT
+    ////    ALL SIGNALS THAT ARE USED IN THIS MODULE, AND ALSO ONES PASSED TO THE NEXT MODULE
     ////
     ////////////////////////////
+    
+    assign nexPC_out = nextPC_in;
+    wire extOp;
+    wire LHIOp;
+    wire RType;
+    
     
     
     
@@ -62,19 +78,120 @@ module instruction_decode(
     
     control CONTROL_ID_STAGE(
         .instruction(instruction_in),
-        .PCtoReg_out
-    
-    
-    
+        .PCtoReg(PCtoReg_out),
+        .regToPC(RegToPC_out),
+        .jump(jump_out),
+        .branch(branch_out),
+        .branchZer(branchZero_out),
+        .RType(RType),
+        .RegWrite(RegWrite_out),
+        .DSize(DSize_out),
+        .MemToReg(MemToReg_out),
+        .MemWrite(MemWrite_out),
+        .loadSign(loadSign_out),
+        .ALUCtrl(ALUCtrl_out),
+        .mul(mul_out),
+        .extOp(extOp),
+        .LHIOp(LHIOp)
     );
+    
     
     /////////////////////////
     /////
     ////
-    ////    FIGURE OUT ALU inputs A and B
+    ////    Split up the instruction into all necessary signals
     ////
     /////////////////////////
     
+    wire [0:31] opA;
+    wire [0:31] opB;
+    wire [0:15] imm16;
+    wire [0:25] imm26;
+    wire [0:25] imm26_32;
+    wire [0:SIZE-1] imm16Extended;
+    wire [0:SIZE-1] busBImmediate;
+    
+    assign opA = busA_in;
+    assign opB = busB_in;
+    assign imm16 = instruction[16:31];
+    assign imm16_out = imm16;
+    assign imm26 = instruction[6:31];
+    assign imm26_out = imm26;
+    assign destReg = instruction[]
+    
+    /////////////
+    ///
+    ///     FIGURE OUT THE CORRECT OPB (based on imm16, control signals, etc)
+    ///
+    ///////////////
+
+    assign extOp_out = extOp;
+    assign LHIOp_out = LHIOp;
+    assign RType_out = RType;
+    
+    extend_16to32 EXTEND_IMM(
+        .x(imm16),
+        .sign(extOp),
+        .Z(imm16Extended)
+    );
+    
+    //and now put it through a mux that takes 16 as the alternative
+    
+    mux2to1_32bit EXTEND_16(
+        .X(imm16Extended),
+        .Y(32'h00000010), //x10 = 16
+        .sel(LHIOp),
+        .Z(busBImmediate)
+    );
+    
+    mux2to1_32bit WIRE_ALU_B(
+        .X(busBImmediate),
+        .Y(busB),
+        .sel(RType),
+        .Z(busB_out)
+    );
+    
+    
+    wire [0:31] imm16_aluA;
+    extend_16to32 EXTEND_IMM_A(
+        .x(imm16),
+        .sign(1'b0),
+        .Z(imm16_aluA)
+    );
+
+    mux2to1_32bit WIRE_ALU_A(
+        .X(opA),
+        .Y(imm16_aluA),
+        .sel(LHIOp),
+        .Z(busA_out)
+    );
+    
+    
+    ///
+    /// figure out how to choose the correct destination register
+    /// this is a simple RType thing:
+        //input to the register file 
+    wire [0:4] rd;
+    wire [0:4] rw;
+    wire [0:4] r2OrRd,rw;
+    assign r1 = instruction[6:10];
+    assign r2 = instruction[11:15];
+    assign rd = instruction[16:20];    //mux with selector which is rType=1, else=0
+    
+    mux2to1_5bit R2_OR_RD(
+        .X(r2),
+        .Y(rd),
+        .sel(RType),
+        .Z(r2OrRd)
+    );
+    
+    //now the one that works with jar/jal (save pc to register 31)
+    mux2to1_5bit SAVE_TO_PC(
+        .X(r2OrRd),
+        .Y(5'd31),
+        .sel(PCtoReg),
+        .Z(rw)
+    );
     
     
 endmodule
