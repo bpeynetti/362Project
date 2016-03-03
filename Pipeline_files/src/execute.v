@@ -2,8 +2,9 @@ module execute (
     //inputs
     nextPC,opA,opB,offset26,offset16,opCode,destReg,PCtoReg,
     RegToPC,jump,branch,branchZero,RType,RegWrite,MemToReg,
-    MemWrite,loadSign,mul,DSize,ALUCtrl,clk,reset
+    MemWrite,loadSign,mul,DSize,ALUCtrl,clk,reset,
     //outputs
+    aluResult, leapAddr, leap
     );
 
     input [0:31] nextPC;
@@ -27,3 +28,50 @@ module execute (
     input [0:1] DSize;
     input [0:3] ALUCtrl;
     input clk,reset;
+    output [0:31] aluResult;
+    output [0:31] leapAddr;
+    output leap;
+    
+    wire [0:31] imm16_32, imm26_32, imm_final;
+    wire sum_cout, sum_of;
+    
+    alu alu_ex(
+       .A(),
+       .B(),
+       .ctrl(),
+       .ALUout(),
+       .zero(),
+       .of()
+    );
+    
+    multiplier mul_ex(
+        .X(),
+        .Y(),
+        .Z()
+    );
+    
+    mux2to1_32bit choose_result(
+        .X(),
+        .Y(),
+        .sel(),
+        .Z()
+    );
+    
+    check_branch decide_if_leap(
+        .busA(),
+        .branchZero(),
+        .branch(),
+        .jump(),
+        .leap()
+    );
+    
+    //SHOULDN'T THESE BY SIGN EXTEND? RIGHT NOW THEY ARE BOTH ZERO EXTEND (taken from PC LOGIC)
+    extend_16to32 EXTEND_IMM16(offset16, 1'b0, imm16_32);
+    extend_26to32 EXTEND_IMM26(offset26, 1'b0, imm26_32);
+    mux2to1_32bit CHOOSE_IMMEDIATE(imm26_32, imm16_32, branch, imm_final);
+    
+    fa_nbit ADD_IMM(imm_final, nextPC, 1'b0, leapAddr, sum_cout, sum_of);
+    //WHERE DOES THE MUX BELOW COME IN (from PC LOGIC, don't know where we need it)
+    //mux2to1_32bit IMM_OR_REG(pc_nonreg, reg_out, regToPC, pc_new);
+        
+endmodule
