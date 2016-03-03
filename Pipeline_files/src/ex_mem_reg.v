@@ -1,4 +1,4 @@
-module ex_mem_reg(in, out);
+module ex_mem_reg(in, out clk, reset);
     parameter width = 112;
     input [0:width-1] in;
     output [0:width-1] out;
@@ -18,6 +18,12 @@ module ex_mem_reg(in, out);
     wire loadSign = in[109];
     wire [0:1] DSize = in[110:111];
     
-    
+    PipeCtlRegN #(112) (
+        .in(in),
+        .ctl(flush),
+        .clk(clk),
+        .reset(reset),
+        .out(out)
+    );
     
 endmodule

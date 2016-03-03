@@ -32,7 +32,24 @@ module PipeCtlReg32(out, in, ctl, clk, rst); // synopsys template
      end
 endmodule // PipeCtlReg
 
+module PipeCtlRegN #(parameter WIDTH=32) (out, in, ctl, clk, rst); // synopsys template
+   parameter init = 0;
+   output [0:WIDTH-1] out;
+   reg [0:WIDTH-1]    out;
+   input [0:WIDTH-1]  in;
+   input     	      ctl;
+   input 	      clk, rst;
 
+   always @ (posedge clk or negedge rst)
+     if (~rst)
+       out <= init;
+     else begin
+        if (ctl == 1'b0)
+	        out <= in;
+        else if (ctl == 1'b1)
+	        out <= init;
+     end
+endmodule // PipeCtlReg
 
 module pipeline(data,clk,rst,flush,out);
    parameter width = 32, init = 0;
@@ -46,41 +63,38 @@ module pipeline(data,clk,rst,flush,out);
     //now create 4 of these and wire them from one to the other
     wire [0:width-1] IF_data,ID_data,EX_data,MEM_data,WB_data;
 
-    // wire IFID_flush,IDEX_flush,EXMEM_flush,MEMWB_flush;
-    wire [0:1] ctlFlush;
-    assign ctlFlush = {flush,flush};
-    wire [0:1] nothing;
-    assign nothing = 2'b00;
+    wire nothing;
+    assign nothing = 1'b0;
 
     assign IF_data = data;
     // I think I don't need flush id since I only flush one 
-    PipeCtlReg32 IFID_REG(
+    PipeCtlRegN #(32) IFID_REG(
     	.clk(clk),
     	.in(IF_data),
     	.rst(rst),
-    	.ctl(ctlFlush),
+    	.ctl(flush),
     	.out(ID_data)
     	);
 
-    PipeCtlReg32 IDEX_REG(
+    PipeCtlRegN #(32) IDEX_REG(
     	.clk(clk),
-    	.in(data),
+    	.in(ID_data),
     	.rst(rst),
     	.ctl(nothing),
     	.out(EX_data)
     	);
 
-    PipeCtlReg32 EXMEM_REG(
+    PipeCtlRegN #(32) EXMEM_REG(
     	.clk(clk),
-    	.in(data),
+    	.in(EX_data),
     	.rst(rst),
     	.ctl(nothing),
     	.out(MEM_data)
     	);
 
-    PipeCtlReg32 MEMWB_REG(
+    PipeCtlRegN #(32) MEMWB_REG(
     	.clk(clk),
-    	.in(data),
+    	.in(MEM_data),
     	.rst(rst),
     	.ctl(nothing),
     	.out(WB_data)

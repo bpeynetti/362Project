@@ -5,11 +5,9 @@ module register1(inData, clk, writeEnable, reset, outData);
     
     wire ffOut;
     wire muxOut;
-    
     mux_1 CHECK_WRITE(ffOut, inData, writeEnable, muxOut);
     dff STORE_DATA(muxOut, clk, reset, ffOut);
     assign outData = ffOut;
-
 endmodule
 
 module register32(inData,clk,writeEnable,reset,outData);

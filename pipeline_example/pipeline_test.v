@@ -54,6 +54,6 @@ module testbench;
 	initial
 	begin
 		
-		$monitor("clk=%b rst=%b flush=%b IF_data=%d ID_data=%d EX_data=%d MEM_data=%d WB_data=%d out=%d ",clk,rst,flush,PIPELINE.IF_data,PIPELINE.ID_data,PIPELINE.EX_data,PIPELINE.MEM_data,PIPELINE.WB_data,out);
+		$monitor("clk=%b rst=%b flush=%b IF_data=%d ID_data=%d EX_data=%d MEM_data=%d WB_data=%d ",clk,rst,flush,PIPELINE.IF_data,PIPELINE.ID_data,PIPELINE.EX_data,PIPELINE.MEM_data,PIPELINE.WB_data);
 	end
 endmodule

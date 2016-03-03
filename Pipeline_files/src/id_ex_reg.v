@@ -1,4 +1,4 @@
-module id_ex_reg(in, out);
+module id_ex_reg(in, out, clk, reset);
     parameter width = 166;
     input [0:width-1] in;
     output [0:width-1] out;
@@ -23,5 +23,13 @@ module id_ex_reg(in, out);
     wire mul = in[159];
     wire [0:1] DSize = in[160:161];
     wire [0:3] ALUCtrl = in[162:165];
+    
+    PipeCtlRegN #(166) (
+        .in(in),
+        .ctl(flush),
+        .clk(clk),
+        .reset(reset),
+        .out(out)
+    );
     
 endmodule
