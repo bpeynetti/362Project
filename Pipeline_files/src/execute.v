@@ -34,35 +34,37 @@ module execute (
     
     wire [0:31] imm16_32, imm26_32, imm_final;
     wire sum_cout, sum_of;
+    wire zero, of;
+    wire not_mul_result, mul_result;
     
     alu alu_ex(
-       .A(),
-       .B(),
-       .ctrl(),
-       .ALUout(),
-       .zero(),
-       .of()
+       .A(opA),
+       .B(opB),
+       .ctrl(ALUCtrl),
+       .ALUout(not_mul_result),
+       .zero(zero),
+       .of(of)
     );
     
     multiplier mul_ex(
-        .X(),
-        .Y(),
-        .Z()
+        .X(opA),
+        .Y(opB),
+        .Z(mul_result)
     );
     
     mux2to1_32bit choose_result(
-        .X(),
-        .Y(),
-        .sel(),
-        .Z()
+        .X(not_mul_result),
+        .Y(mul_result),
+        .sel(mul),
+        .Z(aluResult)
     );
     
     check_branch decide_if_leap(
-        .busA(),
-        .branchZero(),
-        .branch(),
-        .jump(),
-        .leap()
+        .busA(not_mul_result),
+        .branchZero(branchZero),
+        .branch(branch),
+        .jump(jump),
+        .leap(leap)
     );
     
     //SHOULDN'T THESE BY SIGN EXTEND? RIGHT NOW THEY ARE BOTH ZERO EXTEND (taken from PC LOGIC)
