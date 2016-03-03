@@ -72,8 +72,7 @@ module execute (
     extend_26to32 EXTEND_IMM26(offset26, 1'b0, imm26_32);
     mux2to1_32bit CHOOSE_IMMEDIATE(imm26_32, imm16_32, branch, imm_final);
     
-    fa_nbit ADD_IMM(imm_final, nextPC, 1'b0, leapAddr, sum_cout, sum_of);
-    //WHERE DOES THE MUX BELOW COME IN (from PC LOGIC, don't know where we need it)
-    //mux2to1_32bit IMM_OR_REG(pc_nonreg, reg_out, regToPC, pc_new);
+    fa_nbit ADD_IMM(imm_final, nextPC, 1'b0, pc_nonreg, sum_cout, sum_of);
+    mux2to1_32bit IMM_OR_REG(pc_nonreg, opA, regToPC, leapAddr);
         
 endmodule
