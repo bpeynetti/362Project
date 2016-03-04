@@ -36,4 +36,14 @@ model memory_stage(
     output [0:1] DSize_out;
     
     assign nextPC_out = nextPC_in;
-    assign 
+    assign destReg_out = destReg_in;
+    assign aluResult_out = aluResult_in;
+    assign PCtoReg_out = PCtoReg_in;
+    assign RegWrite_out = RegWrite_in;
+    assign MemToReg_out = MemToReg_in;
+    assign loadSign_out = loadSign_in;
+    assign DSize_out = DSize_in;
+    
+    assign dataOut_out = dMemValue_in;
+    
+endmodule

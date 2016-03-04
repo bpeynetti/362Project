@@ -1,5 +1,5 @@
 module ex_mem_reg(in, out clk, reset);
-    parameter width = 112;
+    parameter width = 109;
     input [0:width-1] in;
     output [0:width-1] out;
     
