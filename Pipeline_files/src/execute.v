@@ -19,9 +19,9 @@ module execute (
     input [0:4] destReg_in;
     input PCtoReg_in;
     input RegToPC_in;
-    input jump_in;
-    input branch_in;
-    input branchZero_in;
+    // input jump_in;
+    // input branch_in;
+    // input branchZero_in;
     input RType_in;
     input RegWrite_in;
     input MemToReg_in;
