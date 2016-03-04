@@ -1,0 +1,63 @@
+#! /usr/local/bin/vvp
+:ivl_version "10.0 (stable)" "(v10_0-12-g7b7231c)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0xa14630 .scope module, "testbench" "testbench" 2 6;
+ .timescale 0 0;
+v0xa268a0_0 .var "X", 0 31;
+v0xa26990_0 .var "Y", 0 31;
+v0xa26a60_0 .net "Z", 0 31, L_0xa26b60;  1 drivers
+S_0xa147b0 .scope module, "MULT" "multiplier" 2 11, 3 1 0, S_0xa14630;
+ .timescale 0 0;
+    .port_info 0 /INPUT 32 "X"
+    .port_info 1 /INPUT 32 "Y"
+    .port_info 2 /OUTPUT 32 "Z"
+v0x9f0d10_0 .net "X", 0 31, v0xa268a0_0;  1 drivers
+v0xa26650_0 .net "Y", 0 31, v0xa26990_0;  1 drivers
+v0xa26730_0 .net "Z", 0 31, L_0xa26b60;  alias, 1 drivers
+L_0xa26b60 .arith/mult 32, v0xa268a0_0, v0xa26990_0;
+    .scope S_0xa14630;
+T_0 ;
+    %pushi/vec4 20, 0, 32;
+    %store/vec4 v0xa268a0_0, 0, 32;
+    %pushi/vec4 10, 0, 32;
+    %store/vec4 v0xa26990_0, 0, 32;
+    %delay 1, 0;
+    %delay 1, 0;
+    %pushi/vec4 16843009, 0, 32;
+    %store/vec4 v0xa268a0_0, 0, 32;
+    %pushi/vec4 2, 0, 32;
+    %store/vec4 v0xa26990_0, 0, 32;
+    %delay 1, 0;
+    %pushi/vec4 286326784, 0, 32;
+    %store/vec4 v0xa268a0_0, 0, 32;
+    %pushi/vec4 4294901760, 0, 32;
+    %store/vec4 v0xa26990_0, 0, 32;
+    %delay 1, 0;
+    %pushi/vec4 51, 0, 32;
+    %store/vec4 v0xa268a0_0, 0, 32;
+    %pushi/vec4 3, 0, 32;
+    %store/vec4 v0xa26990_0, 0, 32;
+    %delay 1, 0;
+    %pushi/vec4 4294967295, 0, 32;
+    %store/vec4 v0xa268a0_0, 0, 32;
+    %pushi/vec4 4294967295, 0, 32;
+    %store/vec4 v0xa26990_0, 0, 32;
+    %vpi_call 2 22 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+    .scope S_0xa14630;
+T_1 ;
+    %vpi_call 2 27 "$monitor", "X=%x Y=%x Z=%x", v0xa268a0_0, v0xa26990_0, v0xa26a60_0 {0 0 0};
+    %end;
+    .thread T_1;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "tests/multiplier_test.v";
+    "src/multiplier.v";
