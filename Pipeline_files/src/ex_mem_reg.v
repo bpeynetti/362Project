@@ -1,5 +1,5 @@
 module ex_mem_reg(in, out clk, reset);
-    parameter width = 109;
+    parameter width = 142;
     input [0:width-1] in;
     output [0:width-1] out;
     
@@ -8,12 +8,14 @@ module ex_mem_reg(in, out clk, reset);
     wire [0:4] destReg = in[64:68];
     wire [0:31] aluResult = in[69:100]
     wire PCtoReg = in[101];
-    wire RegToPC = in[102];
+    wire RegToPC = in[102]; //not needed?
     wire RegWrite = in[103];
     wire MemToReg = in[104];
     wire MemWrite = in[105];
     wire loadSign = in[106];
     wire [0:1] DSize = in[107:108];
+    wire [0:31] leapAddr = in[109:140]
+    wire leap = in[141];
     
     PipeCtlRegN #(width) (
         .in(in),

@@ -51,7 +51,7 @@ module execute (
     wire not_mul_result, mul_result;
     
     assign PCtoReg_out = PCtoReg_in;
-    assign RegToPC_out = RegToPC_in;
+    assign RegToPC_out = RegToPC_in; //not needed?
     assign RegWrite_out = RegWrite_in;
     assign MemToReg_out = MemToReg_in;
     assign MemWrite_out = MemWrite_in;
@@ -97,6 +97,6 @@ module execute (
     mux2to1_32bit CHOOSE_IMMEDIATE(imm26_32, imm16_32, branch_in, imm_final);
     
     fa_nbit ADD_IMM(imm_final, nextPC_in, 1'b0, pc_nonreg, sum_cout, sum_of);
-    mux2to1_32bit IMM_OR_REG(pc_nonreg, opA_in, regToPC_in, leapAddr_out);
+    mux2to1_32bit IMM_OR_REG(pc_nonreg, opA_in, RegToPC_in, leapAddr_out);
         
 endmodule

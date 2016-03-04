@@ -1,13 +1,15 @@
-model memory_stage(
+module memory_stage(
     //inputs from ex_mem register
     nextPC_in, opB_in, destReg_in, aluResult_in,
-    PCtoReg_in, RegToPC_in,
+    PCtoReg_in,
+    RegToPC_in, //not needed?
+    
     RegWrite_in, MemToReg_in, MemWrite_in, loadSign_in,
     DSize_in, clk, reset,
     //input from data memory
     dMemValue_in,
     //outputs for mem_wb register
-    destReg_out, aluResult_out, dataOut_out,
+    nextPC_out, destReg_out, aluResult_out, dataOut_out,
     PCtoReg_out, RegWrite_out, MemToReg_out, loadSign_out,
     DSize_out
     );
