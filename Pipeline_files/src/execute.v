@@ -14,14 +14,14 @@ module execute (
     input [0:31] nextPC_in;
     input [0:31] opA_in;
     input [0:31] opB_in;
-    input [0:25] offset_26_in;
-    input [0:15] offset_16_in;
+    input [0:25] offset26_in;
+    input [0:15] offset16_in;
     input [0:4] destReg_in;
     input PCtoReg_in;
     input RegToPC_in;
-    // input jump_in;
-    // input branch_in;
-    // input branchZero_in;
+    input jump_in;
+    input branch_in;
+    input branchZero_in;
     input RType_in;
     input RegWrite_in;
     input MemToReg_in;
@@ -48,7 +48,8 @@ module execute (
     wire [0:31] imm16_32, imm26_32, imm_final;
     wire sum_cout, sum_of;
     wire zero, of;
-    wire not_mul_result, mul_result;
+    wire [0:31] not_mul_result;
+    wire [0:31] mul_result;
     
     assign PCtoReg_out = PCtoReg_in;
     assign RegToPC_out = RegToPC_in; //not needed?
@@ -69,8 +70,8 @@ module execute (
     );
     
     multiplier mul_ex(
-        .X(opA),
-        .Y(opB),
+        .X(opA_in),
+        .Y(opB_in),
         .Z(mul_result)
     );
     
@@ -99,4 +100,7 @@ module execute (
     fa_nbit ADD_IMM(imm_final, nextPC_in, 1'b0, pc_nonreg, sum_cout, sum_of);
     mux2to1_32bit IMM_OR_REG(pc_nonreg, opA_in, RegToPC_in, leapAddr_out);
         
+        
+        
+    // pc_nonreg ????
 endmodule

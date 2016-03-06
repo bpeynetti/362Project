@@ -2,29 +2,78 @@
 // Single Cycle processor file
 // EECS 362 
 // --------------------
+module top_level(clk,reset);
+    parameter WIDTH=32;
+    input clk,reset;
+    //wiring out single cycle to the memory elements
+    
+    wire [0:(WIDTH-1)] dmem_write,dmem_addr,dmem_read,instructionAddr,instruction;
+    wire dmem_writeEnable;
+    wire [0:1] dmem_dsize;
+    //wiring pclogic to instruction memory
+    imem I_MEM (.addr(instructionAddr),.instr(instruction));
+    
+    //wire data memory
+    dmem DATA_MEM (
+        .addr(dmem_addr),
+        .rData(dmem_read),
+        .wData(dmem_write),
+        .writeEnable(dmem_writeEnable),
+        .dsize(dmem_dsize),
+        .clk(clk)
+    );
+    
+    single_cycle SINGLE_CYCLE(
+        .clk(clk),
+        .reset(reset),
+        .instructionAddr_out(instructionAddr),
+        .instruction(instruction),
+        .dmem_addr_out(dmem_addr),
+        .dmem_write_out(dmem_write),
+        .dmem_read_in(dmem_read),
+        .dmem_writeEnable_out(dmem_writeEnable),
+        .dmem_dsize(dmem_dsize)
+    );
 
+endmodule
 
-module single_cycle(clk,reset,busWout,instructionOut);
+module single_cycle(clk,reset,instructionAddr_out,instruction,dmem_addr_out,dmem_write_out,dmem_read_in,dmem_writeEnable_out,dmem_dsize);
     parameter WIDTH=32;
     //only input is the clock
     input clk;
     input reset;
+    input [0:(WIDTH-1)] instruction;
     
+    input [0:(WIDTH-1)] dmem_read_in;
+
     //output (for testing purposes) is busW and instruction
-    output [0:(WIDTH-1)] busWout,instructionOut;
-    
+    output [0:(WIDTH-1)] instructionAddr_out;
+    output dmem_writeEnable_out;
+    output [0:(WIDTH-1)] dmem_addr_out,dmem_write_out;
+    output [0:1] dmem_dsize;
     // Signals directly from the instruction
-    wire [0:(WIDTH-1)] instructionAddr;
-    wire [0:(WIDTH-1)] instruction;
+    // wire [0:(WIDTH-1)] instructionAddr;
+    // wire [0:(WIDTH-1)] instruction;
     wire [0:4] r1,r2,rd;
     wire [0:15] imm16;
     wire [0:25] imm26;
+    wire [0:31] instructionAddr;
+    assign instructionAddr_out = instructionAddr;
     //and assign these as needed
     assign r1 = instruction[6:10];
     assign r2 = instruction[11:15];
     assign rd = instruction[16:20];
     assign imm16 = instruction[16:31];
     assign imm26 = instruction[6:31];
+    
+    wire [0:31] rawMemOut;
+    wire [0:31] aluOrMultOut;
+
+    assign dmem_addr_out = aluOrMultOut;
+    assign dmem_write_out = dataIn;
+    assign rawMemOut = dmem_read_in;
+    assign dmem_writeEnable_out = MemWrite;
+    assign dmem_dsize = DSize;
     
     
     wire [0:31] busW;
@@ -86,12 +135,11 @@ module single_cycle(clk,reset,busWout,instructionOut);
         .regToPC(regToPC),
         .clk(clk),
         .reset(reset),
-        .instruction(instructionAddr),
+        .instruction(instructionAddr_out),
         .save_addr(save_addr)
     );
     
-    //wiring pclogic to instruction memory
-    imem I_MEM (.addr(instructionAddr),.instr(instruction));
+
     
     
     //input to the register file 
@@ -120,7 +168,7 @@ module single_cycle(clk,reset,busWout,instructionOut);
         .sel(PCtoReg),
         .Z(busWin)
     );
-    assign busWout = busWin;
+    // assign busWout = busWin;
     //now wire things into and out of the register file
     register_file REGFILE(
         .rd(rw), //destination register number
@@ -202,7 +250,6 @@ module single_cycle(clk,reset,busWout,instructionOut);
     );
     
     //and mux the output to either an alu or a multiplier
-    wire [0:31] aluOrMultOut;
     mux2to1_32bit MULT_OR_ALU (
         .X(aluOut),
         .Y(multOut),
@@ -213,7 +260,6 @@ module single_cycle(clk,reset,busWout,instructionOut);
     //this should be wired now to the address for data  memory
     
     //
-    wire [0:31] rawMemOut;
     wire [0:31] dataOut;
     wire [0:31] dataIn;
     
@@ -221,15 +267,7 @@ module single_cycle(clk,reset,busWout,instructionOut);
     
     //add extenders for data in?
     
-    //wire data memory
-    dmem DATA_MEM (
-        .addr(aluOrMultOut),
-        .rData(rawMemOut),
-        .wData(dataIn),
-        .writeEnable(MemWrite),
-        .dsize(DSize),
-        .clk(clk)
-    );
+
         
     //extender/shifter here to load correct data
     outData SELECT_CORRECT_SEGMENTS (

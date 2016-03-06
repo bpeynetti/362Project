@@ -1,6 +1,7 @@
 module if_id_reg(in, out, clk, reset);
     parameter width = 64;
     input [0:width-1] in;
+    input clk,reset;
     output [0:width-1] out;
     
     wire [0:31] nextPC = in[0:31];
@@ -21,7 +22,7 @@ module if_id_reg(in, out, clk, reset);
     // wire [0:1] DSize = in[77:78];
     // wire [0:3] ALUCtrl = in[79:82];
     
-    PipeCtlRegN #(width) (
+    PipeCtlRegN #(width) IF_ID_REG (
         .in(in),
         .ctl(flush),
         .clk(clk),

@@ -1,34 +1,16 @@
 module instruction_decode(
-    parameter SIZE = 32;
     //input ports 
-    nextPC_in, instruction_in,
-    clk,reset,
-    busA_in,busB_in,
+    nextPC_in, instruction_in,clk,reset,busA_in,busB_in,
     //output ports
-    nextPC_out, 
-    PCtoReg_out,
-    RegToPC_out,
-    jump_out,
-    branch_out,
-    branchZero_out,
-    RType_out,
-    RegWrite_out,
-    MemToReg_out,
-    MemWrite_out,
-    loadSign_out,
-    mul_out,
-    extOp_out,
-    LHIOp_out,
-    DSize_out,
-    ALUCtrl_out
+    nextPC_out, PCtoReg_out,RegToPC_out,jump_out,branch_out,branchZero_out,
+    RType_out,RegWrite_out,MemToReg_out,MemWrite_out,loadSign_out,mul_out,
+    extOp_out,LHIOp_out,DSize_out,ALUCtrl_out,
     // and instruction decoded
-    imm16_out,
-    imm26_out,
-    busA_out,
-    busB_out,
-    destReg
+    imm16_out,imm26_out,busA_out,busB_out,destReg
     );
     
+    parameter SIZE = 32;
+
     //inputs 
     input [0:SIZE-1] nextPC_in,instruction_in,busA_in,busB_in;
     input clk,reset;
@@ -36,14 +18,14 @@ module instruction_decode(
     //outputs 
     output [0:SIZE-1] nextPC_out;
     output PCtoReg_out,RegToPC_out,jump_out,branch_out,branchZero_out;
-    output RType_out,RegWrite_out,MemToReg_out,MemWrite_out,
+    output RType_out,RegWrite_out,MemToReg_out,MemWrite_out;
     output loadSign_out,mul_out,extOp_out,LHIOp_out;
     output [0:1] DSize_out;
     output [0:3] ALUCtrl_out;
     
     output [0:SIZE-1] busA_out,busB_out;
     output [0:15] imm16_out;
-    output [0:26] imm26_out;
+    output [0:25] imm26_out;
     output [0:4] destReg;
     //what happens in here:
     
@@ -82,7 +64,7 @@ module instruction_decode(
         .regToPC(RegToPC_out),
         .jump(jump_out),
         .branch(branch_out),
-        .branchZer(branchZero_out),
+        .branchZero(branchZero_out),
         .RType(RType),
         .RegWrite(RegWrite_out),
         .DSize(DSize_out),
@@ -113,11 +95,11 @@ module instruction_decode(
     
     assign opA = busA_in;
     assign opB = busB_in;
-    assign imm16 = instruction[16:31];
+    assign imm16 = instruction_in[16:31];
     assign imm16_out = imm16;
-    assign imm26 = instruction[6:31];
+    assign imm26 = instruction_in[6:31];
     assign imm26_out = imm26;
-    assign destReg = instruction[]
+    assign destReg = rw;
     
     /////////////
     ///
@@ -146,7 +128,7 @@ module instruction_decode(
     
     mux2to1_32bit WIRE_ALU_B(
         .X(busBImmediate),
-        .Y(busB),
+        .Y(busB_in),
         .sel(RType),
         .Z(busB_out)
     );
@@ -171,12 +153,11 @@ module instruction_decode(
     /// figure out how to choose the correct destination register
     /// this is a simple RType thing:
         //input to the register file 
-    wire [0:4] rd;
-    wire [0:4] rw;
+    wire [0:4] rd,r1,r2;
     wire [0:4] r2OrRd,rw;
-    assign r1 = instruction[6:10];
-    assign r2 = instruction[11:15];
-    assign rd = instruction[16:20];    //mux with selector which is rType=1, else=0
+    assign r1 = instruction_in[6:10];
+    assign r2 = instruction_in[11:15];
+    assign rd = instruction_in[16:20];    //mux with selector which is rType=1, else=0
     
     mux2to1_5bit R2_OR_RD(
         .X(r2),

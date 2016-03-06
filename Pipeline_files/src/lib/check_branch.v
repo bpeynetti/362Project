@@ -6,7 +6,7 @@ module check_branch(busA,aluZero,branchZero,branch,jump,leap);
     //leap: if not taking PC+4 and taking something else
 
     input [0:31] busA;
-    input branchZero,branch,jump;
+    input branchZero,branch,jump,aluZero;
     
     output leap;
     

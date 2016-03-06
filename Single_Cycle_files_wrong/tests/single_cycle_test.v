@@ -5,7 +5,7 @@ reg [8*80-1:0] filename;
 wire [0:31] PC;
 wire [0:31]busWout,instructionOut;
 
-single_cycle top(clock,reset,busWout,instructionOut);
+top_level top(clock,reset);
 
 // assign PC = {top.instructionfetch.PCout,2'b00};
 
@@ -42,6 +42,14 @@ initial begin
             top.REGFILE.reg_out[0],top.REGFILE.reg_out[1],top.REGFILE.reg_out[2],top.REGFILE.reg_out[3],
             top.REGFILE.reg_out[4],top.REGFILE.reg_out[5],top.REGFILE.reg_out[6],top.REGFILE.reg_out[7],top.REGFILE.reg_out[8],
             top.imm16,top.aluOut,top.aluOrMultOut,top.busW);
+
+
+    $monitor("\n clk=%b reset=%b instruction=%h pc=%h r0=%x r1=%x r2=%x r3=%x r4=%x imm16=%h aluout=%h aluOrMultOut=%h busW=%h",
+            clock,reset,top.instruction,top.instructionAddr,
+            top.SINGLE_CYCLE.REGFILE.reg_out[0],top.SINGLE_CYCLE.REGFILE.reg_out[1],top.SINGLE_CYCLE.REGFILE.reg_out[2],top.SINGLE_CYCLE.REGFILE.reg_out[3],
+            top.SINGLE_CYCLE.REGFILE.reg_out[4],
+            top.SINGLE_CYCLE.imm16,top.SINGLE_CYCLE.aluOut,top.SINGLE_CYCLE.aluOrMultOut,top.SINGLE_CYCLE.busW);
+
 //$monitor("Clock = %b; Instruction = %h PC = %h imm=%h addrout=%h target=%h rs=%d rt=%d rd = %d busA=%d busB=%d bIN=%d ALUSrc=%b ALUOut=(hex)%h (dec)%d ALUCtr=%b \n MemOut=%h busWr=%h WrAddr=%d RegWr=%b Mem2Reg=%b Branch=%b Jump=%b Branch_instruction = %h Zero =%b \n Jump_Link=%b WrAddr = %h JALcheck=%b Reg[1] = %h Reg[31] = %h\n", top.clk, top.instruction, top.instructionfetch.PCout, top.instructionfetch.immediate26, top.instructionfetch.jumpMUXout,  top.instructionfetch.PCin, top.RS, top.RT, top.RD, top.busA, top.busB, top.bIN, top.ALUSrc, top.ALUOut, top.ALUOut, top.ALUCtr, top.MemOut, top.busWr, top.WrAddr, top.RegWr, top.Mem2Reg, top.instructionfetch.andBranch, top.Jump, top.branch_instruction, top.Zero, top.Jump_Link, top.WrAddr, top.instructionfetch.JALcheck, top.rFile.reg_file[1], top.rFile.reg_file[31]); 
 	
 // iter=0;

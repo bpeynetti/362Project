@@ -18,7 +18,7 @@ module top_level(clk,reset);
     assign dmem_addr = BUS_PIPE_TO_DMEM[0:31];
     assign dmem_write = BUS_PIPE_TO_DMEM[32:63];
     assign dmem_writeEnable = BUS_PIPE_TO_DMEM[64];
-    assign dmem_dSize = BUS_PIPE_TO_DMEM[65:66]
+    assign dmem_dSize = BUS_PIPE_TO_DMEM[65:66];
     assign BUS_DMEM_TO_PIPE = dmem_read;
     
     
@@ -37,7 +37,7 @@ module top_level(clk,reset);
     
     imem INSTRUCTION_MEM(
         .addr(imem_addr),
-        .instr(imem_instruction)
+        .instr(imem_out)
     );
     
 
@@ -49,7 +49,7 @@ module top_level(clk,reset);
         .IMEM_BUS_OUT(BUS_PIPE_TO_IMEM),
         .IMEM_BUS_IN(BUS_IMEM_TO_PIPE)
     );
-endmodule;
+endmodule
 
 
 
@@ -87,10 +87,13 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
 
     //// SIGNALS 
     wire [0:31] pcplus4_if_out, instruction_if_out;
-
+    wire [0:31] pc_out;
     ///////
     ///     GO TO IMEM BY SETTING IMEM_BUS IN/OUT
-    assign IMEM_BUS_OUT = PC_Out;
+    assign IMEM_BUS_OUT = pc_out;
+    
+    wire leap_mem_in;
+    wire [0:31] leapAddr_mem_in;
     
     //// wire the IF_STAGE
     instruction_fetch IF_STAGE(
@@ -98,7 +101,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .leap(leap_mem_in),
         .clk(clk),
         .reset(reset),
-        .pcplus4(pcplus4_if_out)
+        .pcplus4(pcplus4_if_out),
+        .pc_out_(pc_out)
     );
     
     assign instruction_if_out = IMEM_BUS_IN;
@@ -118,7 +122,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .in(IF_ID_IN),
         .out(IF_ID_OUT),
         .clk(clk),
-        .rst(rst),
+        .reset(reset)
     );
     
     //assign from IF_ID_out to the instruction decode stage
@@ -268,7 +272,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     
     
     //output signals of the execute stage
-    wire [0:31] nextPC_ex_out;
+    // wire [0:31] nextPC_ex_out;
     wire [0:31] aluResult_ex_out;
     wire [0:31] leapAddr_ex_out;
     wire [0:4] destReg_ex_out;
@@ -285,13 +289,13 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:1] DSize_ex_out;
     
     
-    assign [0:31] nextPC_ex_in = ID_EXEC_OUT[0:31];
-    assign [0:31] opA_ex_in = ID_EXEC_OUT[32:63];
-    assign [0:31] opB_ex_in = ID_EXEC_OUT[64:95];
-    assign [0:25] offset_26_ex_in = ID_EXEC_OUT[96:121];
-    assign [0:15] offset_16_ex_in = ID_EXEC_OUT[122:137];
+    assign nextPC_ex_in = ID_EXEC_OUT[0:31];
+    assign opA_ex_in = ID_EXEC_OUT[32:63];
+    assign opB_ex_in = ID_EXEC_OUT[64:95];
+    assign offset_26_ex_in = ID_EXEC_OUT[96:121];
+    assign offset_16_ex_in = ID_EXEC_OUT[122:137];
     // assign [0:5] opCode_ex_in = ID_EXEC_OUT[138:143];
-    assign [0:4] destReg_ex_in = ID_EXEC_OUT[138:142];
+    assign destReg_ex_in = ID_EXEC_OUT[138:142];
     assign PCtoReg_ex_in = ID_EXEC_OUT[143];
     assign RegToPC_ex_in = ID_EXEC_OUT[144];
     assign jump_ex_in = ID_EXEC_OUT[145];
@@ -303,8 +307,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign MemWrite_ex_in = ID_EXEC_OUT[151];
     assign loadSign_ex_in = ID_EXEC_OUT[152];
     assign mul_ex_in = ID_EXEC_OUT[153];
-    assign [0:1] DSize_ex_in = ID_EXEC_OUT[154:155];
-    assign [0:3] ALUCtrl_ex_in = ID_EXEC_OUT[156:159];
+    assign DSize_ex_in = ID_EXEC_OUT[154:155];
+    assign ALUCtrl_ex_in = ID_EXEC_OUT[156:159];
 
 
     execute EXEC_STAGE(
@@ -314,10 +318,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .nextPC_in(nextPC_ex_in),
         .opA_in(opA_ex_in),
         .opB_in(opB_ex_in),
-        .offset_26_in(offset_26_ex_in),
-        .offset_16_in(offset_16_ex_in),
+        .offset26_in(offset_26_ex_in),
+        .offset16_in(offset_16_ex_in),
         // .opCode(opCode_ex_in),
-        .destReg(destReg_ex_in),
+        .destReg_in(destReg_ex_in),
         .PCtoReg_in(PCtoReg_ex_in),
         .RegToPC_in(RegToPC_ex_in),
         // .jump_in(jump_ex_in),
@@ -365,10 +369,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
            RegWrite_ex_out,MemToReg_ex_out,
            MemWrite_ex_out,loadSign_ex_out,
            DSize_ex_out,
-           leap_Addr_ex_out, leap_ex_out
+           leapAddr_ex_out, leap_ex_out
     };
     
-    id_ex_reg EX_MEM_REGISTER(
+    ex_mem_reg EX_MEM_REGISTER(
         .in(EXEC_MEM_IN),
         .clk(clk),
         .reset(reset),
@@ -386,8 +390,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         //// SIGNALS 
     ///
     /// SIGNALS THAT GO TO THE IF STAGE -> LEAP_ADDR and LEAP
-    wire leap_mem_in;
-    wire [0:31] leapAddr_mem_in;
+
     assign leapAddr_mem_in = EXEC_MEM_OUT[109:140];
     assign leap_mem_in = EXEC_MEM_OUT[141];
 
@@ -418,7 +421,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign nextPC_mem_in = EXEC_MEM_OUT[0:31];
     assign opB_mem_in = EXEC_MEM_OUT[32:63];
     assign destReg_mem_in = EXEC_MEM_OUT[64:68];
-    assign aluResult_mem_in = EXEC_MEM_OUT[69:100]
+    assign aluResult_mem_in = EXEC_MEM_OUT[69:100];
     assign PCtoReg_mem_in = EXEC_MEM_OUT[101];
     assign RegToPC_mem_in = EXEC_MEM_OUT[102];
     assign RegWrite_mem_in = EXEC_MEM_OUT[103];
@@ -482,7 +485,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     
     wire[0:106] MEM_WB_IN, MEM_WB_OUT;
     
-    MEM_WB_IN = {
+    assign MEM_WB_IN = {
         nextPC_mem_out,destReg_mem_out,
         aluResult_mem_out,dataOut_mem_out,
         PCtoReg_mem_out, RegWrite_mem_out,
@@ -501,29 +504,29 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //// SIGNALS 
     
     //INPUTS
-    wire [0:31] nextPC; 
-    wire [0:4] destReg; 
-    wire [0:31] aluResult;
-    wire [0:31] dataOut; 
-    wire PCtoReg; 
-    wire RegWrite;
-    wire MemToReg;
-    wire loadSign;
-    wire [0:1] DSize;
+    wire [0:31] nextPC_wb_in; 
+    wire [0:4] destReg_wb_in; 
+    wire [0:31] aluResult_wb_in;
+    wire [0:31] dataOut_wb_in; 
+    wire PCtoReg_wb_in; 
+    wire RegWrite_wb_in;
+    wire MemToReg_wb_in;
+    wire loadSign_wb_in;
+    wire [0:1] DSize_wb_in;
     // OUTPUTS
     wire [0:4] destReg_wb_out;
     wire RegWrite_wb_out;
     wire [0:31] RegWriteVal_wb_out;
     
-    assign [0:31] nextPC_wb_in = MEM_WB_OUT[0:31];
-    assign [0:4] destReg_wb_in = MEM_WB_OUT[32:36];
-    assign [0:31] aluResult_wb_in = MEM_WB_OUT[37:68];
-    assign [0:31] dataOut_wb_in = MEM_WB_OUT[69:100];
+    assign nextPC_wb_in = MEM_WB_OUT[0:31];
+    assign destReg_wb_in = MEM_WB_OUT[32:36];
+    assign aluResult_wb_in = MEM_WB_OUT[37:68];
+    assign dataOut_wb_in = MEM_WB_OUT[69:100];
     assign PCtoReg_wb_in = MEM_WB_OUT[101];
     assign RegWrite_wb_in = MEM_WB_OUT[102];
     assign MemToReg_wb_in = MEM_WB_OUT[103];
     assign loadSign_wb_in = MEM_WB_OUT[104];
-    assign [0:1] DSize_wb_in = MEM_WB_OUT[105:106];
+    assign DSize_wb_in = MEM_WB_OUT[105:106];
 
     write_back WRITE_BACK_STAGE(
         .nextPC_in(nextPC_wb_in),
@@ -538,7 +541,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         // outputs
         .destReg_out(destReg_wb_out),
         .RegWrite_out(RegWrite_wb_out),
-        .RegWriteVal_out(RegWriteVal_wb_out),
+        .RegWriteVal_out(RegWriteVal_wb_out)
     );
     
     //now wire the values directly into the register file
@@ -575,3 +578,4 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //                                     //
     /////////////////////////////////////////
     
+endmodule

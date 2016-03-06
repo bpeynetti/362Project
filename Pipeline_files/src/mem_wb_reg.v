@@ -14,7 +14,7 @@ module mem_wb_reg(in, out,clk,reset);
     wire loadSign = in[104];
     wire [0:1] DSize = in[105:106];
     
-    PipeCtlRegN #(width) (
+    PipeCtlRegN #(width) MEM_WB_REG(
         .in(in),
         .ctl(flush),
         .clk(clk),

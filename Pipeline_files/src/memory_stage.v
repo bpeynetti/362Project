@@ -17,6 +17,7 @@ module memory_stage(
     input [0:31] nextPC_in;
     input [0:4] destReg_in;
     input [0:31] aluResult_in;
+    input [0:31] opB_in;
     input PCtoReg_in;
     input RegToPC_in;
     input RegWrite_in;
