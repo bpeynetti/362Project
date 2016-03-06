@@ -165,14 +165,16 @@ module instruction_decode(
         .sel(RType),
         .Z(r2OrRd)
     );
+    assign rw = r2OrRd;
     
     //now the one that works with jar/jal (save pc to register 31)
-    mux2to1_5bit SAVE_TO_PC(
-        .X(r2OrRd),
-        .Y(5'd31),
-        .sel(PCtoReg),
-        .Z(rw)
-    );
+    // THIS IS DONE IN THE LAST STAGE
+    // mux2to1_5bit SAVE_TO_PC(
+    //     .X(r2OrRd),
+    //     .Y(5'd31),
+    //     .sel(PCtoReg),
+    //     .Z(rw)
+    // );
     
     
 endmodule

@@ -50,6 +50,7 @@ module execute (
     wire zero, of;
     wire [0:31] not_mul_result;
     wire [0:31] mul_result;
+    wire [0:31] pc_nonreg;
     
     assign PCtoReg_out = PCtoReg_in;
     assign RegToPC_out = RegToPC_in; //not needed?
@@ -93,8 +94,8 @@ module execute (
     
     //SHOULDN'T THESE BY SIGN EXTEND? RIGHT NOW THEY ARE BOTH ZERO EXTEND (taken from PC LOGIC)
     //STILL NEED TO TEST THISSSS!!!!!!
-    extend_16to32 EXTEND_IMM16(offset16_in, 1'b0, imm16_32);
-    extend_26to32 EXTEND_IMM26(offset26_in, 1'b0, imm26_32);
+    extend_16to32 EXTEND_IMM16(offset16_in, 1'b1, imm16_32);
+    extend_26to32 EXTEND_IMM26(offset26_in, 1'b1, imm26_32);
     mux2to1_32bit CHOOSE_IMMEDIATE(imm26_32, imm16_32, branch_in, imm_final);
     
     fa_nbit ADD_IMM(imm_final, nextPC_in, 1'b0, pc_nonreg, sum_cout, sum_of);

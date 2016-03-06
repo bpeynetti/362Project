@@ -26,7 +26,7 @@ module write_back(
     
     assign RegWrite_out = RegWrite_in;
     
-    mux2to1_32bit DEST_REG_OR_31(
+    mux2to1_5bit DEST_REG_OR_31(
         .X(destReg_in),
         .Y(5'd31),
         .sel(PCtoReg_in),

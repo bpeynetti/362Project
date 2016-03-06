@@ -1,4 +1,4 @@
-SRC = ./tests/test.asm
+SRC = ./test/test.asm
 IVERILOG = iverilog
 DLXASM = ~/workspace/dlxasm
 
@@ -21,5 +21,5 @@ pclogic:
 	iverilog -o ./bin/test_pclogic -s testbench src/dff.v src/register.v ../ALU_files/src/mux.v src/extender.v ../ALU_files/src/adder.v ../ALU_files/src/and.v src/pc_logic.v tests/pclogic_test.v
 
 pipeline:
-	# $(DLXASM) -C ./tests/instr.hex -D ./tests/data.hex $(SRC)
+	$(DLXASM) -C ./test/instr.hex -D ./test/data.hex $(SRC)
 	$(IVERILOG) -o ./bin/test_pipe -s testbench src/lib/*.v src/*.v test/pipeline_test.v 
