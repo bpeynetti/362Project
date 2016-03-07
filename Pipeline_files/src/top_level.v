@@ -77,6 +77,13 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //                                     //
     /////////////////////////////////////////    
   
+
+    //HAZARD SIGNALS
+    wire rs1_mem_ex_hazard,rs2_mem_ex_hazard;
+    wire [0:31] aluResult_mem_in;
+
+
+
     /////////////////////////////////////////
     //                                     //
     //                                     //
@@ -299,10 +306,12 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:1] DSize_ex_out;
     wire [0:31] memVal_ex_out;
     
+
+    wire [0:31] opA_id_ex_out,opB_id_ex_out;
     
     assign nextPC_ex_in = ID_EXEC_OUT[0:31];
-    assign opA_ex_in = ID_EXEC_OUT[32:63];
-    assign opB_ex_in = ID_EXEC_OUT[64:95];
+    assign opA_id_ex_out = ID_EXEC_OUT[32:63];
+    assign opB_id_ex_out = ID_EXEC_OUT[64:95];
     assign offset_26_ex_in = ID_EXEC_OUT[96:121];
     assign offset_16_ex_in = ID_EXEC_OUT[122:137];
     // assign [0:5] opCode_ex_in = ID_EXEC_OUT[138:143];
@@ -324,6 +333,25 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign jumpNonReg_ex_in = ID_EXEC_OUT[192];
     assign r1_ex_in = ID_EXEC_OUT[193:197];
     assign r2_ex_in = ID_EXEC_OUT[198:202];
+
+
+
+
+    //DATA HAZARD MEM_EX
+    mux2to1_32bit OPA_MEM_EX_HAZARD(
+        .X(opA_id_ex_out),
+        .Y(aluResult_mem_in),
+        .sel(rs1_mem_ex_hazard),
+        .Z(opA_ex_in)
+    );
+
+    mux2to1_32bit OPB_MEM_EX_HAZARD(
+        .X(opB_id_ex_out),
+        .Y(aluResult_mem_in),
+        .sel(rs2_mem_ex_hazard),
+        .Z(opB_ex_in)
+    );
+
 
 
     execute EXEC_STAGE(
@@ -416,7 +444,6 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:31] nextPC_mem_in;
     wire [0:31] opB_mem_in;
     wire [0:4] destReg_mem_in;
-    wire [0:31] aluResult_mem_in;
     wire PCtoReg_mem_in;
     wire RegToPC_mem_in;
     wire RegWrite_mem_in;
@@ -609,12 +636,11 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     
     
     /// EX_MEM DATA HAZARD
-    wire rs1_mem_ex_hazard,rs2_mem_ex_hazard;
     
     mem_ex_hazard MEM_EX_HAZARD(
         .regWrite_mem(RegWrite_mem_in),
         .rd_mem(destReg_mem_in),
-        // .load_mem(),
+        .load_mem(MemToReg_mem_in),
         .jumpNonReg_ex(jumpNonReg_ex_in),
         .RType_ex(RType_ex_in),
         .store_ex(MemWrite_ex_in),

@@ -54,7 +54,7 @@ module instruction_decode(
     wire LHIOp;
     wire RType;
     
-    
+    wire PCtoReg;
     
     
     ////////////////////////////
@@ -67,7 +67,7 @@ module instruction_decode(
     
     control CONTROL_ID_STAGE(
         .instruction(instruction_in),
-        .PCtoReg(PCtoReg_out),
+        .PCtoReg(PCtoReg),
         .regToPC(RegToPC_out),
         .jump(jump_out),
         .branch(branch_out),
@@ -84,7 +84,7 @@ module instruction_decode(
         .LHIOp(LHIOp),
         .jumpNonReg(jumpNonReg_out)
     );
-    
+    assign PCtoReg_out = PCtoReg;
     
     /////////////////////////
     /////

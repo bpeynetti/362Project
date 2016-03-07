@@ -15,11 +15,7 @@ _f:
 .global _test
 _test:
     ; get whatever is on _f
-    addi r1,r0,0x2
-    nop
-    nop
-    nop
-    nop
-    sw _f,r1
+    addi r2,r0,0x3
+    add r3,r0,r2
     trap #0x300 ;end the execution
 .endproc _test
