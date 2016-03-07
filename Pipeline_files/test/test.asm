@@ -16,7 +16,10 @@ _f:
 _test:
     ; get whatever is on _f
     addi r1,r0,0x2
-    lw r2, 0x2000(r0) ;should be r1=1
-    lw r3, (0x2000+4)(r0) ; should be r2= f[0+4] = 2
+    nop
+    nop
+    nop
+    nop
+    sw _f,r1
     trap #0x300 ;end the execution
 .endproc _test

@@ -6,8 +6,7 @@ module instruction_decode(
     RType_out,RegWrite_out,MemToReg_out,MemWrite_out,loadSign_out,mul_out,
     extOp_out,LHIOp_out,DSize_out,ALUCtrl_out,
     // and instruction decoded
-    imm16_out,imm26_out,busA_out,busB_out,destReg,
-    dataMemWrite
+    imm16_out,imm26_out,busA_out,busB_out,destReg
     );
     
     parameter SIZE = 32;
@@ -28,9 +27,6 @@ module instruction_decode(
     output [0:15] imm16_out;
     output [0:25] imm26_out;
     output [0:4] destReg;
-    output [0:31] dataMemWrite;
-
-    assign dataMemWrite = busB_in;
     //what happens in here:
     
     //instruction and nextPC come as inputs

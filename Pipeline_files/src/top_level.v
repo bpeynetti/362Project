@@ -175,7 +175,6 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:3] ALUCtrl_id;
     wire [0:25] imm26_id;
     wire [0:15] imm16_id;
-    wire [0:31] dataMemWrite_id;
     
     //here goes the ID module with all its components inside of it
     instruction_decode ID_STAGE(
@@ -206,8 +205,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .busB_out(opB_id),
         .imm16_out(offset_16_id),
         .imm26_out(offset_26_id),
-        .destReg(destReg_id),
-        .dataMemWrite(dataMemWrite_id)
+        .destReg(destReg_id)
     );
     
     
@@ -219,7 +217,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     /////////////////////////////////////////
     
     //wire out of this stage to connecto to pipeline registers
-    wire [0:191] ID_EXEC_IN,ID_EXEC_OUT;
+    wire [0:159] ID_EXEC_IN,ID_EXEC_OUT;
     assign ID_EXEC_IN = 
     {
             nextPC_id_in,
@@ -231,8 +229,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
             branchZero_id, RType_id, 
             RegWrite_id, MemToReg_id, 
             MemWrite_id, loadSign_id, 
-            mul_id, DSize_id, ALUCtrl_id,
-            dataMemWrite_id
+            mul_id, DSize_id, ALUCtrl_id
     };
     
     id_ex_reg ID_EX_REG(
@@ -272,7 +269,6 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire mul_ex_in;
     wire [0:1] DSize_ex_in;
     wire [0:3] ALUCtrl_ex_in;
-    wire [0:31] dataMemWrite_ex_in;
     
     
     //output signals of the execute stage
@@ -291,7 +287,6 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire MemWrite_ex_out;
     wire loadSign_ex_out;
     wire [0:1] DSize_ex_out;
-    wire [0:31] dataMemWrite_ex_out;
     
     
     assign nextPC_ex_in = ID_EXEC_OUT[0:31];
@@ -314,7 +309,6 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign mul_ex_in = ID_EXEC_OUT[153];
     assign DSize_ex_in = ID_EXEC_OUT[154:155];
     assign ALUCtrl_ex_in = ID_EXEC_OUT[156:159];
-    assign dataMemWrite_ex_in = ID_EXEC_OUT[160:191];
 
 
     execute EXEC_STAGE(
@@ -341,7 +335,6 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .mul_in(mul_ex_in),
         .DSize_in(DSize_ex_in),
         .ALUCtrl_in(ALUCtrl_ex_in),
-        .dataMemWrite_in(dataMemWrite_ex_in),
         
         // outputs 
         .nextPC_out(nextPC_ex_out),
@@ -355,8 +348,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .MemWrite_out(MemWrite_ex_out),
         .loadSign_out(loadSign_ex_out),
         .DSize_out(DSize_ex_out),
-        .leap_out(leap_ex_out),
-        .dataMemWrite_out(dataMemWrite_ex_out)
+        .leap_out(leap_ex_out)
     );
     
     wire [0:31] opB_ex_out;
@@ -370,7 +362,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     /////////////////////////////////////////
     
     
-    wire [0:171] EXEC_MEM_IN,EXEC_MEM_OUT;
+    wire [0:141] EXEC_MEM_IN,EXEC_MEM_OUT;
     assign EXEC_MEM_IN = 
     {
            nextPC_ex_out,opB_ex_out,
@@ -379,8 +371,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
            RegWrite_ex_out,MemToReg_ex_out,
            MemWrite_ex_out,loadSign_ex_out,
            DSize_ex_out,
-           leapAddr_ex_out, leap_ex_out,
-           dataMemWrite_ex_out
+           leapAddr_ex_out, leap_ex_out
     };
     
     ex_mem_reg EX_MEM_REGISTER(
@@ -418,7 +409,6 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire MemWrite_mem_in;
     wire loadSign_mem_in;
     wire [0:1] DSize_mem_in;
-    wire [0:31] dataMemWrite_mem_in;
     
     //outputs of MEMORY stage
     wire [0:31] nextPC_mem_out;
@@ -441,7 +431,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign MemWrite_mem_in = EXEC_MEM_OUT[105];
     assign loadSign_mem_in = EXEC_MEM_OUT[106];
     assign DSize_mem_in = EXEC_MEM_OUT[107:108];
-    assign dataMemWrite_mem_in = EXEC_MEM_OUT[142:171];
+    
     //what we do here:
     ////    get the signals that go to the Memory (MemBus)
     ////    and put those all the way out othe top level pipeline processor
@@ -450,7 +440,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //this is directly to the input/output of the module, so not as wire
     // wire [0:64] DMEM_BUS_OUT;
     // wire [0:31] DMEM_BUS_IN;
-    assign DMEM_BUS_OUT = {aluResult_mem_in,dataMemWrite_mem_in,MemWrite_mem_in,DSize_mem_in};
+    assign DMEM_BUS_OUT = {aluResult_mem_in,opB_mem_in,MemWrite_mem_in,DSize_mem_in};
 
     //result of this
     wire [0:31] dataOut;

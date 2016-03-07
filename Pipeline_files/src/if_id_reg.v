@@ -24,7 +24,7 @@ module if_id_reg(in, out, clk, reset);
     
     PipeCtlRegN #(width) IF_ID_REG (
         .in(in),
-        .ctl(flush),
+        .ctl(1'b0),
         .clk(clk),
         .reset(reset),
         .out(out)
