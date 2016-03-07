@@ -40,7 +40,7 @@ module wb_ex_hazard(
 	
 	zero_5bit RS2_CHECK_EQUAL(
 		.X(rs2_xor),
-		.Z(rs2_equal)
+		.z(rs2_equal)
 	);
 	
 	assign rs1_hazard = rs1_equal & regWrite_wb & (~jumpNonReg_ex) & (~store_ex);

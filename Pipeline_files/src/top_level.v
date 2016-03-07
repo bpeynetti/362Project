@@ -80,7 +80,11 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
 
     //HAZARD SIGNALS
     wire rs1_mem_ex_hazard,rs2_mem_ex_hazard;
-    wire [0:31] aluResult_mem_in;
+    wire rs1_wb_ex_hazard,rs2_wb_ex_hazard;
+    wire [0:31] aluResult_mem_in,aluResult_wb_in; //note, we don't use aluResult_wb for hazard
+
+    wire [0:31] RegWriteVal_wb_out;
+
 
 
 
@@ -335,20 +339,35 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign r2_ex_in = ID_EXEC_OUT[198:202];
 
 
-
+    wire [0:31] opA_ex_mem_hzd,opB_ex_mem_hzd;
 
     //DATA HAZARD MEM_EX
     mux2to1_32bit OPA_MEM_EX_HAZARD(
         .X(opA_id_ex_out),
         .Y(aluResult_mem_in),
         .sel(rs1_mem_ex_hazard),
-        .Z(opA_ex_in)
+        .Z(opA_ex_mem_hzd)
     );
 
     mux2to1_32bit OPB_MEM_EX_HAZARD(
         .X(opB_id_ex_out),
         .Y(aluResult_mem_in),
         .sel(rs2_mem_ex_hazard),
+        .Z(opB_ex_mem_hzd)
+    );
+
+    // DATA HAZARD WB_EX
+    mux2to1_32bit OPA_WB_EX_HAZARD(
+        .X(opA_ex_mem_hzd),
+        .Y(RegWriteVal_wb_out),
+        .sel(rs1_wb_ex_hazard),
+        .Z(opA_ex_in)
+    );
+
+    mux2to1_32bit OPB_WB_EX_HAZARD(
+        .X(opB_ex_mem_hzd),
+        .Y(RegWriteVal_wb_out),
+        .sel(rs2_wb_ex_hazard),
         .Z(opB_ex_in)
     );
 
@@ -562,7 +581,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //INPUTS
     wire [0:31] nextPC_wb_in; 
     wire [0:4] destReg_wb_in; 
-    wire [0:31] aluResult_wb_in;
+    // wire [0:31] aluResult_wb_in;
     wire [0:31] dataOut_wb_in; 
     wire PCtoReg_wb_in; 
     wire RegWrite_wb_in;
@@ -572,7 +591,6 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     // OUTPUTS
     wire [0:4] destReg_wb_out;
     wire RegWrite_wb_out;
-    wire [0:31] RegWriteVal_wb_out;
     
     assign nextPC_wb_in = MEM_WB_OUT[0:31];
     assign destReg_wb_in = MEM_WB_OUT[32:36];
@@ -650,6 +668,19 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .rs2_hazard(rs2_mem_ex_hazard)
     );
 
+
+    wb_ex_hazard WB_EX_HAZARD(
+        .regWrite_wb(RegWrite_wb_in),
+        .rd_wb(destReg_wb_in),
+        // .load_mem(MemToReg_wb_in),
+        .jumpNonReg_ex(jumpNonReg_ex_in),
+        .RType_ex(RType_ex_in),
+        .store_ex(MemWrite_ex_in),
+        .rs1_ex(r1_ex_in),
+        .rs2_ex(r2_ex_in),
+        .rs1_hazard(rs1_wb_ex_hazard),
+        .rs2_hazard(rs2_wb_ex_hazard)    
+    );
     
     
     
