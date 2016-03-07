@@ -18,10 +18,11 @@ module control(
     ALUCtrl,
     mul,
     extOp, //0 for unsigned immediate instructions
-    LHIOp //1 for LHI
+    LHIOp, //1 for LHI
+    jumpNonReg
 );
     input [0:31] instruction;
-    output PCtoReg, regToPC, jump, branch, branchZero, RType, RegWrite, MemToReg, MemWrite, mul, extOp, LHIOp,loadSign;
+    output PCtoReg, regToPC, jump, branch, branchZero, RType, RegWrite, MemToReg, MemWrite, mul, extOp, LHIOp,loadSign,jumpNonReg;
     output [0:1] DSize;
     output [0:3] ALUCtrl;
     
@@ -38,6 +39,7 @@ module control(
     wire slt, sle, sgt, sge, seq, sne;
     wire sra, srl, sll;
     wire andwire, orwire, xorwire;
+    // wire j,jal;
     
     assign opcode = instruction[0:5];
     assign func = instruction[26:31];
@@ -47,6 +49,9 @@ module control(
     assign rd = instruction[16:20];
     assign imm16 = instruction[16:31];
     assign imm26 = instruction[6:31];
+    
+    assign jumpNonReg = ~(opcode[0] | opcode[1] | opcode[2] | opcode[3] ) & opcode[4];
+    
     
     assign PCtoReg = (~opcode[0]) & (~opcode[2]) & (~opcode[3]) & opcode[4] & opcode[5];
     assign regToPC = (~opcode[0]) & opcode[1] & (~opcode[2]) & (~opcode[3]) & opcode[4];

@@ -7,7 +7,9 @@ module instruction_decode(
     extOp_out,LHIOp_out,DSize_out,ALUCtrl_out,
     // and instruction decoded
     imm16_out,imm26_out,busA_out,busB_out,destReg,
-    memVal_out
+    memVal_out,
+    jumpNonReg_out,
+    r1_out, r2_out
     );
     
     parameter SIZE = 32;
@@ -29,6 +31,9 @@ module instruction_decode(
     output [0:25] imm26_out;
     output [0:4] destReg;
     output [0:31] memVal_out;
+    output jumpNonReg_out;
+    output [0:4] r1_out,r2_out;
+
     //what happens in here:
     
     //instruction and nextPC come as inputs
@@ -76,7 +81,8 @@ module instruction_decode(
         .ALUCtrl(ALUCtrl_out),
         .mul(mul_out),
         .extOp(extOp),
-        .LHIOp(LHIOp)
+        .LHIOp(LHIOp),
+        .jumpNonReg(jumpNonReg_out)
     );
     
     
@@ -162,22 +168,25 @@ module instruction_decode(
     assign r2 = instruction_in[11:15];
     assign rd = instruction_in[16:20];    //mux with selector which is rType=1, else=0
     
+    assign r1_out = r1;
+    assign r2_out = r2;
+    
     mux2to1_5bit R2_OR_RD(
         .X(r2),
         .Y(rd),
         .sel(RType),
         .Z(r2OrRd)
     );
-    assign rw = r2OrRd;
+    // assign rw = r2OrRd;
     
-    //now the one that works with jar/jal (save pc to register 31)
+    // now the one that works with jar/jal (save pc to register 31)
     // THIS IS DONE IN THE LAST STAGE
-    // mux2to1_5bit SAVE_TO_PC(
-    //     .X(r2OrRd),
-    //     .Y(5'd31),
-    //     .sel(PCtoReg),
-    //     .Z(rw)
-    // );
+    mux2to1_5bit SAVE_TO_PC(
+        .X(r2OrRd),
+        .Y(5'd31),
+        .sel(PCtoReg),
+        .Z(rw)
+    );
     
     
 endmodule

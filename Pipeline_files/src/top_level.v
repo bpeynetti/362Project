@@ -176,6 +176,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:25] imm26_id;
     wire [0:15] imm16_id;
     wire [0:31] memVal_id;
+    wire jumpNonReg_id;
     
     //here goes the ID module with all its components inside of it
     instruction_decode ID_STAGE(
@@ -207,7 +208,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .imm16_out(offset_16_id),
         .imm26_out(offset_26_id),
         .destReg(destReg_id),
-        .memVal_out(memVal_id)
+        .memVal_out(memVal_id),
+        .jumpNonReg_out(jumpNonReg_id)
     );
     
     
@@ -219,7 +221,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     /////////////////////////////////////////
     
     //wire out of this stage to connecto to pipeline registers
-    wire [0:191] ID_EXEC_IN,ID_EXEC_OUT;
+    wire [0:202] ID_EXEC_IN,ID_EXEC_OUT;
     assign ID_EXEC_IN = 
     {
             nextPC_id_in,
@@ -232,7 +234,9 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
             RegWrite_id, MemToReg_id, 
             MemWrite_id, loadSign_id, 
             mul_id, DSize_id, ALUCtrl_id,
-            memVal_id
+            memVal_id,
+            jumpNonReg_id,
+            r1_id,r2_id
     };
     
     id_ex_reg ID_EX_REG(
@@ -273,6 +277,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:1] DSize_ex_in;
     wire [0:3] ALUCtrl_ex_in;
     wire [0:31] memVal_ex_in;
+    wire jumpNonReg_ex_in;
+    wire [0:4] r1_ex_in,r2_ex_in;
     
     
     //output signals of the execute stage
@@ -315,6 +321,9 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign DSize_ex_in = ID_EXEC_OUT[154:155];
     assign ALUCtrl_ex_in = ID_EXEC_OUT[156:159];
     assign memVal_ex_in = ID_EXEC_OUT[160:191];
+    assign jumpNonReg_ex_in = ID_EXEC_OUT[192];
+    assign r1_ex_in = ID_EXEC_OUT[193:197];
+    assign r2_ex_in = ID_EXEC_OUT[198:202];
 
 
     execute EXEC_STAGE(
@@ -597,5 +606,26 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //                                     //
     //                                     //
     /////////////////////////////////////////
+    
+    
+    /// EX_MEM DATA HAZARD
+    wire rs1_mem_ex_hazard,rs2_mem_ex_hazard;
+    
+    mem_ex_hazard MEM_EX_HAZARD(
+        .regWrite_mem(RegWrite_mem_in),
+        .rd_mem(destReg_mem_in),
+        // .load_mem(),
+        .jumpNonReg_ex(jumpNonReg_ex_in),
+        .RType_ex(RType_ex_in),
+        .store_ex(MemWrite_ex_in),
+        .rs1_ex(r1_ex_in),
+        .rs2_ex(r2_ex_in),
+        .rs1_hazard(rs1_mem_ex_hazard),
+        .rs2_hazard(rs2_mem_ex_hazard)
+    );
+
+    
+    
+    
     
 endmodule

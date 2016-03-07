@@ -23,3 +23,22 @@ module xor_32(X, Y, Z);
     endgenerate
 
 endmodule
+
+module xor_5(X, Y, Z);
+    parameter WIDTH = 5;
+    input [0:(WIDTH-1)] X, Y;
+    output [0:(WIDTH-1)] Z;
+    
+    genvar i;
+    generate
+        for (i=0;i<WIDTH;i=i+1) begin: XOR_5BIT
+            //each bit of the output is just the 
+            //result of an and on that bit of the two inputs
+            xor_1 XOR_1 (
+                .x(X[i]),
+                .y(Y[i]),
+                .z(Z[i]));
+        end
+    endgenerate
+
+endmodule
