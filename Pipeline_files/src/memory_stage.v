@@ -26,7 +26,7 @@ module memory_stage(
     input loadSign_in;
     input [0:1] DSize_in;
     input clk, reset;
-    input dMemValue_in;
+    input [0:31] dMemValue_in;
     
     output [0:31] nextPC_out;
     output [0:4] destReg_out;

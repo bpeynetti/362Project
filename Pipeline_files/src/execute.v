@@ -2,13 +2,14 @@ module execute (
     //inputs
     nextPC_in,opA_in,opB_in,offset26_in,offset16_in,destReg_in,PCtoReg_in,
     RegToPC_in,jump_in,branch_in,branchZero_in,RType_in,RegWrite_in,MemToReg_in,
-    MemWrite_in,loadSign_in,mul_in,DSize_in,ALUCtrl_in,
+    MemWrite_in,loadSign_in,mul_in,DSize_in,ALUCtrl_in,dataMemWrite_in,
     //basic clk, reset input
     clk,reset,
     //outputs
     nextPC_out, aluResult_out, leapAddr_out, destReg_out, leap_out,
     PCtoReg_out, RegToPC_out, 
-    RegWrite_out, MemToReg_out, MemWrite_out, loadSign_out, DSize_out
+    RegWrite_out, MemToReg_out, MemWrite_out, loadSign_out, DSize_out,
+    dataMemWrite_out
     );
     
     input [0:31] nextPC_in;
@@ -31,6 +32,7 @@ module execute (
     input [0:1] DSize_in;
     input [0:3] ALUCtrl_in;
     input clk,reset;
+    input [0:31] dataMemWrite_in;
     
     output [0:31] nextPC_out;
     output [0:31] aluResult_out;
@@ -44,6 +46,7 @@ module execute (
     output MemWrite_out;
     output loadSign_out;
     output [0:1] DSize_out;
+    output [0:31] dataMemWrite_out;
     
     wire [0:31] imm16_32, imm26_32, imm_final;
     wire sum_cout, sum_of;
@@ -51,6 +54,8 @@ module execute (
     wire [0:31] not_mul_result;
     wire [0:31] mul_result;
     wire [0:31] pc_nonreg;
+
+    assign dataMemWrite_out = dataMemWrite_in;
     
     assign PCtoReg_out = PCtoReg_in;
     assign RegToPC_out = RegToPC_in; //not needed?
@@ -60,6 +65,7 @@ module execute (
     assign loadSign_out = loadSign_in;
     assign DSize_out = DSize_in;
     assign nextPC_out = nextPC_in;
+    assign destReg_out = destReg_in;
     
     alu alu_ex(
        .A(opA_in),
@@ -84,7 +90,7 @@ module execute (
     );
     
     check_branch decide_if_leap(
-        .busA(not_mul_result),
+        .busA(opA_in),
         .aluZero(zero),
         .branchZero(branchZero_in),
         .branch(branch_in),
