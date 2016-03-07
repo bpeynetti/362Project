@@ -1,5 +1,5 @@
 module id_ex_reg(in, out, clk, reset);
-    parameter width = 160;
+    parameter width = 192;
     input [0:width-1] in;
     input clk,reset;
     output [0:width-1] out;
@@ -24,6 +24,7 @@ module id_ex_reg(in, out, clk, reset);
     wire mul = in[153];
     wire [0:1] DSize = in[154:155];
     wire [0:3] ALUCtrl = in[156:159];
+    wire [0:31] memVal = in[160:191];
     
     PipeCtlRegN #(width) ID_EX_REG (
         .in(in),

@@ -1,6 +1,6 @@
 module ex_mem_reg(in, out,clk, reset);
 
-    parameter width = 142;
+    parameter width = 174;
     input [0:(width-1)] in;
     input clk,reset;
     output [0:(width-1)] out;
@@ -18,6 +18,7 @@ module ex_mem_reg(in, out,clk, reset);
     wire [0:1] DSize = in[107:108];
     wire [0:31] leapAddr = in[109:140];
     wire leap = in[141];
+    wire [0:31] memVal = in[142:173];
     
     wire flush;
     assign flush = 1'b0;

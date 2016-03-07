@@ -2,13 +2,13 @@ module execute (
     //inputs
     nextPC_in,opA_in,opB_in,offset26_in,offset16_in,destReg_in,PCtoReg_in,
     RegToPC_in,jump_in,branch_in,branchZero_in,RType_in,RegWrite_in,MemToReg_in,
-    MemWrite_in,loadSign_in,mul_in,DSize_in,ALUCtrl_in,
+    MemWrite_in,loadSign_in,mul_in,DSize_in,ALUCtrl_in, memVal_in,
     //basic clk, reset input
     clk,reset,
     //outputs
     nextPC_out, aluResult_out, leapAddr_out, destReg_out, leap_out,
     PCtoReg_out, RegToPC_out, 
-    RegWrite_out, MemToReg_out, MemWrite_out, loadSign_out, DSize_out
+    RegWrite_out, MemToReg_out, MemWrite_out, loadSign_out, DSize_out, memVal_out
     );
     
     input [0:31] nextPC_in;
@@ -30,6 +30,7 @@ module execute (
     input mul_in;
     input [0:1] DSize_in;
     input [0:3] ALUCtrl_in;
+    input [0:31] memVal_in;
     input clk,reset;
     
     output [0:31] nextPC_out;
@@ -44,6 +45,7 @@ module execute (
     output MemWrite_out;
     output loadSign_out;
     output [0:1] DSize_out;
+    output [0:31] memVal_out;
     
     wire [0:31] imm16_32, imm26_32, imm_final;
     wire sum_cout, sum_of;
@@ -61,6 +63,7 @@ module execute (
     assign DSize_out = DSize_in;
     assign nextPC_out = nextPC_in;
     assign destReg_out = destReg_in;
+    assign memVal_out = memVal_in;
     
     alu alu_ex(
        .A(opA_in),
