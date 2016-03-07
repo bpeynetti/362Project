@@ -1,6 +1,6 @@
 SRC = ./test/test.asm
 IVERILOG = iverilog
-DLXASM = ~/workspace/dlxasm
+DLXASM = ../dlxasm
 
 default: pipeline
 
