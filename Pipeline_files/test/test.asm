@@ -16,7 +16,6 @@ _f:
 _test:
     ; get whatever is on _f
     lw r1, _f(r0)
-    nop
     add r3,r0,r1
     trap #0x300 ;end the execution
 .endproc _test
