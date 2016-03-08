@@ -15,9 +15,7 @@ _f:
 .global _test
 _test:
     ; get whatever is on _f
-    lw r1, _f(r0)
-    slli r3,r1,0x1c
-    srai r2,r3,0x8
-    srli r2,r3,0x4
+    addi r1,r0,0x2
+    sw _f(r0),r1
     trap #0x300 ;end the execution
 .endproc _test

@@ -714,7 +714,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     );
     
     wb_mem_hazard WB_MEM_HAZARD(
-        .regWrite_wb(regWrite_wb_in),
+        .regWrite_wb(RegWrite_wb_in),
         .rd_wb(destReg_wb_in),
         .store_mem(MemWrite_mem_in),
         .rs_mem(rs2_mem_in),
