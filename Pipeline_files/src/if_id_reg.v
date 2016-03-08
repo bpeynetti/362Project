@@ -1,6 +1,7 @@
-module if_id_reg(in, out, clk, reset);
+module if_id_reg(in, flush, out, clk, reset);
     parameter width = 64;
     input [0:width-1] in;
+    input flush;
     input clk,reset;
     output [0:width-1] out;
     
@@ -24,7 +25,7 @@ module if_id_reg(in, out, clk, reset);
     
     PipeCtlRegN #(width) IF_ID_REG (
         .in(in),
-        .ctl(1'b0),
+        .ctl(flush),
         .clk(clk),
         .reset(reset),
         .out(out)

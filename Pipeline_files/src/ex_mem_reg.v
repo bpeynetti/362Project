@@ -1,7 +1,8 @@
-module ex_mem_reg(in, out,clk, reset);
+module ex_mem_reg(in, flush, out,clk, reset);
 
     parameter width = 174;
     input [0:(width-1)] in;
+    input flush;
     input clk,reset;
     output [0:(width-1)] out;
     

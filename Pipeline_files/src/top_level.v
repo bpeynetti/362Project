@@ -82,8 +82,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire rs1_mem_ex_hazard,rs2_mem_ex_hazard;
     wire rs1_wb_ex_hazard,rs2_wb_ex_hazard;
     wire [0:31] aluResult_mem_in,aluResult_wb_in; //note, we don't use aluResult_wb for hazard
-
     wire [0:31] RegWriteVal_wb_out;
+    wire load_stall_id_if;
 
 
 
@@ -110,6 +110,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     instruction_fetch IF_STAGE(
         .leap_addr(leapAddr_mem_in),
         .leap(leap_mem_in),
+        .pc_we(~load_stall_id_if),
         .clk(clk),
         .reset(reset),
         .pcplus4(pcplus4_if_out),
@@ -131,6 +132,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     
     if_id_reg IF_ID_REG(
         .in(IF_ID_IN),
+        .flush(load_stall_id_if),
         .out(IF_ID_OUT),
         .clk(clk),
         .reset(reset)
@@ -682,7 +684,11 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .rs2_hazard(rs2_wb_ex_hazard)    
     );
     
-    
-    
+    load_stall LOAD_STALL(
+        .regWrite_id(RegWrite_id),
+        .rd_id(destReg_id),
+        .instruction_if(instruction_if_out),
+        .stall(load_stall_id_if)
+    );
     
 endmodule
