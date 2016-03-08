@@ -85,6 +85,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:31] RegWriteVal_wb_out;
     wire load_stall_id_if;
 
+    wire wb_mem_hazard;
 
 
 
@@ -426,9 +427,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //          EXEC_MEM PIPELINE REGISTER
     //
     /////////////////////////////////////////
+    wire [0:4] rs2_ex_out;
+    assign rs2_ex_out = r2_ex_in;
     
-    
-    wire [0:173] EXEC_MEM_IN,EXEC_MEM_OUT;
+    wire [0:178] EXEC_MEM_IN,EXEC_MEM_OUT;
     assign EXEC_MEM_IN = 
     {
            nextPC_ex_out,opB_ex_out,
@@ -438,7 +440,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
            MemWrite_ex_out,loadSign_ex_out,
            DSize_ex_out,
            leapAddr_ex_out, leap_ex_out,
-           memVal_ex_out
+           memVal_ex_out,
+           rs2_ex_out
     };
     
     ex_mem_reg EX_MEM_REGISTER(
@@ -448,6 +451,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .out(EXEC_MEM_OUT)
     );
     
+
     /////////////////////////////////////////
     //                                     //
     //                                     //
@@ -483,6 +487,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire loadSign_mem_out;
     wire [0:1] DSize_mem_out;
     
+    wire [0:4] rs2_mem_in;
+    
+
+    
     //get signals out of the register file
     assign nextPC_mem_in = EXEC_MEM_OUT[0:31];
     assign opB_mem_in = EXEC_MEM_OUT[32:63];
@@ -498,6 +506,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign leapAddr_mem_in = EXEC_MEM_OUT[109:140];
     assign leap_mem_in = EXEC_MEM_OUT[141];
     assign memVal_mem_in = EXEC_MEM_OUT[142:173];
+    assign rs2_mem_in = EXEC_MEM_OUT[174:178];
     
     //what we do here:
     ////    get the signals that go to the Memory (MemBus)
@@ -507,7 +516,20 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //this is directly to the input/output of the module, so not as wire
     // wire [0:64] DMEM_BUS_OUT;
     // wire [0:31] DMEM_BUS_IN;
-    assign DMEM_BUS_OUT = {aluResult_mem_in,memVal_mem_in,MemWrite_mem_in,DSize_mem_in};
+    
+    
+    //MEM_WB (store) HAZARD
+    wire [0:31] memVal_correct_in;
+    
+    mux2to1_32bit STORE_HAZARD_MUX(
+        .X(memVal_mem_in),
+        .Y(RegWriteVal_wb_out),
+        .sel(wb_mem_hazard),
+        .Z(memVal_correct_in)
+    );
+    
+    
+    assign DMEM_BUS_OUT = {aluResult_mem_in,memVal_correct_in,MemWrite_mem_in,DSize_mem_in};
 
     //result of this
     wire [0:31] dataOut;
@@ -689,6 +711,14 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .rd_id(destReg_id),
         .instruction_if(instruction_if_out),
         .stall(load_stall_id_if)
+    );
+    
+    wb_mem_hazard WB_MEM_HAZARD(
+        .regWrite_wb(regWrite_wb_in),
+        .rd_wb(destReg_wb_in),
+        .store_mem(MemWrite_mem_in),
+        .rs_mem(rs2_mem_in),
+        .store_hazard(wb_mem_hazard)
     );
     
 endmodule
