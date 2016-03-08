@@ -9,7 +9,7 @@ module load_stall(
 
 	input regWrite_id;
 	input [0:4] rd_id;
-	input instruction_if;
+	input [0:31] instruction_if;
 	output stall;
 	
 	wire [0:4] rs1, rs2, rs1_xor, rs2_xor;
@@ -47,6 +47,6 @@ module load_stall(
 		.z(rs2_equal)
 	);
 	
-	assign stall = (rs1_equal & regWrite_wb & (~jumpNonReg_ex) & (~store_ex)) | (rs2_equal & regWrite_wb & (~jumpNonReg_ex) & (RType_ex | store_ex));
+	assign stall = (rs1_equal & regWrite_id & (~jumpNonReg_if) & (~store_if)) | (rs2_equal & regWrite_id & (~jumpNonReg_if) & (RType_if | store_if));
 	
 endmodule
