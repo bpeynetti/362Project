@@ -1,13 +1,13 @@
 module load_stall(
 	//inputs from first instruction (in insturction decode stage)
-	regWrite_id, rd_id,
+	MemToReg_id, rd_id,
 	//inputs from second instruction (in instruction fetch stage)
 	instruction_if,
 	//output: whether to stall the instruction in instruction fetch for 1 cycle
 	stall
 );
 
-	input regWrite_id;
+	input MemToReg_id;
 	input [0:4] rd_id;
 	input [0:31] instruction_if;
 	output stall;
@@ -47,6 +47,6 @@ module load_stall(
 		.z(rs2_equal)
 	);
 	
-	assign stall = (rs1_equal & regWrite_id & (~jumpNonReg_if) & (~store_if)) | (rs2_equal & regWrite_id & (~jumpNonReg_if) & (RType_if | store_if));
+	assign stall = (rs1_equal & MemToReg_id & (~jumpNonReg_if) & (~store_if)) | (rs2_equal & MemToReg_id & (~jumpNonReg_if) & (RType_if | store_if));
 	
 endmodule

@@ -685,7 +685,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     );
     
     load_stall LOAD_STALL(
-        .regWrite_id(RegWrite_id),
+        .MemToReg_id(MemToReg_id),
         .rd_id(destReg_id),
         .instruction_if(instruction_if_out),
         .stall(load_stall_id_if)
