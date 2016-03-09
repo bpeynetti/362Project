@@ -65,7 +65,7 @@ initial begin
    #2 reset=0;
    #2 reset=1;
 
-   #100; 
+   #800; 
    $finish;
 end
 

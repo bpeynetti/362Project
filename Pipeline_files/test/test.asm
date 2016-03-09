@@ -4,8 +4,8 @@
 .data 0x2000
 .global _f
 _f:
-.word 84
 .word 1
+.word 2
 
 ; Instructions
 .text
@@ -15,31 +15,29 @@ _f:
 .proc _fib
 .global _fib
 _fib:
-    addui r3,r0,0x4; 0
-    nop
-    xor r2,r2,r2; 4
+	addui r3,r3,0x3
+	lw r1,_f(r0)
+	lw r2,(_f+4)(r0)
+	xor r3,r3,r3
+	addui r3,r3,0x8
 fibr1:
-	;addui r3,r3,0x4; 8
+	add r1, r1, r2 ; a=(a+b)
 	nop
 	nop
-	sw _f(r2),r3; 10
-	nop
-	nop
-	;addui r2,r2,#0x1; 14
-    ;sgei r4, r3, #0x8; 18
-    ;nop
-    ;nop
-    ;lw r1,_f(r0)
-    ;xor x5,x1,x3
-    ; 0xb4 = 180 = 45*4
-    ; much higher, and the number runs out of bits
-    ;beqz r4, fibr1
-    ;nop; 1c
-    trap #0x300; 20
+    trap #0x300
 
 .endproc _fib
 
 
 
-; hazard addui,nop,sw -> it's taking the result of r3 (addui) and putting it in aluResult
-; we want it to be in the opB (for storing the value)
+;////
+
+;DATA HAZARD
+
+;lw r2,(_f+4)(r0) - wb
+;xor r3,r3,r3	 - mem
+;addui r3,r3,0x8  - ex
+;add r1,r1,r2	 - id (need r2 that hasn't been written into r2 from the load)
+
+
+;avg_list = [(sum(x)/len(x)) for x in avg_list]
