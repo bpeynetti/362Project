@@ -686,7 +686,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //                                     //
     //                                     //
     /////////////////////////////////////////
-    
+    wire [0:31] r1_reg_file,r2_reg_file;
     
     register_file REG_FILE(
             .rd(destReg_wb_out), //destination register number (COMES FROM WB STAGE)
@@ -697,10 +697,37 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
             .writeEnable(RegWrite_wb_out), //1 to write (COMES FROM WB STAGE)
             .reset(reset), //1 for reset (GENERAL)
     
-            .busA(reg1_id), //value from register ra (GOES TO ID STAGE)
-            .busB(reg2_id) //value from register rb (GOES TO ID STAGE)
+            .busA(r1_reg_file), //value from register ra (GOES TO HAZARD DETECT)
+            .busB(r2_reg_file) //value from register rb (GOES TO HAZARD DETECT)
     );
     
+    
+    wire wb_id_hazard_rs1, wb_id_hazard_rs2;
+    wire [0:31] busW;
+    assign busW = RegWriteVal_wb_out;
+    
+    wb_id_hazard WB_ID_HAZARD(
+        .rs1_id(r1_id),
+        .rs2_id(r2_id),
+        .rd_wb(destReg_wb_out),
+        .we_wb(RegWrite_wb_out),
+        .wb_id_hazard_rs1(wb_id_hazard_rs1),
+        .wb_id_hazard_rs2(wb_id_hazard_rs2)
+    );
+    
+    mux2to1_32bit HAZARD_BUS_A_ID(
+        .X(r1_reg_file),
+        .Y(busW),
+        .sel(wb_id_hazard_rs1),
+        .Z(reg1_id)
+    );
+    
+    mux2to1_32bit HAZARD_BUS_B_ID(
+        .X(r2_reg_file),
+        .Y(busW),
+        .sel(wb_id_hazard_rs2),
+        .Z(reg2_id)
+    );
     
     /////////////////////////////////////////
     //                                     //

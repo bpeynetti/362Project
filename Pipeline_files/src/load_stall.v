@@ -37,12 +37,12 @@ module load_stall(
 		.Z(rs2_xor)
 	);
 	
-	zero_5bit RS1_CHECK_EQUAL(
+	zero_5bit RS1_CHECK_RS1_EQUAL(
 		.X(rs1_xor),
 		.z(rs1_equal)
 	);
 	
-	zero_5bit RS2_CHECK_EQUAL(
+	zero_5bit RS2_CHECK_RS2_EQUAL(
 		.X(rs2_xor),
 		.z(rs2_equal)
 	);
