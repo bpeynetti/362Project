@@ -80,7 +80,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
 
     //HAZARD SIGNALS
     wire rs1_mem_ex_hazard,rs2_mem_ex_hazard;
-    wire store_mem_ex_hazard;
+    wire store_mem_ex_hazard,store_wb_ex_hazard;
     wire rs1_wb_ex_hazard,rs2_wb_ex_hazard;
     wire [0:31] aluResult_mem_in,aluResult_wb_in; //note, we don't use aluResult_wb for hazard
     wire [0:31] RegWriteVal_wb_out;
@@ -401,10 +401,18 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .Z(opB_ex_in)
     );
 
+    wire [0:31] memVal_partial_ex_in;
     wire [0:31] memVal_correct_ex_in;
     
-    mux2to1_32bit MEM_EX_STORE_HAZARD(
+    mux2to1_32bit WB_EX_STORE_HAZARD(
         .X(memVal_ex_in),
+        .Y(aluResult_wb_in),
+        .sel(store_wb_ex_hazard),
+        .Z(memVal_partial_ex_in)
+    );
+    
+    mux2to1_32bit MEM_EX_STORE_HAZARD(
+        .X(memVal_partial_ex_in),
         .Y(aluResult_mem_in),
         .sel(store_mem_ex_hazard),
         .Z(memVal_correct_ex_in)
@@ -775,7 +783,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .rs1_ex(r1_ex_in),
         .rs2_ex(r2_ex_in),
         .rs1_hazard(rs1_wb_ex_hazard),
-        .rs2_hazard(rs2_wb_ex_hazard)    
+        .rs2_hazard(rs2_wb_ex_hazard),
+        .store_hazard(store_wb_ex_hazard)
     );
     
     load_stall LOAD_STALL(
