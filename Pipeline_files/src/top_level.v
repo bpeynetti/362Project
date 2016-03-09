@@ -87,6 +87,17 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
 
     wire wb_mem_hazard;
 
+    wire [0:31] leapAddr_ex_out;
+    wire [0:31] leapAddr_mem_in;
+
+    wire leap_ex_out;
+    wire leap_mem_in;
+
+
+    wire trap_id;
+    wire trap_ex;
+    wire trap_mem;
+    wire trap_wb;
 
 
     /////////////////////////////////////////
@@ -102,10 +113,15 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:31] pc_out;
     ///////
     ///     GO TO IMEM BY SETTING IMEM_BUS IN/OUT
-    assign IMEM_BUS_OUT = pc_out;
+    mux2to1_32bit SEL_CORRECT_PC(
+        .X(pc_out),
+        .Y(leapAddr_mem_in),
+        .sel(leap_mem_in),
+        .Z(IMEM_BUS_OUT)
+        );
+
+    // assign IMEM_BUS_OUT = pc_out;
     
-    wire leap_mem_in;
-    wire [0:31] leapAddr_mem_in;
     
     //// wire the IF_STAGE
     instruction_fetch IF_STAGE(
@@ -131,6 +147,11 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     
     assign IF_ID_IN = {pcplus4_if_out,instruction_if_out};
     
+
+    wire if_id_flush;
+
+    assign if_id_flush = leap_mem_in | load_stall_id_if;
+
     if_id_reg IF_ID_REG(
         .in(IF_ID_IN),
         .flush(load_stall_id_if),
@@ -223,7 +244,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .imm26_out(offset_26_id),
         .destReg(destReg_id),
         .memVal_out(memVal_id),
-        .jumpNonReg_out(jumpNonReg_id)
+        .jumpNonReg_out(jumpNonReg_id),
+        .trap_out(trap_id)
     );
     
     
@@ -235,7 +257,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     /////////////////////////////////////////
     
     //wire out of this stage to connecto to pipeline registers
-    wire [0:202] ID_EXEC_IN,ID_EXEC_OUT;
+    wire [0:203] ID_EXEC_IN,ID_EXEC_OUT;
     assign ID_EXEC_IN = 
     {
             nextPC_id_in,
@@ -250,14 +272,19 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
             mul_id, DSize_id, ALUCtrl_id,
             memVal_id,
             jumpNonReg_id,
-            r1_id,r2_id
+            r1_id,r2_id,
+            trap_id
     };
     
+    wire id_ex_flush;
+    assign id_ex_flush = leap_mem_in;
+
     id_ex_reg ID_EX_REG(
         .in(ID_EXEC_IN),
         .clk(clk),
         .reset(reset),
-        .out(ID_EXEC_OUT)
+        .out(ID_EXEC_OUT),
+        .flush(id_ex_flush)
     );
     
     
@@ -298,9 +325,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //output signals of the execute stage
     // wire [0:31] nextPC_ex_out;
     wire [0:31] aluResult_ex_out;
-    wire [0:31] leapAddr_ex_out;
     wire [0:4] destReg_ex_out;
-    wire leap_ex_out;
     wire PCtoReg_ex_out;
     wire RegToPC_ex_out;
     // wire jump_ex_out;
@@ -340,6 +365,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign jumpNonReg_ex_in = ID_EXEC_OUT[192];
     assign r1_ex_in = ID_EXEC_OUT[193:197];
     assign r2_ex_in = ID_EXEC_OUT[198:202];
+    assign trap_ex = ID_EXEC_OUT[203];
 
 
     wire [0:31] opA_ex_mem_hzd,opB_ex_mem_hzd;
@@ -430,7 +456,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:4] rs2_ex_out;
     assign rs2_ex_out = r2_ex_in;
     
-    wire [0:178] EXEC_MEM_IN,EXEC_MEM_OUT;
+    wire [0:179] EXEC_MEM_IN,EXEC_MEM_OUT;
     assign EXEC_MEM_IN = 
     {
            nextPC_ex_out,opB_ex_out,
@@ -441,14 +467,19 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
            DSize_ex_out,
            leapAddr_ex_out, leap_ex_out,
            memVal_ex_out,
-           rs2_ex_out
+           rs2_ex_out,
+           trap_ex
     };
+
+    wire ex_mem_flush;
+    assign ex_mem_flush = leap_mem_in;
     
     ex_mem_reg EX_MEM_REGISTER(
         .in(EXEC_MEM_IN),
         .clk(clk),
         .reset(reset),
-        .out(EXEC_MEM_OUT)
+        .out(EXEC_MEM_OUT),
+        .flush(ex_mem_flush)
     );
     
 
@@ -507,6 +538,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign leap_mem_in = EXEC_MEM_OUT[141];
     assign memVal_mem_in = EXEC_MEM_OUT[142:173];
     assign rs2_mem_in = EXEC_MEM_OUT[174:178];
+    assign trap_mem = EXEC_MEM_OUT[179];
     
     //what we do here:
     ////    get the signals that go to the Memory (MemBus)
@@ -575,14 +607,15 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //
     /////////////////////////////////////////
     
-    wire[0:106] MEM_WB_IN, MEM_WB_OUT;
+    wire[0:107] MEM_WB_IN, MEM_WB_OUT;
     
     assign MEM_WB_IN = {
         nextPC_mem_out,destReg_mem_out,
         aluResult_mem_out,dataOut_mem_out,
         PCtoReg_mem_out, RegWrite_mem_out,
         MemToReg_mem_out, loadSign_mem_out,
-        DSize_mem_out
+        DSize_mem_out,
+        trap_mem
     };
 
     mem_wb_reg MEM_WB_REG(
@@ -625,6 +658,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign MemToReg_wb_in = MEM_WB_OUT[103];
     assign loadSign_wb_in = MEM_WB_OUT[104];
     assign DSize_wb_in = MEM_WB_OUT[105:106];
+    assign trap_wb = MEM_WB_OUT[107];
 
     write_back WRITE_BACK_STAGE(
         .nextPC_in(nextPC_wb_in),

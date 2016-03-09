@@ -44,6 +44,6 @@ module wb_ex_hazard(
 	);
 	
 	assign rs1_hazard = rs1_equal & regWrite_wb & (~jumpNonReg_ex) & (~store_ex);
-	assign rs2_hazard = rs2_equal & regWrite_wb & (~jumpNonReg_ex) & (RType_ex | store_ex);
+	assign rs2_hazard = rs2_equal & regWrite_wb & (~jumpNonReg_ex) & (RType_ex );
 	
 endmodule

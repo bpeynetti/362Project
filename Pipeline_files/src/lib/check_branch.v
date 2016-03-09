@@ -17,7 +17,7 @@ module check_branch(busA,aluZero,branchZero,branch,jump,leap);
     wire branchTrue;
     
     
-    assign zeroBit = aluZero;
+    zero ZERO_A (.X(busA),.z(zeroBit));
     
     //check if beqz and 0 
     assign andZeroBEQZ = zeroBit & branchZero;

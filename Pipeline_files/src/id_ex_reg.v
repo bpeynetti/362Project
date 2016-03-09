@@ -1,5 +1,6 @@
 module id_ex_reg(in, flush, out, clk, reset);
-    parameter width = 203;
+
+    parameter width = 204;
     input [0:width-1] in;
     input flush;
     input clk,reset;
@@ -29,10 +30,11 @@ module id_ex_reg(in, flush, out, clk, reset);
     wire jumpNonReg = in[192];
     wire [0:4] r1 = in[193:197];
     wire [0:4] r2 = in[198:202];
+    wire trap = in[203];
     
     PipeCtlRegN #(width) ID_EX_REG (
         .in(in),
-        .ctl(1'b0),
+        .ctl(flush),
         .clk(clk),
         .reset(reset),
         .out(out)

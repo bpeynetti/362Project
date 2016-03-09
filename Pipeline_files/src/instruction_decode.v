@@ -9,7 +9,7 @@ module instruction_decode(
     imm16_out,imm26_out,busA_out,busB_out,destReg,
     memVal_out,
     jumpNonReg_out,
-    r1_out, r2_out
+    r1_out, r2_out,trap_out
     );
     
     parameter SIZE = 32;
@@ -33,7 +33,21 @@ module instruction_decode(
     output [0:31] memVal_out;
     output jumpNonReg_out;
     output [0:4] r1_out,r2_out;
+    output trap_out;
 
+
+    wire [0:31] trap_xor;
+
+    xor_32 XOR_TRAP(
+        .X(instruction_in),
+        .Y(32'h44000300),
+        .Z(trap_xor)
+    );
+    
+    zero CHECK_TRAP_INSTRUCTION(
+        .X(trap_xor),
+        .z(trap_out)
+    );
     //what happens in here:
     
     //instruction and nextPC come as inputs

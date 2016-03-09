@@ -1,6 +1,6 @@
 module ex_mem_reg(in, flush, out,clk, reset);
 
-    parameter width = 179;
+    parameter width = 180;
     input [0:(width-1)] in;
     input flush;
     input clk,reset;
@@ -21,13 +21,15 @@ module ex_mem_reg(in, flush, out,clk, reset);
     wire leap = in[141];
     wire [0:31] memVal = in[142:173];
     wire [0:4] rs2 = in[174:178];
+        wire trap = in[179];
+
     
-    wire flush;
-    assign flush = 1'b0;
+    // wire flush;
+    // assign flush = 1'b0;
     
     PipeCtlRegN #(width) EX_MEM_REG(
         .in(in),
-        .ctl(1'b0),
+        .ctl(flush),
         .clk(clk),
         .reset(reset),
         .out(out)

@@ -54,32 +54,30 @@ initial begin
 //$monitor("Clock = %b; Instruction = %h PC = %h imm=%h addrout=%h target=%h rs=%d rt=%d rd = %d busA=%d busB=%d bIN=%d ALUSrc=%b ALUOut=(hex)%h (dec)%d ALUCtr=%b \n MemOut=%h busWr=%h WrAddr=%d RegWr=%b Mem2Reg=%b Branch=%b Jump=%b Branch_instruction = %h Zero =%b \n Jump_Link=%b WrAddr = %h JALcheck=%b Reg[1] = %h Reg[31] = %h\n", top.clk, top.instruction, top.instructionfetch.PCout, top.instructionfetch.immediate26, top.instructionfetch.jumpMUXout,  top.instructionfetch.PCin, top.RS, top.RT, top.RD, top.busA, top.busB, top.bIN, top.ALUSrc, top.ALUOut, top.ALUOut, top.ALUCtr, top.MemOut, top.busWr, top.WrAddr, top.RegWr, top.Mem2Reg, top.instructionfetch.andBranch, top.Jump, top.branch_instruction, top.Zero, top.Jump_Link, top.WrAddr, top.instructionfetch.JALcheck, top.rFile.reg_file[1], top.rFile.reg_file[31]); 
 	
 // iter=0;
-    $monitor("clk=%b Instruction=%h PC=%h r1=%h r2=%h r3=%h",top.clk,top.imem_out,top.imem_addr,top.PIPELINE.REG_FILE.reg_out[1],top.PIPELINE.REG_FILE.reg_out[2],top.PIPELINE.REG_FILE.reg_out[3]);
+    $monitor("clk=%b rst=%b Instruction=%h PC=%h r1=%h r2=%h r3=%h r4=%h r5=%h r6=%h",
+      top.clk,top.reset,top.imem_out,top.imem_addr,
+      top.PIPELINE.REG_FILE.reg_out[1],top.PIPELINE.REG_FILE.reg_out[2],
+      top.PIPELINE.REG_FILE.reg_out[3],top.PIPELINE.REG_FILE.reg_out[4],
+      top.PIPELINE.REG_FILE.reg_out[5],top.PIPELINE.REG_FILE.reg_out[6],
+    );
 
    #0 clock=0; reset=1;
    #2 reset=0;
    #2 reset=1;
 
-   #20 ; 
+   #100; 
    $finish;
 end
 
 // attempt to finish before we're supposed to (before #5000 steps)
 reg [0:31] instr;
 
-always @(top.imem_out) begin
+always @(posedge clock) begin
     // $display("Evaluation number: %h",j);
   //This checks for a trap 0x300 (signifying the end of the file)
-  if (top.imem_out == 32'h44000300) begin	
+  if (top.PIPELINE.trap_mem == 1'b1) begin	
    
-// 	$display("Data memory: \n");
-
-// 	for (i = 32'h2000; i < 32'h2100; i = i+4) begin
-// 		assign instr = {top.datamem.mem[i], top.datamem.mem[i+1], top.datamem.mem[i+2], top.datamem.mem[i+3]};
-// 		$display("address: %h\tdata: %h", i, instr);
-// 	end
-	$display("Hitting a trap, end, waiting 5 clock cycles and finishing");
-	#10;
+	$display("Hitting a trap, end, waiting 1 clock cycle and finishing");
 	
 	$finish;
 	
