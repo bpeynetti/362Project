@@ -4,8 +4,8 @@
 .data 0x2000
 .global _f
 _f:
+.word 0
 .word 1
-.word 2
 
 ; Instructions
 .text
@@ -22,7 +22,7 @@ _fib:
 	addui r3,r3,0x8
 fibr1:
 	add r1, r1, r2 ; a=(a+b)
-	nop
+    sw _f(r3), r1   ; f[i] = a
 	nop
     trap #0x300
 

@@ -406,7 +406,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     mux2to1_32bit MEM_EX_STORE_HAZARD(
         .X(memVal_ex_in),
         .Y(aluResult_mem_in),
-        .sel(store_hazard),
+        .sel(store_mem_ex_hazard),
         .Z(memVal_correct_ex_in)
     );
     // memVal_ex_in
