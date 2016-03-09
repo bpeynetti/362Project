@@ -114,12 +114,13 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:31] pc_out;
     ///////
     ///     GO TO IMEM BY SETTING IMEM_BUS IN/OUT
-    mux2to1_32bit SEL_CORRECT_PC(
-        .X(pc_out),
-        .Y(leapAddr_mem_in),
-        .sel(leap_mem_in),
-        .Z(IMEM_BUS_OUT)
-        );
+    // mux2to1_32bit SEL_CORRECT_PC(
+    //     .X(pc_out),
+    //     .Y(leapAddr_mem_in),
+    //     .sel(leap_mem_in),
+    //     .Z(IMEM_BUS_OUT)
+    //     );
+    assign IMEM_BUS_OUT = pc_out;
 
     // assign IMEM_BUS_OUT = pc_out;
     

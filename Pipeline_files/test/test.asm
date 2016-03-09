@@ -23,6 +23,12 @@ _fib:
 fibr1:
 	add r1, r1, r2 ; a=(a+b)
     sw _f(r3), r1   ; f[i] = a
+    addui r3, r3, #4 ; i++
+    addu r2, r1, r2 ; b=(a+b)
+    sw _f(r3), r2   ; f[i] = b
+    addui r3, r3, #4 ; i++
+    sgei r4, r3, #0x20
+    beqz r4, fibr1
 	nop
     trap #0x300
 

@@ -21,6 +21,8 @@ initial begin
   // Clear DMEM
    for (i = 0; i < top.DATA_MEM.SIZE; i = i+1)
       top.DATA_MEM.mem[i] = 8'h0;
+    for (i=0; i<top.INSTRUCTION_MEM.SIZE; i = i+1)
+      top.INSTRUCTION_MEM.mem[i] = 8'h0;
 
   //Load IMEM from file
    if (!$value$plusargs("instrfile=%s", filename)) begin
