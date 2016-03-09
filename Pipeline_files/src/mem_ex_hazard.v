@@ -4,7 +4,7 @@ module mem_ex_hazard(
 	//inputs from second instruction (in execution stage)
 	jumpNonReg_ex, RType_ex, store_ex, rs1_ex, rs2_ex,
 	//output: the two control bits for rs1 and rs2 in the execution stage
-	rs1_hazard, rs2_hazard
+	rs1_hazard, rs2_hazard,store_hazard
 );
 	
 	input regWrite_mem;
@@ -17,6 +17,7 @@ module mem_ex_hazard(
 	input [0:4] rs2_ex;
 	output rs1_hazard;
 	output rs2_hazard;
+	output store_hazard;
 	
 	wire [0:4] rs1_xor, rs2_xor;
 	wire rs1_equal, rs2_equal;
@@ -45,5 +46,7 @@ module mem_ex_hazard(
 	
 	assign rs1_hazard = rs1_equal & regWrite_mem & (~load_mem) & (~jumpNonReg_ex) & (~store_ex);
 	assign rs2_hazard = rs2_equal & regWrite_mem & (~load_mem) & (~jumpNonReg_ex) & (RType_ex);
+	
+	assign store_hazard = rs2_equal & regWrite_mem & store_ex;
 	
 endmodule
