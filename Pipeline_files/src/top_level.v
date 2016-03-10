@@ -13,6 +13,8 @@ module top_level(clk,reset);
     wire [0:31] dmem_write;
     wire dmem_writeEnable;
     wire [0:1] dmem_dSize;
+    wire [0:31] imem_addr,imem_out;
+
     
     //  {aluResult_mem_in,opB_mem_in,MemWrite_mem_in,DSize_mem_in};
     assign dmem_addr = BUS_PIPE_TO_DMEM[0:31];
@@ -22,7 +24,6 @@ module top_level(clk,reset);
     assign BUS_DMEM_TO_PIPE = dmem_read;
     
     
-    wire [0:31] imem_addr,imem_out;
     assign imem_addr = BUS_PIPE_TO_IMEM;
     assign BUS_IMEM_TO_PIPE = imem_out;
     
@@ -176,18 +177,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     
     // signals coming in from the pipeline register output (IF_ID)
     wire [0:31] nextPC_id_in, instruction_id_in;
-    assign nextPC_id_in = IF_ID_OUT[0:31];
-    assign instruction_id_in = IF_ID_OUT[32:63];
-    
-    //these go into the register file (and out of)
     wire [0:4] r1_id,r2_id; 
     wire [0:31] reg1_id,reg2_id; 
-    
-    assign r1_id = instruction_id_in[6:10];
-    assign r2_id = instruction_id_in[11:15];
-
     //these go in and out of the ID stage
-    
+
     wire [0:31] nextPC_id_out;
     wire [0:31] opA_id;
     wire [0:31] opB_id;
@@ -214,6 +207,18 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:15] imm16_id;
     wire [0:31] memVal_id;
     wire jumpNonReg_id;
+
+    assign nextPC_id_in = IF_ID_OUT[0:31];
+    assign instruction_id_in = IF_ID_OUT[32:63];
+    
+    //these go into the register file (and out of)
+
+    
+    assign r1_id = instruction_id_in[6:10];
+    assign r2_id = instruction_id_in[11:15];
+
+    
+
     
     //here goes the ID module with all its components inside of it
     instruction_decode ID_STAGE(

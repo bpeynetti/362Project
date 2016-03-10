@@ -12,7 +12,7 @@ module check_branch(busA,aluZero,branchZero,branch,jump,leap);
     
     wire zeroBit;
     
-    wire andZeroBEQZ,andNotZeroBNEQZ;
+    wire andZeroBEQZ,andNotZeroBNEQZ,andNotZeroNotBNEQZ;
     wire branchConditionTrue;
     wire branchTrue;
     

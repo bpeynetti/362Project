@@ -38,6 +38,21 @@ module instruction_decode(
 
     wire [0:31] trap_xor;
 
+    wire [0:4] rd,r1,r2;
+    wire [0:4] r2OrRd,rw;
+    wire extOp;
+    wire LHIOp;
+    wire RType;
+    
+    wire PCtoReg;
+    wire [0:31] opA;
+    wire [0:31] opB;
+    wire [0:15] imm16;
+    wire [0:25] imm26;
+    wire [0:25] imm26_32;
+    wire [0:SIZE-1] imm16Extended;
+    wire [0:SIZE-1] busBImmediate;
+
     xor_32 XOR_TRAP(
         .X(instruction_in),
         .Y(32'h44000300),
@@ -63,12 +78,8 @@ module instruction_decode(
     ////
     ////////////////////////////
     
-    assign nexPC_out = nextPC_in;
-    wire extOp;
-    wire LHIOp;
-    wire RType;
-    
-    wire PCtoReg;
+    assign nextPC_out = nextPC_in;
+
     
     
     ////////////////////////////
@@ -107,13 +118,7 @@ module instruction_decode(
     ////
     /////////////////////////
     
-    wire [0:31] opA;
-    wire [0:31] opB;
-    wire [0:15] imm16;
-    wire [0:25] imm26;
-    wire [0:25] imm26_32;
-    wire [0:SIZE-1] imm16Extended;
-    wire [0:SIZE-1] busBImmediate;
+
     
     assign opA = busA_in;
     assign opB = busB_in;
@@ -176,8 +181,7 @@ module instruction_decode(
     /// figure out how to choose the correct destination register
     /// this is a simple RType thing:
         //input to the register file 
-    wire [0:4] rd,r1,r2;
-    wire [0:4] r2OrRd,rw;
+
     assign r1 = instruction_in[6:10];
     assign r2 = instruction_in[11:15];
     assign rd = instruction_in[16:20];    //mux with selector which is rType=1, else=0
