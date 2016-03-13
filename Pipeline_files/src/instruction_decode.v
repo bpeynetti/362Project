@@ -9,7 +9,9 @@ module instruction_decode(
     imm16_out,imm26_out,busA_out,busB_out,destReg,
     memVal_out,
     jumpNonReg_out,
-    r1_out, r2_out,trap_out
+    r1_out, r2_out,trap_out,
+    FPRType_out,FPRegWrite_out,
+    movi2fp_out,movfp2i_out
     );
     
     parameter SIZE = 32;
@@ -34,6 +36,10 @@ module instruction_decode(
     output jumpNonReg_out;
     output [0:4] r1_out,r2_out;
     output trap_out;
+    output FPRType_out;
+    output FPRegWrite_out;
+    output movi2fp;
+    output movfp2i;
 
 
     wire [0:31] trap_xor;
@@ -104,10 +110,14 @@ module instruction_decode(
         .MemWrite(MemWrite_out),
         .loadSign(loadSign_out),
         .ALUCtrl(ALUCtrl_out),
-        .mul(mul_out),
+        .mul_out(mul_out),
         .extOp(extOp),
         .LHIOp(LHIOp),
-        .jumpNonReg(jumpNonReg_out)
+        .jumpNonReg(jumpNonReg_out),
+        .FPRType_out(FPRType_out),
+        .FPRegWrite(FPRegWrite_out)
+        .movfp2i_out(movfp2i_out),
+        .movi2fp_out(movi2fp_out)
     );
     assign PCtoReg_out = PCtoReg;
     

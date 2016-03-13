@@ -1,6 +1,5 @@
-module id_ex_reg(in, flush, out, clk, reset);
+module id_ex_reg #(parameter width=32) (in, flush, out, clk, reset);
 
-    parameter width = 204;
     input [0:width-1] in;
     input flush;
     input clk,reset;
@@ -31,6 +30,14 @@ module id_ex_reg(in, flush, out, clk, reset);
     wire [0:4] r1 = in[193:197];
     wire [0:4] r2 = in[198:202];
     wire trap = in[203];
+    wire [0:31] f1 = in[204:235];
+    wire [0:31] f2 = in[236:267];
+    wire [0:4] fDestReg = in[268:272];
+    wire fprtype = in[273];
+    wire fpregwrite = in[274];
+    wire movfp2i = in[275];
+    wire movi2fp = in[276];
+    
     
     PipeCtlRegN #(width) ID_EX_REG (
         .in(in),

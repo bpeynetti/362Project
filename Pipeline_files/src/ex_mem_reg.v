@@ -1,6 +1,5 @@
-module ex_mem_reg(in, flush, out,clk, reset);
+module ex_mem_reg #(parameter width=32) (in, flush, out,clk, reset);
 
-    parameter width = 180;
     input [0:(width-1)] in;
     input flush;
     input clk,reset;
@@ -21,7 +20,11 @@ module ex_mem_reg(in, flush, out,clk, reset);
     wire leap = in[141];
     wire [0:31] memVal = in[142:173];
     wire [0:4] rs2 = in[174:178];
-        wire trap = in[179];
+    wire trap = in[179];
+    wire [0:4] fDestReg = in[180:184];
+    wire [0:63] fbusW = in[185:248];
+    wire FPRegWrite = in[249];
+    wire mul = in[250];
 
     
     // wire flush;

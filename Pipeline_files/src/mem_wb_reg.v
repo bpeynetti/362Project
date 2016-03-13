@@ -1,5 +1,4 @@
-module mem_wb_reg(in, flush, out,clk,reset);
-    parameter width = 108;
+module mem_wb_reg #(parameter width=32) (in, flush, out,clk,reset);
     input [0:width-1] in;
     input flush;
     input clk, reset;
@@ -14,8 +13,11 @@ module mem_wb_reg(in, flush, out,clk,reset);
     wire MemToReg = in[103];
     wire loadSign = in[104];
     wire [0:1] DSize = in[105:106];
-        wire trap = in[107];
-
+    wire trap = in[107];
+    wire [0:4] fDestReg = in[108:112];
+    wire [0:63] fbusW = in[113:176];
+    wire FPRegWrite = in[177];
+    wire mul = in[178];
     
     PipeCtlRegN #(width) MEM_WB_REG(
         .in(in),

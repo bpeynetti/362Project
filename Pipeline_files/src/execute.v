@@ -2,14 +2,15 @@ module execute (
     //inputs
     nextPC_in,opA_in,opB_in,offset26_in,offset16_in,destReg_in,PCtoReg_in,
     RegToPC_in,jump_in,branch_in,branchZero_in,RType_in,RegWrite_in,MemToReg_in,
-    MemWrite_in,loadSign_in,mul_in,DSize_in,ALUCtrl_in, memVal_in,
+    MemWrite_in,loadSign_in,mul_in,DSize_in,ALUCtrl_in, memVal_in, f1_in, f2_in, fDestReg_in,
+    FPRtype_in, FPRegWrite_in, movfp2i_in, movi2fp_in,
     //basic clk, reset input
     clk,reset,
     //outputs
     nextPC_out, aluResult_out, leapAddr_out, destReg_out, leap_out,
     PCtoReg_out, RegToPC_out, 
     RegWrite_out, MemToReg_out, MemWrite_out, loadSign_out, DSize_out, memVal_out,
-    stall_out
+    stall_out, fDestReg_out, fbusW, FPRegWrite_out, mul_out
     );
     
     input [0:31] nextPC_in;
@@ -32,6 +33,10 @@ module execute (
     input [0:1] DSize_in;
     input [0:3] ALUCtrl_in;
     input [0:31] memVal_in;
+    //FLOATING POINT INPUTS
+    input [0:31] f1_in, f2_in;
+    input [0:4] fDestReg_in;
+    input FPRtype_in, FPRegWrite_in, movfp2i_in, movi2fp_in;
     input clk,reset;
     
     output [0:31] nextPC_out;
@@ -48,6 +53,10 @@ module execute (
     output [0:1] DSize_out;
     output [0:31] memVal_out;
     output stall_out;
+    //FLOATING POINT OUTPUTS
+    output [0:4] fDestReg_out;
+    output [0:63] fbusW;
+    output FPRegWrite_out, mul_out;
     
     wire [0:31] imm16_32, imm26_32, imm_final;
     wire sum_cout, sum_of;
@@ -67,6 +76,9 @@ module execute (
     assign nextPC_out = nextPC_in;
     assign destReg_out = destReg_in;
     assign memVal_out = memVal_in;
+    assign fDestReg_out = fDestReg_in;
+    assign mul_out = mul_in;
+    assign FPRegWrite_out = FPRegWrite_in;
     
     alu alu_ex(
        .A(opA_in),
@@ -114,8 +126,6 @@ module execute (
         .leap(leap_out)
     );
     
-    //SHOULDN'T THESE BY SIGN EXTEND? RIGHT NOW THEY ARE BOTH ZERO EXTEND (taken from PC LOGIC)
-    //STILL NEED TO TEST THISSSS!!!!!!
     extend_16to32 EXTEND_IMM16(offset16_in, 1'b1, imm16_32);
     extend_26to32 EXTEND_IMM26(offset26_in, 1'b1, imm26_32);
     mux2to1_32bit CHOOSE_IMMEDIATE(imm26_32, imm16_32, branch_in, imm_final);

@@ -16,15 +16,24 @@ module control(
     loadSign, //1 for LB and LH (for sign extend)
     //ALU/Execution Stage Controls
     ALUCtrl,
-    mul,
+    mul_out,
     extOp, //0 for unsigned immediate instructions
     LHIOp, //1 for LHI
-    jumpNonReg
+    jumpNonReg,
+    FPRType, // 1 if floating point operation, 0 otherwise
+    FPRegWrite,
+    movfp2i_out,movi2fp_out //signals to be used in execution stage
 );
     input [0:31] instruction;
-    output PCtoReg, regToPC, jump, branch, branchZero, RType, RegWrite, MemToReg, MemWrite, mul, extOp, LHIOp,loadSign,jumpNonReg;
+    output PCtoReg, regToPC, jump, branch, branchZero, RType, RegWrite, MemToReg, MemWrite, mul_out, extOp, LHIOp,loadSign,jumpNonReg;
     output [0:1] DSize;
     output [0:3] ALUCtrl;
+    output FPRType,FPRegWrite;
+    wire movi2fp_out;
+    wire movfp2i_out;
+    wire movi2fp;
+    wire movfp2i;
+
     
     //NOTE: for I-type instructions, rd is located where rs2 is located for R-type instructions
     //This will simply be called rs2 for the purposes of our processor
@@ -33,7 +42,8 @@ module control(
     wire [0:4] rs1, rs2, rd;
     wire [0:15] imm16;
     wire [0:25] imm26;
-    wire FPRType, jumpNotLink;
+    wire jumpNotLink;
+    wire mul;
     //wires for ALU controls below
     wire sub; //don't need an add wire, because add has ALU control 0000
     wire slt, sle, sgt, sge, seq, sne;
@@ -50,6 +60,7 @@ module control(
     assign rd = instruction[16:20];
     assign imm16 = instruction[16:31];
     assign imm26 = instruction[6:31];
+    assign mul_out = mul;
     
     zero INSTRUCTION_ZERO(
         .X(instruction),
@@ -65,9 +76,9 @@ module control(
     assign branch = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & opcode[3] & (~opcode[4])&~iz;
     assign branchZero = branch & (~opcode[5])&~iz;
     assign jumpNotLink = jump & (~PCtoReg)&~iz;
-    assign RType = (mul|(~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & (~opcode[5]))&~iz;
+    assign RType = ((~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & (~opcode[5]))&~iz;
     assign FPRType = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & opcode[5]&~iz; //if opcode ==1
-    assign RegWrite = (~MemWrite) & (~jumpNotLink) & (~branch)&~iz;
+    assign RegWrite = (movfp2i | ((~MemWrite) & (~jumpNotLink) & (~branch)) ) & (~movi2fp) &(~iz);
     assign MemToReg = opcode[0] & (~opcode[1]) & (~opcode[2]) & ((~opcode[4]) | ((~opcode[3]) & opcode[4] & opcode[5]))&~iz;
     assign MemWrite = opcode[0] & (~opcode[1]) & opcode[2] & (~opcode[3]) & ((~opcode[4]) | (opcode[4] & opcode[5]))&~iz;
     assign loadSign = opcode[0] & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4])&~iz;
@@ -96,5 +107,16 @@ module control(
     assign ALUCtrl[1] = (sgt | sge | sra | sne | andwire | orwire | xorwire)&~iz;
     assign ALUCtrl[2] = (slt | sle | sra | srl | seq | orwire | xorwire)&~iz;
     assign ALUCtrl[3] = (sub | sle | sge | sra | sll | seq | andwire | xorwire)&~iz;
+    
+    
+
+    //movi2fp: 11 0101
+    // movfp2i:11 0100
+    assign movfp2i = RType & (func[0] & func[1] & (~func[2]) & func[3] & (~func[4]) & (~func[5]));
+    assign movi2fp = RType & (func[0] & func[1] & (~func[2]) & func[3] & (~func[4]) & func[5]);
+    assign movfp2i_out = movfp2i;
+    assign movi2fp_out = movi2fp;
+    //FPRegWrite happens on mul or movi2fp
+    assign FPRegWrite =  mul | movi2fp;
     
 endmodule
