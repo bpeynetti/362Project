@@ -65,7 +65,7 @@ module control(
     assign branch = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & opcode[3] & (~opcode[4])&~iz;
     assign branchZero = branch & (~opcode[5])&~iz;
     assign jumpNotLink = jump & (~PCtoReg)&~iz;
-    assign RType = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & (~opcode[5])&~iz;
+    assign RType = (mul|(~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & (~opcode[5]))&~iz;
     assign FPRType = (~opcode[0]) & (~opcode[1]) & (~opcode[2]) & (~opcode[3]) & (~opcode[4]) & opcode[5]&~iz; //if opcode ==1
     assign RegWrite = (~MemWrite) & (~jumpNotLink) & (~branch)&~iz;
     assign MemToReg = opcode[0] & (~opcode[1]) & (~opcode[2]) & ((~opcode[4]) | ((~opcode[3]) & opcode[4] & opcode[5]))&~iz;

@@ -63,7 +63,7 @@ initial begin
       top.PIPELINE.REG_FILE.reg_out[5],top.PIPELINE.REG_FILE.reg_out[6],
     );
 
-   #0 clock=0; reset=1;
+   #0 clock=0; reset=0; 
    #2 reset=0;
    #2 reset=1;
 

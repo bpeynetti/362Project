@@ -8,7 +8,8 @@ module execute (
     //outputs
     nextPC_out, aluResult_out, leapAddr_out, destReg_out, leap_out,
     PCtoReg_out, RegToPC_out, 
-    RegWrite_out, MemToReg_out, MemWrite_out, loadSign_out, DSize_out, memVal_out
+    RegWrite_out, MemToReg_out, MemWrite_out, loadSign_out, DSize_out, memVal_out,
+    stall_out
     );
     
     input [0:31] nextPC_in;
@@ -46,12 +47,14 @@ module execute (
     output loadSign_out;
     output [0:1] DSize_out;
     output [0:31] memVal_out;
+    output stall_out;
     
     wire [0:31] imm16_32, imm26_32, imm_final;
     wire sum_cout, sum_of;
     wire zero, of;
     wire [0:31] not_mul_result;
     wire [0:31] mul_result;
+    wire [0:63] mul_result_long;
     wire [0:31] pc_nonreg;
     
     assign PCtoReg_out = PCtoReg_in;
@@ -74,11 +77,26 @@ module execute (
        .of(of)
     );
     
+
     multiplier mul_ex(
-        .X(opA_in),
-        .Y(opB_in),
-        .Z(mul_result)
+        .clk(clk),
+        .reset(reset),
+        .mul(mul_in),
+        .a(opA_in),
+        .b(opB_in),
+        .done(mul_done),
+        .result(mul_result_long)
     );
+
+    assign mul_result = mul_result_long[32:63];
+    assign stall_out = mul_in & (~mul_done);
+
+
+    // multiplier mul_ex(
+    //     .X(opA_in),
+    //     .Y(opB_in),
+    //     .Z(mul_result)
+    // );
     
     mux2to1_32bit choose_result(
         .X(not_mul_result),
@@ -105,7 +123,7 @@ module execute (
     fa_nbit ADD_IMM(imm_final, nextPC_in, 1'b0, pc_nonreg, sum_cout, sum_of);
     mux2to1_32bit IMM_OR_REG(pc_nonreg, opA_in, RegToPC_in, leapAddr_out);
         
-        
+    // assign stall_out = 1'b0;
         
     // pc_nonreg ????
 endmodule

@@ -20,6 +20,14 @@ pclogic:
 multiplier:
 	iverilog -o ./bin/test_multiplier -s testbench multiplier.v test/test_multiply.v
 
+mux_nbit:
+	iverilog -o ./bin/test_mux_n -s testbench src/lib/mux.v test/test_mux_n.v
+
 pipeline:
 	$(DLXASM) -C ./test/instr.hex -D ./test/data.hex $(SRC)
 	$(IVERILOG) -o ./bin/test_pipe -s testbench src/lib/*.v src/*.v test/pipeline_test.v 
+
+pipeline_stall:
+	$(DLXASM) -C ./test/instr.hex -D ./test/data.hex $(SRC)
+	$(IVERILOG) -o ./bin/test_pipe_stall -s testbench src/lib/*.v src/*.v test/pipeline_test_stall_in.v 
+

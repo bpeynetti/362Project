@@ -14,7 +14,7 @@ module top_level(clk,reset);
     wire dmem_writeEnable;
     wire [0:1] dmem_dSize;
     wire [0:31] imem_addr,imem_out;
-
+    wire dmem_we;
     
     //  {aluResult_mem_in,opB_mem_in,MemWrite_mem_in,DSize_mem_in};
     assign dmem_addr = BUS_PIPE_TO_DMEM[0:31];
@@ -23,6 +23,7 @@ module top_level(clk,reset);
     assign dmem_dSize = BUS_PIPE_TO_DMEM[65:66];
     assign BUS_DMEM_TO_PIPE = dmem_read;
     
+    assign dmem_we = dmem_writeEnable & reset;
     
     assign imem_addr = BUS_PIPE_TO_IMEM;
     assign BUS_IMEM_TO_PIPE = imem_out;
@@ -101,6 +102,16 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire trap_mem;
     wire trap_wb;
 
+    ////STALL SIGNALS (INTO REGISTERS)
+
+    wire [0:63] IF_ID_CORRECT_IN;
+    wire [0:203] ID_EXEC_CORRECT_IN;
+    wire [0:179] EXEC_MEM_CORRECT_IN;
+    wire [0:107] MEM_WB_CORRECT_IN;
+    wire stall_ex_out;
+    //assign stall_ex_out = stall_in_test;
+
+
 
     /////////////////////////////////////////
     //                                     //
@@ -113,6 +124,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //// SIGNALS 
     wire [0:31] pcplus4_if_out, instruction_if_out;
     wire [0:31] pc_out;
+    wire pc_we;
+    assign pc_we = ~load_stall_id_if & ~stall_ex_out;
     ///////
     ///     GO TO IMEM BY SETTING IMEM_BUS IN/OUT
     // mux2to1_32bit SEL_CORRECT_PC(
@@ -130,7 +143,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     instruction_fetch IF_STAGE(
         .leap_addr(leapAddr_mem_in),
         .leap(leap_mem_in),
-        .pc_we(~load_stall_id_if),
+        .pc_we(pc_we),
         .clk(clk),
         .reset(reset),
         .pcplus4(pcplus4_if_out),
@@ -156,7 +169,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign if_id_flush = leap_mem_in | load_stall_id_if;
 
     if_id_reg IF_ID_REG(
-        .in(IF_ID_IN),
+        .in(IF_ID_CORRECT_IN),
         .flush(load_stall_id_if),
         .out(IF_ID_OUT),
         .clk(clk),
@@ -287,7 +300,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign id_ex_flush = leap_mem_in;
 
     id_ex_reg ID_EX_REG(
-        .in(ID_EXEC_IN),
+        .in(ID_EXEC_CORRECT_IN),
         .clk(clk),
         .reset(reset),
         .out(ID_EXEC_OUT),
@@ -468,7 +481,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .loadSign_out(loadSign_ex_out),
         .DSize_out(DSize_ex_out),
         .leap_out(leap_ex_out),
-        .memVal_out(memVal_ex_out)
+        .memVal_out(memVal_ex_out),
+        .stall_out(stall_ex_out)
     );
     
     wire [0:31] opB_ex_out;
@@ -502,7 +516,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign ex_mem_flush = leap_mem_in;
     
     ex_mem_reg EX_MEM_REGISTER(
-        .in(EXEC_MEM_IN),
+        .in(EXEC_MEM_CORRECT_IN),
         .clk(clk),
         .reset(reset),
         .out(EXEC_MEM_OUT),
@@ -617,6 +631,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .DSize_in(DSize_mem_in),
         .dMemValue_in(dataOut),
         // outputs
+        .nextPC_out(nextPC_mem_out),
         .destReg_out(destReg_mem_out),
         .aluResult_out(aluResult_mem_out),
         .dataOut_out(dataOut_mem_out),
@@ -646,7 +661,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     };
 
     mem_wb_reg MEM_WB_REG(
-        .in(MEM_WB_IN),
+        .in(MEM_WB_CORRECT_IN),
         .clk(clk),
         .reset(reset),
         .out(MEM_WB_OUT)
@@ -810,5 +825,46 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //     .rs_mem(rs2_mem_in),
     //     .store_hazard(wb_mem_hazard)
     // );
+
+
+    //////////////////////////////////
+    /////
+    ////
+    /////   MULTIPLY AND STALL LOGIC 
+    ////
+    ////
+    ////
+    /////////////////////////////////
     
+    ////MUXES TO THE CORRECT INPUT AT REGISTERS
+
+    mux2to1_nbit #(64) MUX_IF_ID(
+        .X(IF_ID_IN),
+        .Y(IF_ID_OUT),
+        .sel(stall_ex_out),
+        .Z(IF_ID_CORRECT_IN)
+    );
+
+    mux2to1_nbit #(204) MUX_ID_EXEC(
+        .X(ID_EXEC_IN),
+        .Y(ID_EXEC_OUT),
+        .sel(stall_ex_out),
+        .Z(ID_EXEC_CORRECT_IN)
+    );
+
+    mux2to1_nbit #(180) MUX_EXEC_MEM(
+        .X(EXEC_MEM_IN),
+        .Y(EXEC_MEM_OUT),
+        .sel(stall_ex_out),
+        .Z(EXEC_MEM_CORRECT_IN)
+    );
+
+    mux2to1_nbit #(108) MUX_MEM_WB(
+        .X(MEM_WB_IN),
+        .Y(MEM_WB_OUT),
+        .sel(stall_ex_out),
+        .Z(MEM_WB_CORRECT_IN)
+    );
+
+
 endmodule
