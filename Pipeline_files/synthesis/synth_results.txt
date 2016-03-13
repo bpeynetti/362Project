@@ -1,0 +1,1529 @@
+
+                        DC Professional (TM)
+                           DC Expert (TM)
+                            DC Ultra (TM)
+                       FloorPlan Manager (TM)
+                          HDL Compiler (TM)
+                         VHDL Compiler (TM)
+                        Library Compiler (TM)
+                      DesignWare Developer (TM)
+                          DFT Compiler (TM)
+                            BSD Compiler
+                         Power Compiler (TM)
+
+           Version D-2010.03-SP5 for amd64 -- Oct 18, 2010
+              Copyright (c) 1988-2010 by Synopsys, Inc.
+                         ALL RIGHTS RESERVED
+
+This software and the associated documentation are confidential and 
+proprietary to Synopsys, Inc. Your use or disclosure of this software 
+is subject to the terms and conditions of a written license agreement 
+between you, or your company, and Synopsys, Inc.
+
+The above trademark notice does not imply that you are licensed to use 
+all of the listed products. You are licensed to use only those products 
+for which you have lawfully obtained a valid license key.
+
+Initializing...
+# ========== Copyright Header Begin ==========================================
+# 
+# OpenSPARC T1 Processor File: run.scr
+# Copyright (c) 2006 Sun Microsystems, Inc.  All Rights Reserved.
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES.
+# 
+# The above named program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public
+# License version 2 as published by the Free Software Foundation.
+# 
+# The above named program is distributed in the hope that it will be 
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public
+# License along with this work; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+# 
+# ========== Copyright Header End ============================================
+sh date
+Wed Mar  9 10:02:01 CST 2016
+sh hostname
+joker.ece.northwestern.edu
+sh uptime
+ 10:02:01 up 22:45,  4 users,  load average: 0.08, 0.02, 0.02
+remove_design -all
+1
+if {[file exists template]} {
+   sh rm -rf template
+}
+sh mkdir template
+if {![file exists gate]} {
+   sh mkdir gate
+}
+if {![file exists log]} {
+   sh mkdir log
+}
+###########################################################################
+# Setup from environment variables
+###########################################################################
+set dv_root [sh echo \$DV_ROOT]
+set syn_home [sh echo \$SYN_LIB]
+source -echo -verbose user_cfg.tcl
+# ========== Copyright Header Begin ==========================================
+# 
+# OpenSPARC T1 Processor File: user_cfg.scr
+# Copyright (c) 2006 Sun Microsystems, Inc.  All Rights Reserved.
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES.
+# 
+# The above named program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public
+# License version 2 as published by the Free Software Foundation.
+# 
+# The above named program is distributed in the hope that it will be 
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public
+# License along with this work; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+# 
+# ========== Copyright Header End ============================================
+source -echo -verbose project_sparc_cfg.tcl
+# ========== Copyright Header Begin ==========================================
+# 
+# OpenSPARC T1 Processor File: project_sparc_cfg.scr
+# Copyright (c) 2006 Sun Microsystems, Inc.  All Rights Reserved.
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES.
+# 
+# The above named program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public
+# License version 2 as published by the Free Software Foundation.
+# 
+# The above named program is distributed in the hope that it will be 
+# useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public
+# License along with this work; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.
+# 
+# ========== Copyright Header End ============================================
+###########################################################################
+# Need to define in this file
+###########################################################################
+# Include target library
+# Include Synopsys Designware
+#
+# clk_list (name + freq/MHz)
+# default_clk
+#
+# setup_skew  (all timing in ns)
+# hold_skew
+# clk_transition
+# max_transition
+# max_fanout
+#
+# This variable indicates we are synthesizing cmp blocks
+set project_sparc_cfg	1
+1
+###########################################################################
+# Specify target library specific variables
+###########################################################################
+#source $dv_root/design/sys/synopsys/script/target_lib.tcl
+###########################################################################
+# Include Synopsys Designware library
+###########################################################################
+# Designware will not be used in sparc control blocks
+set synthetic_library {}
+set link_path [concat  $link_library $synthetic_library]
+* your_library.db
+###########################################################################
+# Sparc/IO clocks
+###########################################################################
+# Name				Freq	Comment
+# cpu_clk			1400.0	CPU clock
+# cmp_gclk			1400.0	CPU clock
+# clk				240.0   BSC clock 200 + 20%
+# The script will NOT automatically pad 20% (1.2x) to these
+# frequencies  mhz,setup_skew  ns,hold_skew  ns,clk_transition  ns
+set clk_list {                                          {cpu_clk   1204.82   0.130   0.130   0.040}                     {cmp_gclk  1204.82   0.130   0.130   0.040}                     {clk       1204.82   0.086   0.086   0.040}                     {rclk      1204.82   0.086   0.086   0.040}     }
+                                          {cpu_clk   1204.82   0.130   0.130   0.040}                     {cmp_gclk  1204.82   0.130   0.130   0.040}                     {clk       1204.82   0.086   0.086   0.040}                     {rclk      1204.82   0.086   0.086   0.040}     
+# setup_skew = local skew (60ps) + jitter (36ps)
+set default_clk rclk
+rclk
+set default_clk_freq 1204.82
+1204.82
+set default_setup_skew       0.086
+0.086
+set default_hold_skew        0.086
+0.086
+set default_clock_transition 0.040
+0.040
+# More parameters
+# setup_skew = local skew (125ps) + jitter (250ps)
+set default_clk clk
+clk
+set default_clk_freq	240
+240
+set default_setup_skew       0.375
+0.375
+set default_hold_skew        0.080
+0.080
+set default_clock_transition 0.050
+0.050
+set max_transition   0.110
+0.110
+set max_fanout         6
+6
+# default input/output delays
+#set default_input_delay  0.15
+#set default_output_delay 0.2 
+#set critical_range       0.30
+set default_input_delay  0.001
+Information: Use of Variable 'default_input_delay' is not recommended. This variable will be obsolete in a future release. (INFO-101)
+0.001
+set default_output_delay 0.001 
+Information: Use of Variable 'default_output_delay' is not recommended. This variable will be obsolete in a future release. (INFO-101)
+0.001
+set critical_range       0.30
+0.30
+# default number of worst path reported
+set num_of_path 1000
+1000
+#default compile style for io is to not flatten the whole design
+set compile_flatten_all 0
+0
+0
+set rtl_files { /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/adder.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/alu.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/and.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/check_branch.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/control.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/decoder.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/dff.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/extend_1to32.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/extender.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/mux.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/not.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/or.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/outData.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/pipeline_reg.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/register.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/setter.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/shift.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/xor.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/zero.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/execute.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/ex_mem_reg.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/id_ex_reg.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/if_id_reg.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_decode.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_fetch.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/load_stall.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/mem_ex_hazard.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/memory_stage.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/mem_wb_reg.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/register_file.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/top_level.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_ex_hazard.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_id_hazard.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_mem_hazard.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/write_back.v }
+ /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/adder.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/alu.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/and.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/check_branch.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/control.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/decoder.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/dff.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/extend_1to32.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/extender.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/mux.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/not.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/or.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/outData.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/pipeline_reg.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/register.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/setter.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/shift.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/xor.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/zero.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/execute.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/ex_mem_reg.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/id_ex_reg.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/if_id_reg.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_decode.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_fetch.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/load_stall.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/mem_ex_hazard.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/memory_stage.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/mem_wb_reg.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/register_file.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/top_level.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_ex_hazard.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_id_hazard.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_mem_hazard.v /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/write_back.v 
+set mix_files {}
+set top_module pipeline_processor
+pipeline_processor
+set include_paths { design/sys/iop/include }
+ design/sys/iop/include 
+set black_box_libs {}
+set black_box_designs {}
+set mem_libs {}
+set compile_effort   "high"
+high
+set area_effort "low"
+low
+set compile_flatten_all 1
+1
+set compile_no_new_cells_at_top_level false
+false
+set default_clk clk
+clk
+set default_clk_freq 800
+800
+set default_setup_skew  0.00
+0.00
+set default_hold_skew  0.00
+0.00
+set default_clk_transition  0.00
+0.00
+set clk_list {                                {clk     800.0    0.0    0.0    0.0}        }
+                                {clk     800.0    0.0    0.0    0.0}        
+set ideal_net_list {}
+set false_path_list {}
+set enforce_input_fanout_one     0
+0
+set allow_outport_drive_innodes  1
+1
+set skip_scan            0
+0
+set add_lockup_latch     false
+false
+set chain_count          1
+1
+set scanin_port_list     {}
+set scanout_port_list    {}
+set scanenable_port      global_shift_enable
+global_shift_enable
+set has_test_stub        1
+1
+set scanenable_pin       test_stub_no_bist/se
+test_stub_no_bist/se
+set long_chain_so_0_net  long_chain_so_0
+long_chain_so_0
+set short_chain_so_0_net short_chain_so_0
+short_chain_so_0
+set so_0_net             so_0
+so_0
+set insert_extra_lockup_latch 0
+0
+set extra_lockup_latch_clk_list {}
+set dont_use_cells 0
+0
+set dont_touch_modules []
+set search_path [concat $search_path script/]
+. /vol/eecs362/synopsys/dc/libraries/syn /vol/eecs362/synopsys/dc/dw/syn_ver /vol/eecs362/synopsys/dc/dw/sim_ver script/
+set search_path [concat $syn_home    $search_path ]
+. /vol/eecs362/synopsys/dc/libraries/syn /vol/eecs362/synopsys/dc/dw/syn_ver /vol/eecs362/synopsys/dc/dw/sim_ver script/
+#set search_path [concat $search_path /homes/gho705/fault/synthesis-stuff/src/s1_core/trunk/hdl/rtl/sparc_core /homes/gho705/fault/synthesis-stuff/src/a5-syn ]
+set search_path [concat $search_path a5-dev ]
+. /vol/eecs362/synopsys/dc/libraries/syn /vol/eecs362/synopsys/dc/dw/syn_ver /vol/eecs362/synopsys/dc/dw/sim_ver script/ a5-dev
+foreach include_path $include_paths {
+   set search_path [concat $search_path $dv_root/$include_path]
+}
+sh date
+Wed Mar  9 10:02:02 CST 2016
+set link_library [concat $link_library                          $mem_libs                          $black_box_designs 		      NangateOpenCellLibrary.db]
+* your_library.db NangateOpenCellLibrary.db
+#/homes/gho705/fault/synthesis-stuff/lib/FreePDK45/osu_soc/lib/files/gscl45nm.db]
+# set link_library ["*", /homes/gho705/fault/synthesis-stuff/lib/FreePDK45/osu_soc/lib/files/gscl45nm.db]
+#set target_library $syn_home/lsi_10k.db 
+#set target_library /homes/gho705/fault/synthesis-stuff/lib/FreePDK45/osu_soc/lib/files/gscl45nm.db
+set target_library NangateOpenCellLibrary.db
+NangateOpenCellLibrary.db
+#set target_library /homes/rjoseph/research/mmx-synth/lib/NangateOpenCellLibrary.db
+set target_library [concat $target_library                            $mem_libs]
+NangateOpenCellLibrary.db
+set hdlin_enable_vpp true
+Information: Variable 'hdlin_enable_vpp' is obsolete and is being ignored. (INFO-100)
+true
+set hdlin_auto_save_templates false
+false
+define_design_lib WORK -path .template
+1
+set verilogout_single_bit false
+false
+set hdlout_internal_busses true
+true
+set bus_naming_style {%s[%d]}
+%s[%d]
+set bus_inference_style $bus_naming_style
+%s[%d]
+echo $search_path
+. /vol/eecs362/synopsys/dc/libraries/syn /vol/eecs362/synopsys/dc/dw/syn_ver /vol/eecs362/synopsys/dc/dw/sim_ver script/ a5-dev /design/sys/iop/include
+foreach rtl_file $rtl_files {
+    #read_file -format verilog -define RUNDC $dv_root/$rtl_file
+    read_file -format verilog -define RUNDC $rtl_file
+}
+Loading db file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/NangateOpenCellLibrary.db'
+Loading db file '/vol/eecs362/synopsys/dc/libraries/syn/gtech.db'
+Loading db file '/vol/eecs362/synopsys/dc/libraries/syn/standard.sldb'
+  Loading link library 'NangateOpenCellLibrary'
+  Loading link library 'gtech'
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/adder.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/adder.v
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/fa.db:fa'
+Loaded 2 designs.
+Current design is 'fa'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/alu.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/alu.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/alu.db:alu'
+Loaded 1 design.
+Current design is 'alu'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/and.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/and.v
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/and_1.db:and_1'
+Loaded 2 designs.
+Current design is 'and_1'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/check_branch.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/check_branch.v
+Warning:  /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/check_branch.v:26: the undeclared symbol 'andNotZeroNotBNEQZ' assumed to have the default net type, which is 'wire'. (VER-936)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/check_branch.db:check_branch'
+Loaded 1 design.
+Current design is 'check_branch'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/control.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/control.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/control.db:control'
+Loaded 1 design.
+Current design is 'control'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/decoder.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/decoder.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/decoder_2to4.db:decoder_2to4'
+Loaded 3 designs.
+Current design is 'decoder_2to4'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/dff.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/dff.v
+
+Inferred memory devices in process
+	in routine dff line 8 in file
+		'/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/dff.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|        q_reg        | Flip-flop |   1   |  N  | N  | N  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/dff.db:dff'
+Loaded 1 design.
+Current design is 'dff'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/extend_1to32.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Performing 'read' command.
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/extend_1to32.v
+Reading with netlist reader (equivalent to -netlist option).
+Verilog netlist reader completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/extend_1to32.db:extend_1to32'
+Loaded 1 design.
+Current design is 'extend_1to32'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/extender.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/extender.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/extend_8to32.db:extend_8to32'
+Loaded 3 designs.
+Current design is 'extend_8to32'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/mux.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/mux.v
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/mux_1.db:mux_1'
+Loaded 7 designs.
+Current design is 'mux_1'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/not.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/not.v
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/not_1.db:not_1'
+Loaded 2 designs.
+Current design is 'not_1'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/or.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/or.v
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/or_1.db:or_1'
+Loaded 2 designs.
+Current design is 'or_1'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/outData.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Performing 'read' command.
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/outData.v
+Reading with netlist reader (equivalent to -netlist option).
+Verilog netlist reader completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/outData.db:outData'
+Loaded 1 design.
+Current design is 'outData'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/pipeline_reg.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/pipeline_reg.v
+Warning:  /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/pipeline_reg.v:2: Parameter keyword used in local parameter declaration. (VER-329)
+Warning:  /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/pipeline_reg.v:2: Parameter keyword used in local parameter declaration. (VER-329)
+Module 'PipeCtlRegN' was not elaborated because it contains the 'template' attribute.  Instead, it has been saved as a template.
+No designs were read
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/register.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/register.v
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/register1.db:register1'
+Loaded 2 designs.
+Current design is 'register1'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/setter.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/setter.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/setter.db:setter'
+Loaded 1 design.
+Current design is 'setter'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/shift.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/shift.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/shift.db:shift'
+Loaded 1 design.
+Current design is 'shift'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/xor.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/xor.v
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/xor_1.db:xor_1'
+Loaded 3 designs.
+Current design is 'xor_1'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/zero.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/zero.v
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/zero.db:zero'
+Loaded 2 designs.
+Current design is 'zero'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/execute.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Performing 'read' command.
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/execute.v
+Reading with netlist reader (equivalent to -netlist option).
+Verilog netlist reader completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/execute.db:execute'
+Loaded 1 design.
+Current design is 'execute'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/ex_mem_reg.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/ex_mem_reg.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/ex_mem_reg.db:ex_mem_reg'
+Loaded 1 design.
+Current design is 'ex_mem_reg'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/id_ex_reg.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/id_ex_reg.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/id_ex_reg.db:id_ex_reg'
+Loaded 1 design.
+Current design is 'id_ex_reg'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/if_id_reg.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/if_id_reg.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/if_id_reg.db:if_id_reg'
+Loaded 1 design.
+Current design is 'if_id_reg'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_decode.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_decode.v
+Warning:  /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_decode.v:67: the undeclared symbol 'nexPC_out' assumed to have the default net type, which is 'wire'. (VER-936)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_decode.db:instruction_decode'
+Loaded 1 design.
+Current design is 'instruction_decode'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_fetch.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Performing 'read' command.
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_fetch.v
+Reading with netlist reader (equivalent to -netlist option).
+Verilog netlist reader completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/instruction_fetch.db:instruction_fetch'
+Loaded 1 design.
+Current design is 'instruction_fetch'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/load_stall.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/load_stall.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/load_stall.db:load_stall'
+Loaded 1 design.
+Current design is 'load_stall'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/mem_ex_hazard.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/mem_ex_hazard.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/mem_ex_hazard.db:mem_ex_hazard'
+Loaded 1 design.
+Current design is 'mem_ex_hazard'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/memory_stage.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Performing 'read' command.
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/memory_stage.v
+Reading with netlist reader (equivalent to -netlist option).
+Verilog netlist reader completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/memory_stage.db:memory_stage'
+Loaded 1 design.
+Current design is 'memory_stage'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/mem_wb_reg.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/mem_wb_reg.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/mem_wb_reg.db:mem_wb_reg'
+Loaded 1 design.
+Current design is 'mem_wb_reg'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/register_file.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/register_file.v
+Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/register_file.db:register_file'
+Loaded 1 design.
+Current design is 'register_file'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/top_level.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/top_level.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/top_level.db:top_level'
+Loaded 2 designs.
+Current design is 'top_level'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_ex_hazard.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_ex_hazard.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_ex_hazard.db:wb_ex_hazard'
+Loaded 1 design.
+Current design is 'wb_ex_hazard'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_id_hazard.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_id_hazard.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_id_hazard.db:wb_id_hazard'
+Loaded 1 design.
+Current design is 'wb_id_hazard'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_mem_hazard.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Reading with Presto HDL Compiler (equivalent to -rtl option).
+Running PRESTO HDLC
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_mem_hazard.v
+Presto compilation completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/wb_mem_hazard.db:wb_mem_hazard'
+Loaded 1 design.
+Current design is 'wb_mem_hazard'.
+Loading verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/write_back.v'
+Detecting input file type automatically (-rtl or -netlist).
+Running DC verilog reader
+Performing 'read' command.
+Compiling source file /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/write_back.v
+Reading with netlist reader (equivalent to -netlist option).
+Verilog netlist reader completed successfully.
+Current design is now '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/write_back.db:write_back'
+Loaded 1 design.
+Current design is 'write_back'.
+if {[info exists mix_files] && ($mix_files != {}) } {
+   foreach mix_file $mix_files {
+      set index_beg [expr {[string last "/" $mix_file] + 1}]
+      set mix_file_name [string range $mix_file $index_beg end]
+      read_file -format verilog -define RUNDC gate/${mix_file_name}.exp
+   }
+}
+set design_list [list]
+foreach_in_collection design_object [get_designs] {
+   set design_name [get_object_name $design_object]
+   lappend design_list $design_name
+}
+sh date
+Wed Mar  9 10:02:05 CST 2016
+current_design $top_module
+Current design is 'pipeline_processor'.
+{pipeline_processor}
+echo $top_module
+pipeline_processor
+# if {[get_designs -hier $dont_touch_modules] != {}} {
+#    set_dont_touch $dont_touch_modules
+# }
+set dc_shell_status [ link ]
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+
+  Linking design 'pipeline_processor'
+  Using the following designs and libraries:
+  --------------------------------------------------------------------------
+  * (53 designs)              /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/pipeline_processor.db, etc
+  NangateOpenCellLibrary (library) /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/NangateOpenCellLibrary.db
+
+Information: Building the design 'PipeCtlRegN' instantiated from design 'if_id_reg' with
+	the parameters "64". (HDL-193)
+
+Inferred memory devices in process
+	in routine PipeCtlRegN_WIDTH64 line 9 in file
+		'/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/pipeline_reg.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|       out_reg       | Flip-flop |  64   |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'PipeCtlRegN' instantiated from design 'id_ex_reg' with
+	the parameters "204". (HDL-193)
+
+Inferred memory devices in process
+	in routine PipeCtlRegN_WIDTH204 line 9 in file
+		'/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/pipeline_reg.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|       out_reg       | Flip-flop |  204  |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'PipeCtlRegN' instantiated from design 'ex_mem_reg' with
+	the parameters "180". (HDL-193)
+
+Inferred memory devices in process
+	in routine PipeCtlRegN_WIDTH180 line 9 in file
+		'/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/pipeline_reg.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|       out_reg       | Flip-flop |  180  |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+Information: Building the design 'PipeCtlRegN' instantiated from design 'mem_wb_reg' with
+	the parameters "108". (HDL-193)
+
+Inferred memory devices in process
+	in routine PipeCtlRegN_WIDTH108 line 9 in file
+		'/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/src/lib/pipeline_reg.v'.
+===============================================================================
+|    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
+===============================================================================
+|       out_reg       | Flip-flop |  108  |  Y  | N  | Y  | N  | N  | N  | N  |
+===============================================================================
+Presto compilation completed successfully.
+1
+if {$dc_shell_status == 0} {
+   echo "****************************************************"
+   echo "* ERROR!!!! Failed to Link...exiting prematurely.  *"
+   echo "****************************************************"
+   quit
+}
+current_design $top_module
+Current design is 'pipeline_processor'.
+{pipeline_processor}
+echo $top_module
+pipeline_processor
+current_design $top_module
+Current design is 'pipeline_processor'.
+{pipeline_processor}
+echo $top_module
+pipeline_processor
+set clk_name_list [list]
+set ideal_inputs [list]
+foreach clk_spec $clk_list {
+   set listcnt 0
+   set clk_port_pin {}
+   set clk_name {}
+   set clk_freq 0.0
+   set setup_skew $default_setup_skew
+   set hold_skew  $default_hold_skew
+   set clock_transition  $default_clock_transition
+   set clk_is_port 1
+   foreach element $clk_spec {
+      if {$listcnt == 0} {
+         set clk_port_pin $element
+         set clk_name $element
+      }
+      if {$listcnt == 1} {
+         set clk_freq $element
+      }
+      if {$listcnt == 2} {
+         set setup_skew $element
+      }
+      if {$listcnt == 3} {
+         set hold_skew $element
+      }
+      if {$listcnt == 4} {
+         set clock_transition $element
+      }
+      if {$listcnt == 5} {
+         set clk_name $element
+         set clk_is_port 0
+      }
+      set listcnt [expr $listcnt + 1]
+   }
+   if {$clk_is_port == 1} {
+      set clk_exists [sizeof_collection [find port $clk_port_pin]]
+   } else {
+      set clk_exists [sizeof_collection [find pin $clk_port_pin]]
+   }
+   if {$clk_exists != 0} {
+      set clk_period [expr 1000.0 / $clk_freq / 1.0]
+      set high_time [expr $clk_period / 2.0]
+      create_clock $clk_port_pin -period $clk_period -waveform [list 0 $high_time] -name $clk_name
+      set_clock_uncertainty -setup $setup_skew [find clock $clk_name]
+      set_clock_uncertainty -hold $hold_skew [find clock $clk_name]
+      set_clock_transition $clock_transition [find clock $clk_name]
+      set_dont_touch_network $clk_name
+      if {$clk_is_port == 1} {
+         set_drive 0.0 $clk_name
+         lappend ideal_inputs $clk_name
+      }
+      set clk_name_list [concat  $clk_name_list $clk_name]
+   }
+}
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+if {$clk_name_list == {} } {
+   echo "\[WARNING\] No clock is defined,create a virtual one -- $default_clk..."
+   set clk_name $default_clk
+   set clk_freq $default_clk_freq
+   set clk_period [expr 1000.0 / $clk_freq / 1.0]
+   set high_time [expr $clk_period / 2.0]
+   set setup_skew $default_setup_skew
+   set hold_skew  $default_hold_skew
+   set clock_transition  $default_clock_transition
+   create_clock -name $clk_name -period $clk_period -waveform [list 0 $high_time]
+   set_clock_uncertainty -setup $setup_skew $clk_name
+   set_clock_uncertainty -hold $hold_skew $clk_name
+}
+set non_ideal_inputs [list]
+foreach_in_collection input_object [all_inputs] {
+   set input_name [get_object_name $input_object]
+   set input_is_ideal [lsearch -exact $ideal_net_list $input_name]
+   if {$input_is_ideal == -1} {
+      lappend non_ideal_inputs $input_name
+   } else {
+      lappend ideal_inputs $input_name
+   }
+}
+echo $ideal_inputs
+clk
+echo $non_ideal_inputs
+clk reset {DMEM_BUS_IN[0]} {DMEM_BUS_IN[1]} {DMEM_BUS_IN[2]} {DMEM_BUS_IN[3]} {DMEM_BUS_IN[4]} {DMEM_BUS_IN[5]} {DMEM_BUS_IN[6]} {DMEM_BUS_IN[7]} {DMEM_BUS_IN[8]} {DMEM_BUS_IN[9]} {DMEM_BUS_IN[10]} {DMEM_BUS_IN[11]} {DMEM_BUS_IN[12]} {DMEM_BUS_IN[13]} {DMEM_BUS_IN[14]} {DMEM_BUS_IN[15]} {DMEM_BUS_IN[16]} {DMEM_BUS_IN[17]} {DMEM_BUS_IN[18]} {DMEM_BUS_IN[19]} {DMEM_BUS_IN[20]} {DMEM_BUS_IN[21]} {DMEM_BUS_IN[22]} {DMEM_BUS_IN[23]} {DMEM_BUS_IN[24]} {DMEM_BUS_IN[25]} {DMEM_BUS_IN[26]} {DMEM_BUS_IN[27]} {DMEM_BUS_IN[28]} {DMEM_BUS_IN[29]} {DMEM_BUS_IN[30]} {DMEM_BUS_IN[31]} {IMEM_BUS_IN[0]} {IMEM_BUS_IN[1]} {IMEM_BUS_IN[2]} {IMEM_BUS_IN[3]} {IMEM_BUS_IN[4]} {IMEM_BUS_IN[5]} {IMEM_BUS_IN[6]} {IMEM_BUS_IN[7]} {IMEM_BUS_IN[8]} {IMEM_BUS_IN[9]} {IMEM_BUS_IN[10]} {IMEM_BUS_IN[11]} {IMEM_BUS_IN[12]} {IMEM_BUS_IN[13]} {IMEM_BUS_IN[14]} {IMEM_BUS_IN[15]} {IMEM_BUS_IN[16]} {IMEM_BUS_IN[17]} {IMEM_BUS_IN[18]} {IMEM_BUS_IN[19]} {IMEM_BUS_IN[20]} {IMEM_BUS_IN[21]} {IMEM_BUS_IN[22]} {IMEM_BUS_IN[23]} {IMEM_BUS_IN[24]} {IMEM_BUS_IN[25]} {IMEM_BUS_IN[26]} {IMEM_BUS_IN[27]} {IMEM_BUS_IN[28]} {IMEM_BUS_IN[29]} {IMEM_BUS_IN[30]} {IMEM_BUS_IN[31]}
+set_input_delay $default_input_delay -clock $default_clk $non_ideal_inputs
+1
+set_output_delay $default_output_delay -clock $default_clk [all_outputs]
+1
+if {$clk_name_list != {} } {
+   group_path -name "reg2reg" -critical_range $critical_range -from [ all_registers -clock_pins ] -to [ all_registers -data_pins ]
+   group_path -name "in2reg"  -from $non_ideal_inputs -to [ all_registers -data_pins ]
+   group_path -name "reg2out" -from [ all_registers -clock_pins ] -to [all_outputs]
+}
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Information: Updating graph... (UID-83)
+Warning: Design 'pipeline_processor' contains 6 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Information: Updating graph... (UID-83)
+Warning: Design 'pipeline_processor' contains 6 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Information: Updating graph... (UID-83)
+Warning: Design 'pipeline_processor' contains 6 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+1
+group_path -name "in2out"  -from $non_ideal_inputs -to [all_outputs]
+1
+if {[info exists false_path_list] && ($false_path_list != {}) } {
+        set_false_path -through $false_path_list
+}
+if {[info exists enforce_input_fanout_one] && ($enforce_input_fanout_one  == 1)} {
+   set_max_fanout 1 $non_ideal_inputs
+}
+# Load custom constraint file for the unit
+# This will overwrite the default constraints
+# Report port contraint information just applied to check for errors
+###########################################################################
+# 4f. More constraints and setup before compile
+###########################################################################
+# This is to prevent assign statements from generated in the netlist
+# Certain rtl coding conventions need to be followed. For IO blocks only 
+# write_name_nets_same_as_ports
+if {[info exists project_io_cfg] && ($project_io_cfg == 1) } {
+   foreach_in_collection design [ get_designs "*" ] {
+      current_design $design
+      set_fix_multiple_port_nets -outputs -feedthroughs 
+   }
+   current_design $top_module
+}
+#check timing constraints
+###########################################################################
+# 5a. Compile
+###########################################################################
+# Disable cells that we don't want to use in the library
+if {$dont_use_cells != 0} {
+   if {[info exists my_dont_use_cell_list] && ($my_dont_use_cell_list != {}) } {
+      set dont_use_cell_list [concat $dont_use_cell_list $my_dont_use_cell_list]
+   }
+   foreach dont_use_cell $dont_use_cell_list {
+      set_dont_use [find lib_cell $dont_use_cell]
+   }
+}
+sh date
+Wed Mar  9 10:02:08 CST 2016
+sh uptime
+ 10:02:08 up 22:45,  4 users,  load average: 0.15, 0.04, 0.02
+# Switch off the dont_touch attribute globally for set_size_only cells
+set dont_touch_nets_with_size_only_cells false
+false
+## Source user compile options
+#if set to 1,the whole design will be flattened. default 1 for cmp
+if {[info exists compile_flatten_all] && ($compile_flatten_all  == 1)} {
+      ungroup -flatten -all
+   }
+1
+# compile !!
+if {[info exists project_io_cfg] && ($project_io_cfg == 1) } {
+      set dc_shell_status [ compile -boundary_optimization -exact_map -map_effort $compile_effort -area_effort $area_effort]
+   }
+if {[info exists project_sparc_cfg] && ($project_sparc_cfg == 1) } {
+      if {[info exists use_physopt] && ($use_physopt == 1)} {
+         set_fix_multiple_port_nets -all -buffer_constants
+      }
+      set dc_shell_status [ compile -boundary_optimization -exact_map -map_effort $compile_effort -area_effort $area_effort]
+   }
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Information: Evaluating DesignWare library utilization. (UISN-27)
+
+============================================================================
+| DesignWare Building Block Library       |      Version       | Available |
+============================================================================
+| Basic DW Building Blocks                | D-2010.03-DWBB_1010 |    *     |
+| Licensed DW Building Blocks             |                    |           |
+============================================================================
+
+
+Information: There are 202 potential problems in your design. Please run 'check_design' for more information. (LINT-99)
+
+
+
+  Beginning Pass 1 Mapping
+  ------------------------
+  Processing 'pipeline_processor'
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[107]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[0]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[1]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[2]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[3]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[4]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[5]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[6]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[7]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[8]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[9]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[10]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[11]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[12]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[13]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[14]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[15]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[16]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[17]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[18]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[19]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[20]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[21]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[22]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[23]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[24]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[25]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[26]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[27]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[28]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[29]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[30]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[31]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[32]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[33]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[34]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[35]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[36]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[37]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[38]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[39]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[40]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[41]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[42]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[43]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[44]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[45]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[46]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[47]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[48]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[49]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[50]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[51]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[52]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[53]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[54]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[55]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[56]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[57]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[58]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[59]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[60]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[61]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[62]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[63]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[102]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[174]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[175]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[176]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[177]' will be removed. (OPT-1207)
+Information: The register 'EX_MEM_REGISTER/EX_MEM_REG/out_reg[178]' will be removed. (OPT-1207)
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+
+  Beginning Mapping Optimizations  (High effort)
+  -------------------------------
+  Mapping Optimization (Phase 1)
+  Mapping Optimization (Phase 2)
+  Mapping Optimization (Phase 3)
+  Mapping Optimization (Phase 4)
+  Mapping Optimization (Phase 5)
+  Mapping Optimization (Phase 6)
+  Mapping Optimization (Phase 7)
+  Mapping Optimization (Phase 8)
+  Mapping Optimization (Phase 9)
+  Mapping Optimization (Phase 10)
+  Mapping Optimization (Phase 11)
+
+   ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
+    TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:00:29   22105.5      0.00       0.0       0.0                          
+    0:00:29   22105.5      0.00       0.0       0.0                          
+
+  Beginning Delay Optimization Phase
+  ----------------------------------
+
+   ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
+    TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:00:29   22105.5      0.00       0.0       0.0                          
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[0]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[1]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[2]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[3]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[4]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[5]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[6]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[7]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[8]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[9]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[10]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[11]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[12]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[13]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[14]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[15]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[16]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[17]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[18]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[19]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[20]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[21]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[22]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[23]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[24]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[25]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[26]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[27]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[28]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[29]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[30]' is a constant and will be removed. (OPT-1206)
+Information: The register 'MEM_WB_REG/MEM_WB_REG/out_reg[31]' is a constant and will be removed. (OPT-1206)
+    0:00:30   21878.6      0.00       0.0       0.0                          
+    0:00:30   21878.6      0.00       0.0       0.0                          
+
+
+  Beginning Critical Range Optimization
+  -------------------------------------
+
+   ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
+    TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:00:30   21878.6      0.00       0.0       0.0                          
+
+
+  Beginning Area-Recovery Phase  (cleanup)
+  -----------------------------
+
+   ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
+    TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:00:30   21878.6      0.00       0.0       0.0                          
+    0:00:30   21878.6      0.00       0.0       0.0                          
+    0:00:30   20921.1      0.03       0.2       0.0                          
+    0:00:31   20294.5      0.04       0.4       0.0                          
+    0:00:31   19950.4      0.03       0.2       0.0                          
+    0:00:31   19765.3      0.03       0.2       0.0                          
+    0:00:32   19653.1      0.03       0.2       0.0                          
+    0:00:32   19596.2      0.03       0.2       0.0                          
+    0:00:32   19564.3      0.03       0.2       0.0                          
+    0:00:32   19541.3      0.03       0.2       0.0                          
+    0:00:32   19521.5      0.03       0.2       0.0                          
+    0:00:32   19511.7      0.03       0.2       0.0                          
+    0:00:33   19504.9      0.03       0.2       0.0                          
+    0:00:33   19499.7      0.03       0.2       0.0                          
+    0:00:33   19499.7      0.03       0.2       0.0                          
+    0:00:33   19497.9      0.00       0.0       0.0                          
+    0:00:33   19152.6      0.10       1.0       0.0                          
+    0:00:33   18912.7      0.08       2.4       0.0                          
+    0:00:34   18864.8      0.07       1.7       0.0                          
+    0:00:34   18844.9      0.06       1.7       0.0                          
+    0:00:34   18843.8      0.06       1.7       0.0                          
+    0:00:34   18843.8      0.06       1.7       0.0                          
+    0:00:34   18843.8      0.06       1.7       0.0                          
+    0:00:34   18843.8      0.06       1.7       0.0                          
+    0:00:34   18855.0      0.00       0.0       0.0                          
+
+
+  Beginning Critical Range Optimization
+  -------------------------------------
+
+   ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
+    TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:00:34   18855.0      0.00       0.0       0.0                          
+    0:00:34   18835.1      0.00       0.0       0.0                          
+Loading db file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/NangateOpenCellLibrary.db'
+
+  Optimization Complete
+  ---------------------
+Warning: Design 'pipeline_processor' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+     Net 'clk': 1507 load(s), 1 driver(s)
+1
+if {$dc_shell_status == 0} {
+      echo "*******************************************************"
+      echo "* ERROR!!!! Failed to compile...exiting prematurely.  *"
+      echo "*******************************************************"
+      quit
+   }
+sh date
+Wed Mar  9 10:02:45 CST 2016
+###########################################################################
+# 5e. Insert Scan - Hook up the scan chain.
+###########################################################################
+if {[info exists use_physopt] && ($use_physopt == 1)} {
+   set skip_scan 1
+}
+if {[info exists skip_scan] && ($skip_scan == 1)} {
+   ######  skip section 5e. 
+} else {
+
+current_design $top_module
+
+## Tell DC the design is "scan ready"
+## We do this because we already instantiate scan flops in the rtl
+set_attribute $top_module is_test_ready true -type boolean
+foreach_in_collection design_object [get_designs] {
+   current_design $design_object
+   # make sure the module has FFs in it to prevent warning messages
+   if { [all_registers] != {} } {
+      set_attribute [all_registers] scanned_by_test_compiler true -type boolean
+   }
+}
+
+current_design $top_module
+
+
+# Tell DC not to optimize away spare FF's 
+set compile_delete_unloaded_sequential_cells false
+
+# Disable cells that we don't want to use in the library
+if {$dont_use_cells != 0} {
+   foreach dont_use_cell $dont_use_cell_list {
+      set_dont_use [find lib_cell $dont_use_cell]
+   }
+}
+
+# Insert scan chain with number of chains specified by user
+# Allow scan chain to hook up flops clocked by different clocks
+# Add lockup latches between clock domains
+set_scan_configuration -add_lockup $add_lockup_latch -chain_count $chain_count -clock_mixing mix_clocks
+
+# This should prevent assign statements from generated in the netlist
+# at the cost of extra compile time. For cmp only 
+if {[info exists project_sparc_cfg] && ($project_sparc_cfg == 1) } {
+   foreach_in_collection design [ get_designs "*" ] {
+      current_design $design
+      set_fix_multiple_port_nets -all -buffer_constants
+   }
+
+   current_design $top_module
+
+   # allow_outport_drive_innodes is used by sparc units but not IO units
+   # set this switch to 0 to make sure output port doesn't driving internal nodes
+   if {[info exists allow_outport_drive_innodes] && ($allow_outport_drive_innodes == 0)} {
+      set_isolate_ports -type inverter [all_outputs]
+   }
+
+   current_design $top_module
+   compile -inc
+}
+
+
+### section 5e. will be skipped if user want to use PC flow
+}
+Current design is 'pipeline_processor'.
+Current design is 'or_1'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Information: Updating graph... (UID-83)
+Current design is 'xor_1'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Information: Updating graph... (UID-83)
+Current design is 'xor_5'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Information: Updating graph... (UID-83)
+Current design is 'zero_5bit'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Information: Updating graph... (UID-83)
+Current design is 'top_level'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Information: Building the design 'dmem'. (HDL-193)
+Warning: Cannot find the design 'dmem' in the library 'WORK'. (LBR-1)
+Information: Building the design 'imem'. (HDL-193)
+Warning: Cannot find the design 'imem' in the library 'WORK'. (LBR-1)
+Warning: Unable to resolve reference 'dmem' in 'top_level'. (LINK-5)
+Warning: Unable to resolve reference 'imem' in 'top_level'. (LINK-5)
+Warning: Design 'top_level' has '2' unresolved references. For more detailed information, use the "link" command. (UID-341)
+Information: Updating graph... (UID-83)
+Warning: Design 'top_level' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Warning: Design 'top_level' has '2' unresolved references. For more detailed information, use the "link" command. (UID-341)
+Warning: Design 'top_level' has '2' unresolved references. For more detailed information, use the "link" command. (UID-341)
+Information: Attribute 'scanned_by_test_compiler' is set on 1507 objects. (UID-186)
+Current design is 'pipeline_processor'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Information: Updating graph... (UID-83)
+Warning: Design 'pipeline_processor' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+Information: Attribute 'scanned_by_test_compiler' is set on 1507 objects. (UID-186)
+Current design is 'wb_mem_hazard'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Information: Updating graph... (UID-83)
+Current design is 'pipeline_processor'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Accepted scan configuration for modes: all_dft
+Current design is 'or_1'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Current design is 'xor_1'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Current design is 'xor_5'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Current design is 'zero_5bit'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Current design is 'top_level'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Information: Building the design 'dmem'. (HDL-193)
+Warning: Cannot find the design 'dmem' in the library 'WORK'. (LBR-1)
+Information: Building the design 'imem'. (HDL-193)
+Warning: Cannot find the design 'imem' in the library 'WORK'. (LBR-1)
+Warning: Unable to resolve reference 'dmem' in 'top_level'. (LINK-5)
+Warning: Unable to resolve reference 'imem' in 'top_level'. (LINK-5)
+Current design is 'pipeline_processor'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Current design is 'wb_mem_hazard'.
+Current design is 'pipeline_processor'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+Current design is 'pipeline_processor'.
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+
+
+  Beginning Pass 1 Mapping  (Incremental)
+  ------------------------
+Warning: Can't read link_library file 'your_library.db'. (UID-3)
+
+  Updating timing information
+Information: Updating design information... (UID-85)
+
+  Beginning Mapping Optimizations  (Medium effort)  (Incremental)
+  -------------------------------
+
+  Beginning Incremental Implementation Selection
+  ----------------------------------------------
+
+  Beginning Delay Optimization Phase
+  ----------------------------------
+
+   ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
+    TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:00:01   18837.3      0.00       0.0       0.0                          
+    0:00:01   18837.3      0.00       0.0       0.0                          
+    0:00:03   18834.4      0.00       0.0       0.0                          
+
+
+  Beginning Critical Range Optimization
+  -------------------------------------
+
+   ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
+    TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:00:03   18834.4      0.00       0.0       0.0                          
+
+
+  Beginning Critical Range Optimization
+  -------------------------------------
+
+   ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
+    TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
+  --------- --------- --------- --------- --------- -------------------------
+    0:00:03   18834.4      0.00       0.0       0.0                          
+Loading db file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/NangateOpenCellLibrary.db'
+
+  Optimization Complete
+  ---------------------
+Warning: Design 'pipeline_processor' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
+     Net 'clk': 1507 load(s), 1 driver(s)
+1
+###########################################################################
+# 6. Write Out Design
+###########################################################################
+# Get rid of *cell* names
+define_name_rules afara_rules -map {{ {"\\*cell\\*", "UDW_"}}}
+1
+change_names -rule afara_rules -hierarchy
+1
+sh date
+Wed Mar  9 10:02:50 CST 2016
+if {[info exists use_physopt] && ($use_physopt == 1)} {
+   write -format verilog -hier -output [format "%s%s%s" gate/ $top_module _hier_fromdc.v]
+} else {
+   write -format verilog -hier -output [format "%s%s%s" gate/ $top_module _hier.v]
+}
+Writing verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/gate/pipeline_processor_hier.v'.
+Warning: Verilog 'assign' or 'tran' statements are written out. (VO-4)
+1
+###########################################################################
+# 7. Write Reports
+###########################################################################
+redirect [format "%s%s%s" log/ $top_module _hier_area.rep] { report_area }
+redirect -append [format "%s%s%s" log/ $top_module _hier_area.rep] { report_reference }
+redirect [format "%s%s%s" log/ $top_module _hier_timing.rep] { report_timing -max_paths 100}
+###########################################################################
+# 8. Flatten hierarchy for backend tools
+###########################################################################
+sh date
+Wed Mar  9 10:02:51 CST 2016
+# remove dont_touch attribute before flattening the design
+if { [get_designs -hier $dont_touch_modules] != {} } {
+   set_dont_touch $dont_touch_modules false
+}
+current_design $top_module
+Current design is 'pipeline_processor'.
+{pipeline_processor}
+ungroup -all -flatten
+Warning: Design has no hierarchy.  No cells can be ungrouped. (UID-228)
+0
+# Make sure flat netlist does not have "/" in signal names
+#define_name_rules hier_change -restricted "/" -replacement_char "_"
+#change_names -rule hier_change -hierarchy
+# When writing out Verilog files, set the
+# verilogout_single_bit variable to false (the default).
+# Set the bus_inference_style variable and the
+# bus_naming_style variable to the naming style.  For
+# more information, see the man pages for the
+# bus_inference_style and bus_naming_style variables.
+change_names -rules verilog -hierarchy
+1
+# Write out flat netlist.  Location depends on CMP or IO synthesis
+if {[info exists project_io_cfg] && ($project_io_cfg == 1) } {
+   write -format verilog -output [format "%s%s%s"  gate/ $top_module _flat_nc.v]
+} else {
+   write -format verilog -output [format "%s%s%s"  gate/ $top_module _flat.v]
+}
+Writing verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/gate/pipeline_processor_flat.v'.
+1
+# Report flattened results
+redirect [format "%s%s%s" log/ $top_module _area.rep] { report_area }
+redirect -append [format "%s%s%s" log/ $top_module _area.rep] {report_reference }
+redirect [format "%s%s%s" log/ $top_module _timing.rep] { report_timing -max_paths 1000 -nworst 10000}
+#redirect -append [format "%s%s%s" log/ $top_module _timing.rep] { report_timing -true}
+#write_sdf -version 2.1 A5.sdf
+#redirect [format "%s%s%s" log/ $top_module _timing.rep] { report_timing -max_paths 1000 -greater_path 2.5 -nworst 10000}
+#redirect [format "%s%s%s" log/ $top_module _timing_in2out.rep] { report_timing -max_paths 1000 -nworst 10 -group in2out -path end}
+#redirect [format "%s%s%s" log/ $top_module _timing_in2reg.rep] { report_timing -max_paths 1000 -nworst 10 -group in2reg -path end}
+#redirect [format "%s%s%s" log/ $top_module _timing_reg2out.rep] { report_timing -max_paths 1000 -nworst 10 -group reg2out -path end}
+#redirect [format "%s%s%s" log/ $top_module _timing_reg2reg.rep] { report_timing -max_paths 1000 -nworst 10 -group reg2reg -path end}
+#redirect [format "%s%s%s" log/ $top_module _timing.rep] { report_timing -max_paths 1 -nworst 1}
+#redirect [format "%s%s%s" log/ $top_module _path_group.rep] { report_path_group }
+###########################################################################
+# 9. Compress output files
+###########################################################################
+#sh gzip -f gate/${top_module}_hier.v 
+#sh gzip -f gate/${top_module}_flat.v
+###########################################################################
+# 10. Check design and Detect unmapped design
+###########################################################################
+set unmapped_designs [get_designs -filter "is_unmapped == true" $top_module]
+if {  [sizeof_collection $unmapped_designs] != 0 } {
+   echo "****************************************************"
+   echo "* ERROR!!!! Compile finished with unmapped logic.  *"
+   echo "****************************************************"
+   quit
+}
+###########################################################################
+# 11. Done
+###########################################################################
+sh date
+Wed Mar  9 10:02:52 CST 2016
+echo "run.scr completed successfully"
+run.scr completed successfully
+quit
+Information: Defining new variable 'allow_outport_drive_innodes'. (CMD-041)
+Information: Defining new variable 'non_ideal_inputs'. (CMD-041)
+Information: Defining new variable 'high_time'. (CMD-041)
+Information: Defining new variable 'default_clk_transition'. (CMD-041)
+Information: Defining new variable 'critical_range'. (CMD-041)
+Information: Defining new variable 'mix_files'. (CMD-041)
+Information: Defining new variable 'false_path_list'. (CMD-041)
+Information: Defining new variable 'element'. (CMD-041)
+Information: Defining new variable 'unmapped_designs'. (CMD-041)
+Information: Defining new variable 'long_chain_so_0_net'. (CMD-041)
+Information: Defining new variable 'clk_exists'. (CMD-041)
+Information: Defining new variable 'ideal_inputs'. (CMD-041)
+Information: Defining new variable 'default_clk_freq'. (CMD-041)
+Information: Defining new variable 'num_of_path'. (CMD-041)
+Information: Defining new variable 'enforce_input_fanout_one'. (CMD-041)
+Information: Defining new variable 'clk_name'. (CMD-041)
+Information: Defining new variable 'default_hold_skew'. (CMD-041)
+Information: Defining new variable 'compile_flatten_all'. (CMD-041)
+Information: Defining new variable 'so_0_net'. (CMD-041)
+Information: Defining new variable 'input_object'. (CMD-041)
+Information: Defining new variable 'max_fanout'. (CMD-041)
+Information: Defining new variable 'include_paths'. (CMD-041)
+Information: Defining new variable 'area_effort'. (CMD-041)
+Information: Defining new variable 'max_transition'. (CMD-041)
+Information: Defining new variable 'dont_use_cells'. (CMD-041)
+Information: Defining new variable 'clk_period'. (CMD-041)
+Information: Defining new variable 'dont_touch_modules'. (CMD-041)
+Information: Defining new variable 'project_sparc_cfg'. (CMD-041)
+Information: Defining new variable 'clock_transition'. (CMD-041)
+Information: Defining new variable 'extra_lockup_latch_clk_list'. (CMD-041)
+Information: Defining new variable 'mem_libs'. (CMD-041)
+Information: Defining new variable 'black_box_designs'. (CMD-041)
+Information: Defining new variable 'clk_list'. (CMD-041)
+Information: Defining new variable 'clk_port_pin'. (CMD-041)
+Information: Defining new variable 'default_clock_transition'. (CMD-041)
+Information: Defining new variable 'listcnt'. (CMD-041)
+Information: Defining new variable 'clk_name_list'. (CMD-041)
+Information: Defining new variable 'top_module'. (CMD-041)
+Information: Defining new variable 'compile_group_pull_control_logic'. (CMD-041)
+Information: Defining new variable 'input_name'. (CMD-041)
+Information: Defining new variable 'setup_skew'. (CMD-041)
+Information: Defining new variable 'has_test_stub'. (CMD-041)
+Information: Defining new variable 'default_clk'. (CMD-041)
+Information: Defining new variable 'default_setup_skew'. (CMD-041)
+Information: Defining new variable 'add_lockup_latch'. (CMD-041)
+Information: Defining new variable 'design_name'. (CMD-041)
+Information: Defining new variable 'ideal_net_list'. (CMD-041)
+Information: Defining new variable 'dv_root'. (CMD-041)
+Information: Defining new variable 'dc_shell_status'. (CMD-041)
+Information: Defining new variable 'skip_scan'. (CMD-041)
+Information: Defining new variable 'clk_is_port'. (CMD-041)
+Information: Defining new variable 'rtl_file'. (CMD-041)
+Information: Defining new variable 'design_object'. (CMD-041)
+Information: Defining new variable 'syn_home'. (CMD-041)
+Information: Defining new variable 'compile_effort'. (CMD-041)
+Information: Defining new variable 'include_path'. (CMD-041)
+Information: Defining new variable 'scanenable_pin'. (CMD-041)
+Information: Defining new variable 'scanenable_port'. (CMD-041)
+Information: Defining new variable 'design'. (CMD-041)
+Information: Defining new variable 'clk_freq'. (CMD-041)
+Information: Defining new variable 'scanin_port_list'. (CMD-041)
+Information: Defining new variable 'rtl_files'. (CMD-041)
+Information: Defining new variable 'insert_extra_lockup_latch'. (CMD-041)
+Information: Defining new variable 'hold_skew'. (CMD-041)
+Information: Defining new variable 'clk_spec'. (CMD-041)
+Information: Defining new variable 'black_box_libs'. (CMD-041)
+Information: Defining new variable 'scanout_port_list'. (CMD-041)
+Information: Defining new variable 'short_chain_so_0_net'. (CMD-041)
+Information: Defining new variable 'input_is_ideal'. (CMD-041)
+Information: Defining new variable 'design_list'. (CMD-041)
+Information: Defining new variable 'chain_count'. (CMD-041)
+
+Thank you...

@@ -376,36 +376,39 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
 
 
     wire [0:31] opA_ex_mem_hzd,opB_ex_mem_hzd;
-
-    //DATA HAZARD MEM_EX
-    mux2to1_32bit OPA_MEM_EX_HAZARD(
-        .X(opA_id_ex_out),
-        .Y(aluResult_mem_in),
-        .sel(rs1_mem_ex_hazard),
-        .Z(opA_ex_mem_hzd)
-    );
-
-    mux2to1_32bit OPB_MEM_EX_HAZARD(
-        .X(opB_id_ex_out),
-        .Y(aluResult_mem_in),
-        .sel(rs2_mem_ex_hazard),
-        .Z(opB_ex_mem_hzd)
-    );
+    wire [0:31] opA_wb_ex_hzd, opB_wb_ex_hzd;
 
     // DATA HAZARD WB_EX
     mux2to1_32bit OPA_WB_EX_HAZARD(
-        .X(opA_ex_mem_hzd),
+        .X(opA_id_ex_out),
         .Y(RegWriteVal_wb_out),
         .sel(rs1_wb_ex_hazard),
-        .Z(opA_ex_in)
+        .Z(opA_wb_ex_hzd)
     );
 
     mux2to1_32bit OPB_WB_EX_HAZARD(
-        .X(opB_ex_mem_hzd),
+        .X(opB_id_ex_out),
         .Y(RegWriteVal_wb_out),
         .sel(rs2_wb_ex_hazard),
+        .Z(opB_wb_ex_hzd)
+    );
+
+    //DATA HAZARD MEM_EX
+    mux2to1_32bit OPA_MEM_EX_HAZARD(
+        .X(opA_wb_ex_hzd),
+        .Y(aluResult_mem_in),
+        .sel(rs1_mem_ex_hazard),
+        .Z(opA_ex_in)
+    );
+
+    mux2to1_32bit OPB_MEM_EX_HAZARD(
+        .X(opB_wb_ex_hzd),
+        .Y(aluResult_mem_in),
+        .sel(rs2_mem_ex_hazard),
         .Z(opB_ex_in)
     );
+
+
 
     wire [0:31] memVal_partial_ex_in;
     wire [0:31] memVal_correct_ex_in;

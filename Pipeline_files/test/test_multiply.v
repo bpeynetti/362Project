@@ -23,10 +23,12 @@ module testbench;
 	end 
 	
 	initial begin 
+   	$dumpvars(0);
+
 		#0 clock = 0; reset = 1; mul=0;
 		a = 2; b=2;
 		#2 reset = 0;
-		#2 mul=1;
+		#3 mul=1;
 		#16;
 		if (done==1'b1) begin 
 			$display ("Done");

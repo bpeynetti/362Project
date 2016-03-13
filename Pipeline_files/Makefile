@@ -14,11 +14,11 @@ register32:
 registerFile:
 	iverilog -o ./bin/test_regFile -s test_registerFile ../ALU_files/src/mux.v src/decoder.v src/dff.v src/register.v src/register_file.v tests/test_registerFile.v
 
-multiplier:
-	iverilog -o ./bin/test_multiplier -s testbench src/multiplier.v tests/multiplier_test.v
-
 pclogic:
 	iverilog -o ./bin/test_pclogic -s testbench src/dff.v src/register.v ../ALU_files/src/mux.v src/extender.v ../ALU_files/src/adder.v ../ALU_files/src/and.v src/pc_logic.v tests/pclogic_test.v
+
+multiplier:
+	iverilog -o ./bin/test_multiplier -s testbench multiplier.v test/test_multiply.v
 
 pipeline:
 	$(DLXASM) -C ./test/instr.hex -D ./test/data.hex $(SRC)

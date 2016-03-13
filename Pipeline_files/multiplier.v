@@ -32,11 +32,18 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 	always @ (posedge clk) begin
 		if (reset)  
 			CurrentState <= STATE_Initial;
-			// working = 1'b0;
-			// done = 1'b0;
-			// result = 0;
 		else 
 			CurrentState <= NextState;
+	end
+
+	always @ (*) begin
+		if (reset) begin
+			result <= 0;
+			H <= 0;
+			L <= 0;
+			Z <= 0;
+			P <= 0;
+		end
 	end
 	
 	always @ (*) begin
@@ -77,6 +84,7 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 			STATE_Initial: begin 
 				H <= a_h * b_h;
 				working <= mul;
+				done <= 1'b0;
 			end 
 			STATE_1: begin 
 				L <= a_l * b_l;
@@ -93,7 +101,7 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 			STATE_4 : begin 
 				result <= (Z<<32)+(Z<<16)+(L);
 				working = 1'b0;
-				// done <= 1'b1;
+				done <= 1'b1;
 			end 
 		endcase
 		
