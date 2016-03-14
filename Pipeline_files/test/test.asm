@@ -16,15 +16,20 @@ _f:
 .global _fib
 _fib:
     ; Initialize r1-r2
-    addi r1,r1,0x40
-    addi r2,r2,0x50
+    addi r1,r1,0x1
+    addi r2,r2,0x10
     nop
     nop
-    movfp2i r2,f3
-    ;movi2fp f1,f5
+    ;movfp2i r2,f3
+    movi2fp f2,r2
+    movi2fp f3,r1
     nop
     nop
-    mult r4,r2,r1
+    nop
+    mult f4,f2,f3
+    nop
+    nop
+    ;movfp2i r3,f1
     nop ; delay slow
     trap #0x300
 
