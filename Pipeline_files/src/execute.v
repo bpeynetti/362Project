@@ -62,9 +62,11 @@ module execute (
     wire sum_cout, sum_of;
     wire zero, of;
     wire [0:31] not_mul_result;
-    wire [0:31] mul_result;
+    wire [0:31] mul_result_short;
     wire [0:63] mul_result_long;
     wire [0:31] pc_nonreg;
+    wire [0:63] opA_long;
+    
     
     assign PCtoReg_out = PCtoReg_in;
     assign RegToPC_out = RegToPC_in; //not needed?
@@ -89,6 +91,15 @@ module execute (
        .of(of)
     );
     
+    
+    //choose whether to take f1 or mul_result
+    mux2to1_32bit CHOOSE_FP_OR_NOTMUL(
+        .X(not_mul_result),
+        .Y(f1_in),
+        .sel(movfp2i_in),
+        .Z(aluResult_out)
+    );
+    
 
     multiplier mul_ex(
         .clk(clk),
@@ -99,23 +110,30 @@ module execute (
         .done(mul_done),
         .result(mul_result_long)
     );
+    
+    assign opA_long = {32'd0,opA_in};
+    
+    //choose to take an input from the i register file (opA) or multiplier result
+    mux2to1_nbit #(64) CHOOSE_MULT_OR_INT(
+        .X(mul_result_long),
+        .Y(opA_long),
+        .sel(movi2fp_in),
+        .Z(fbusW)
+    );
 
-    assign mul_result = mul_result_long[32:63];
     assign stall_out = mul_in & (~mul_done);
-
-
-    // multiplier mul_ex(
-    //     .X(opA_in),
-    //     .Y(opB_in),
-    //     .Z(mul_result)
+    
+    // mux2to1_32bit choose_result(
+    //     .X(not_mul_result),
+    //     .Y(mul_result),
+    //     .sel(mul_in),
+    //     .Z(aluResult_out)
     // );
     
-    mux2to1_32bit choose_result(
-        .X(not_mul_result),
-        .Y(mul_result),
-        .sel(mul_in),
-        .Z(aluResult_out)
-    );
+    
+    
+    
+    
     
     check_branch decide_if_leap(
         .busA(opA_in),
