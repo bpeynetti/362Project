@@ -105,8 +105,8 @@ module execute (
         .clk(clk),
         .reset(reset),
         .mul(mul_in),
-        .a(opA_in),
-        .b(opB_in),
+        .a(f1_in),
+        .b(f2_in),
         .done(mul_done),
         .result(mul_result_long)
     );

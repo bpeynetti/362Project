@@ -26,7 +26,7 @@ _fib:
     nop
     nop
     nop
-    mult f4,f2,f3
+    mult f4,f2,f3 ; saves the high 32 bits in f4 and the low 32 bits in f5
     nop
     nop
     ;movfp2i r3,f1
