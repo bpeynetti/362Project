@@ -20,6 +20,8 @@ _fib:
     addi r2,r2,0x50
     nop
     nop
+    movfp2i r2,f3
+    ;movi2fp f1,f5
     nop
     nop
     mult r4,r2,r1

@@ -3,7 +3,7 @@ module register_file_fp(
     ra, //source 1 register number (goes to busA)
     rb, //source 2 register number (goes to busB)
     busW, //value to write into rd
-    64bit, //1 if 64 bits should be written to rd
+    bit_64, //1 if 64 bits should be written to rd
     clk, //clock
     writeEnable, //1 to write
     reset, //1 for reset
@@ -14,7 +14,7 @@ module register_file_fp(
     
     input [0:4] rd, ra, rb;
     input [0:63] busW;
-    input 64bit;
+    input bit_64;
     input clk, writeEnable, reset;
     
     output [0:31] busA, busB;
@@ -28,7 +28,7 @@ module register_file_fp(
     mux2to1_32bit CHOOSE_EVEN_BUSW(
     	.X(busW[32:63]),
     	.Y(busW[0:31]),
-    	.sel(64bit),
+    	.sel(bit_64),
     	.Z(busW_even)
     );
     
@@ -43,7 +43,7 @@ module register_file_fp(
     		mux_1 CHOOSE_WRITE_ENABLE (
     			.x(reg32_we[i]),
     			.y(reg64_we[i/2]),
-    			.sel(64bit),
+    			.sel(bit_64),
     			.z(reg_we[i])
     		);
     	end
@@ -53,19 +53,19 @@ module register_file_fp(
             register32 REGISTER32_EVEN (
                 .inData(busW_even),
                 .clk(clk),
-                .writeEnable(reg_we),
+                .writeEnable(reg_we[j]),
                 .reset(reset),
                 .outData(reg_out[j]));
         end
     endgenerate
     generate
-        for (k=0; k<32; k=k+2) begin: REGISTER_FILE_ODD
+        for (k=1; k<32; k=k+2) begin: REGISTER_FILE_ODD
             register32 REGISTER32_ODD (
                 .inData(busW_odd),
                 .clk(clk),
-                .writeEnable(reg_we),
+                .writeEnable(reg_we[k]),
                 .reset(reset),
-                .outData(reg_out[j]));
+                .outData(reg_out[k]));
         end
     endgenerate
     

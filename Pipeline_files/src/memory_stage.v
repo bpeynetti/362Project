@@ -5,7 +5,9 @@ module memory_stage(
     RegToPC_in, //not needed?
     
     RegWrite_in, MemToReg_in, MemWrite_in, loadSign_in,
-    DSize_in, fDestReg_in, fbusW_in, FPRegWrite_in, mul_in clk, reset,
+    DSize_in, fDestReg_in, fbusW_in, FPRegWrite_in, mul_in,
+    //std clk/reset
+    clk, reset,
     //input from data memory
     dMemValue_in,
     //outputs for mem_wb register

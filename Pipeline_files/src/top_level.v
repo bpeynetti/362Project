@@ -109,9 +109,9 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     ////STALL SIGNALS (INTO REGISTERS)
 
     wire [0:63] IF_ID_CORRECT_IN;
-    wire [0:203] ID_EXEC_CORRECT_IN;
-    wire [0:179] EXEC_MEM_CORRECT_IN;
-    wire [0:107] MEM_WB_CORRECT_IN;
+    wire [0:ID_EXEC_WIDTH-1] ID_EXEC_CORRECT_IN;
+    wire [0:EXEC_MEM_WIDTH-1] EXEC_MEM_CORRECT_IN;
+    wire [0:MEM_WB_WIDTH-1] MEM_WB_CORRECT_IN;
     wire stall_ex_out;
     //assign stall_ex_out = stall_in_test;
 
@@ -236,6 +236,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     
     assign r1_id = instruction_id_in[6:10];
     assign r2_id = instruction_id_in[11:15];
+    wire [0:4] fDestReg_id;
+    assign fDestReg_id = instruction_id_in[16:20];
 
     
 
@@ -287,6 +289,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     //
     /////////////////////////////////////////
     
+    wire [0:31] f1_id, f2_id;
+    
     //wire out of this stage to connecto to pipeline registers
     wire [0:ID_EXEC_WIDTH-1] ID_EXEC_IN,ID_EXEC_OUT;
     assign ID_EXEC_IN = 
@@ -305,7 +309,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
             jumpNonReg_id,
             r1_id,r2_id,
             trap_id,
-            f1_id,f2_id,destFReg_id,
+            f1_id,f2_id,fDestReg_id,
             FPRType_id,FPRegWrite_id,
             movfp2i_id,movi2fp_id
     };
@@ -525,7 +529,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .DSize_out(DSize_ex_out),
         .leap_out(leap_ex_out),
         .memVal_out(memVal_ex_out),
-        .stall_out(stall_ex_out)
+        .stall_out(stall_ex_out),
         
         //floating point stuff outputs
         .fDestReg_out(fDestReg_ex_out),
@@ -640,13 +644,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign fbusW_mem_in = EXEC_MEM_OUT[185:248];
     assign FPRegWrite_mem_in = EXEC_MEM_OUT[249];
     assign mul_mem_in = EXEC_MEM_OUT[250];
-    
-    //bypassing the memory stage for simplicity (nothing would be done there)
-    assign fDestReg_mem_out = fDestReg_mem_in;
-    assign fbusW_mem_out = fbusW_mem_in;
-    assign FPRegWrite_mem_out = FPRegWrite_mem_in;
-    assign mul_mem_out = mul_mem_in;
-    
+
     
     //what we do here:
     ////    get the signals that go to the Memory (MemBus)
@@ -683,6 +681,14 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     /////
     ///////////////////////////////////
     
+        //bypassing the memory stage for simplicity (nothing would be done there)
+    // assign fDestReg_mem_out = fDestReg_mem_in;
+    // assign fbusW_mem_out = fbusW_mem_in;
+    // assign FPRegWrite_mem_out = FPRegWrite_mem_in;
+    // assign mul_mem_out = mul_mem_in;
+    
+    
+    
     memory_stage MEM_STAGE(
         .clk(clk),
         .reset(reset),
@@ -697,6 +703,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .loadSign_in(loadSign_mem_in),
         .DSize_in(DSize_mem_in),
         .dMemValue_in(dataOut),
+        .fDestReg_in(fDestReg_mem_in),
+        .fbusW_in(fbusW_mem_in),
+        .FPRegWrite_in(FPRegWrite_mem_in),
+        .mul_in(mul_mem_in),
         // outputs
         .nextPC_out(nextPC_mem_out),
         .destReg_out(destReg_mem_out),
@@ -706,7 +716,11 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .RegWrite_out(RegWrite_mem_out),
         .MemToReg_out(MemToReg_mem_out),
         .loadSign_out(loadSign_mem_out),
-        .DSize_out(DSize_mem_out)
+        .DSize_out(DSize_mem_out),
+        .fDestReg_out(fDestReg_mem_out),
+        .fbusW_out(fbusW_mem_out),
+        .FPRegWrite_out(FPRegWrite_mem_out),
+        .mul_out(mul_mem_out)
     );
     
     /////////////////////////////////////////
@@ -760,10 +774,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire [0:4] destReg_wb_out;
     wire RegWrite_wb_out;
     
-    wire [0:4] fDestReg_wb_in;
-    wire [0:63] fbusW_wb_in;
-    wire FPRegWrite_wb_in;
-    wire mul_wb_in;
+    wire [0:4] fDestReg_wb_in,fDestReg_wb_out;
+    wire [0:63] fbusW_wb_in,fbusW_wb_out;
+    wire FPRegWrite_wb_in,FPRegWrite_wb_out;
+    wire mul_wb_in,mul_wb_out;
     
     assign nextPC_wb_in = MEM_WB_OUT[0:31];
     assign destReg_wb_in = MEM_WB_OUT[32:36];
@@ -780,8 +794,12 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign fbusW_wb_in = MEM_WB_OUT[113:176];
     assign FPRegWrite_wb_in = MEM_WB_OUT[177];
     assign mul_wb_in = MEM_WB_OUT[178];
-        
-        
+    
+    assign fDestReg_wb_out = fDestReg_wb_in;
+    assign fbusW_wb_out = fbusW_wb_in;
+    assign FPRegWrite_wb_out = FPRegWrite_wb_in;
+    assign mul_wb_out = mul_wb_in;
+
         
     write_back WRITE_BACK_STAGE(
         .nextPC_in(nextPC_wb_in),
@@ -799,6 +817,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .RegWriteVal_out(RegWriteVal_wb_out)
     );
     
+
     //now wire the values directly into the register file
 
     
@@ -822,6 +841,23 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     
             .busA(r1_reg_file), //value from register ra (GOES TO HAZARD DETECT)
             .busB(r2_reg_file) //value from register rb (GOES TO HAZARD DETECT)
+    );
+    
+    
+    
+    /// FLOATING POINT REGISTER FILE
+    register_file_fp FP_REG_FILE(
+        .rd(fDestReg_wb_out),
+        .ra(r1_id),
+        .rb(r2_id),
+        .busW(fbusW_wb_out),
+        .bit_64(mul_wb_out),
+        .clk(clk),
+        .reset(reset),
+        .writeEnable(FPRegWrite_wb_out),
+        
+        .busA(f1_id),
+        .busB(f2_id)
     );
     
     

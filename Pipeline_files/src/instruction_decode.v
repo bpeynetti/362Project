@@ -38,8 +38,8 @@ module instruction_decode(
     output trap_out;
     output FPRType_out;
     output FPRegWrite_out;
-    output movi2fp;
-    output movfp2i;
+    output movi2fp_out;
+    output movfp2i_out;
 
 
     wire [0:31] trap_xor;
@@ -115,7 +115,7 @@ module instruction_decode(
         .LHIOp(LHIOp),
         .jumpNonReg(jumpNonReg_out),
         .FPRType_out(FPRType_out),
-        .FPRegWrite(FPRegWrite_out)
+        .FPRegWrite_out(FPRegWrite_out),
         .movfp2i_out(movfp2i_out),
         .movi2fp_out(movi2fp_out)
     );

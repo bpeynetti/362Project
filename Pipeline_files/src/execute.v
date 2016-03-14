@@ -3,7 +3,7 @@ module execute (
     nextPC_in,opA_in,opB_in,offset26_in,offset16_in,destReg_in,PCtoReg_in,
     RegToPC_in,jump_in,branch_in,branchZero_in,RType_in,RegWrite_in,MemToReg_in,
     MemWrite_in,loadSign_in,mul_in,DSize_in,ALUCtrl_in, memVal_in, f1_in, f2_in, fDestReg_in,
-    FPRtype_in, FPRegWrite_in, movfp2i_in, movi2fp_in,
+    FPRType_in, FPRegWrite_in, movfp2i_in, movi2fp_in,
     //basic clk, reset input
     clk,reset,
     //outputs
@@ -36,7 +36,7 @@ module execute (
     //FLOATING POINT INPUTS
     input [0:31] f1_in, f2_in;
     input [0:4] fDestReg_in;
-    input FPRtype_in, FPRegWrite_in, movfp2i_in, movi2fp_in;
+    input FPRType_in, FPRegWrite_in, movfp2i_in, movi2fp_in;
     input clk,reset;
     
     output [0:31] nextPC_out;

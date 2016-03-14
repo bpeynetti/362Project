@@ -49,3 +49,19 @@ module decoder_5to32(x, en, z);
     // assign enable_out = enable;
 
 endmodule
+
+module decoder_4to16(x, en, z);
+
+    input [0:3] x; //4 bit signal to decode
+    input en;
+    output [0:15] z; //the 16-bit signal to decode
+    
+    wire enable_low;
+    assign enable_low = en & (~x[0]);
+    wire enable_high;
+    assign enable_high = en & x[0];
+    
+    decoder_3to8 DECODE_BYTE_0(x[1:3], enable_low, z[0:7]);
+    decoder_3to8 DECODE_BYTE_1(x[1:3], enable_high, z[8:15]);
+    
+endmodule

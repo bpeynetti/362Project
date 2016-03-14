@@ -20,17 +20,20 @@ module control(
     extOp, //0 for unsigned immediate instructions
     LHIOp, //1 for LHI
     jumpNonReg,
-    FPRType, // 1 if floating point operation, 0 otherwise
-    FPRegWrite,
-    movfp2i_out,movi2fp_out //signals to be used in execution stage
+    FPRType_out, // 1 if floating point operation, 0 otherwise
+    FPRegWrite_out,
+    movfp2i_out,
+    movi2fp_out //signals to be used in execution stage
 );
     input [0:31] instruction;
     output PCtoReg, regToPC, jump, branch, branchZero, RType, RegWrite, MemToReg, MemWrite, mul_out, extOp, LHIOp,loadSign,jumpNonReg;
     output [0:1] DSize;
     output [0:3] ALUCtrl;
-    output FPRType,FPRegWrite;
-    wire movi2fp_out;
-    wire movfp2i_out;
+    output FPRType_out,FPRegWrite_out;
+    output movi2fp_out,movfp2i_out;
+    
+    wire FPRType;
+    assign FPRType_out = FPRType;
     wire movi2fp;
     wire movfp2i;
 
@@ -117,6 +120,6 @@ module control(
     assign movfp2i_out = movfp2i;
     assign movi2fp_out = movi2fp;
     //FPRegWrite happens on mul or movi2fp
-    assign FPRegWrite =  mul | movi2fp;
+    assign FPRegWrite_out =  mul | movi2fp;
     
 endmodule
