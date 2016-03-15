@@ -74,6 +74,7 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 		case (CurrentState)
 			STATE_Initial: begin 
 				H <= a_h * b_h;
+				P1 <= a_h+a_l;
 				L <= 0;
 				Z <= 0;
 				P <= 0;
@@ -81,11 +82,12 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 				done <= 1'b0;
 			end 
 			STATE_1: begin 
+				P2 <= b_h+b_l;
 				L <= a_l * b_l;
 				working <= 1'b1;
 			end 
 			STATE_2 : begin 
-				P <= (a_h+a_l)*(b_h+b_l);
+				P <= (P1)*(P2);
 				working <= 1'b1;
 			end
 			STATE_3 : begin 
