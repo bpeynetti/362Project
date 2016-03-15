@@ -56,22 +56,22 @@ initial begin
 //$monitor("Clock = %b; Instruction = %h PC = %h imm=%h addrout=%h target=%h rs=%d rt=%d rd = %d busA=%d busB=%d bIN=%d ALUSrc=%b ALUOut=(hex)%h (dec)%d ALUCtr=%b \n MemOut=%h busWr=%h WrAddr=%d RegWr=%b Mem2Reg=%b Branch=%b Jump=%b Branch_instruction = %h Zero =%b \n Jump_Link=%b WrAddr = %h JALcheck=%b Reg[1] = %h Reg[31] = %h\n", top.clk, top.instruction, top.instructionfetch.PCout, top.instructionfetch.immediate26, top.instructionfetch.jumpMUXout,  top.instructionfetch.PCin, top.RS, top.RT, top.RD, top.busA, top.busB, top.bIN, top.ALUSrc, top.ALUOut, top.ALUOut, top.ALUCtr, top.MemOut, top.busWr, top.WrAddr, top.RegWr, top.Mem2Reg, top.instructionfetch.andBranch, top.Jump, top.branch_instruction, top.Zero, top.Jump_Link, top.WrAddr, top.instructionfetch.JALcheck, top.rFile.reg_file[1], top.rFile.reg_file[31]); 
 	
 // iter=0;
-    // $monitor("clk=%b rst=%b Instruction=%h PC=%h r1=%h r2=%h r3=%h r4=%h r5=%h r6=%h f1=%h f2=%h f3=%h f4=%h f5=%h r29=%h f30=%h r31=%h",
-    //   top.clk,top.reset,top.imem_out,top.imem_addr,
-    //   top.PIPELINE.REG_FILE.reg_out[1],top.PIPELINE.REG_FILE.reg_out[2],
-    //   top.PIPELINE.REG_FILE.reg_out[3],top.PIPELINE.REG_FILE.reg_out[4],
-    //   top.PIPELINE.REG_FILE.reg_out[5],top.PIPELINE.REG_FILE.reg_out[6],
-    //   top.PIPELINE.FP_REG_FILE.reg_out[1],top.PIPELINE.FP_REG_FILE.reg_out[2],
-    //   top.PIPELINE.FP_REG_FILE.reg_out[3],top.PIPELINE.FP_REG_FILE.reg_out[4],
-    //   top.PIPELINE.FP_REG_FILE.reg_out[5],
-    //   top.PIPELINE.REG_FILE.reg_out[29],top.PIPELINE.REG_FILE.reg_out[30],top.PIPELINE.REG_FILE.reg_out[31]
-    // );
+    $monitor("clk=%b rst=%b Instruction=%h PC=%h r1=%h r2=%h r3=%h r4=%h r5=%h r6=%h f1=%h f2=%h f3=%h f4=%h f5=%h r29=%h f30=%h r31=%h",
+      top.clk,top.reset,top.imem_out,top.imem_addr,
+      top.PIPELINE.REG_FILE.reg_out[1],top.PIPELINE.REG_FILE.reg_out[2],
+      top.PIPELINE.REG_FILE.reg_out[3],top.PIPELINE.REG_FILE.reg_out[4],
+      top.PIPELINE.REG_FILE.reg_out[5],top.PIPELINE.REG_FILE.reg_out[6],
+      top.PIPELINE.FP_REG_FILE.reg_out[1],top.PIPELINE.FP_REG_FILE.reg_out[2],
+      top.PIPELINE.FP_REG_FILE.reg_out[3],top.PIPELINE.FP_REG_FILE.reg_out[4],
+      top.PIPELINE.FP_REG_FILE.reg_out[5],
+      top.PIPELINE.REG_FILE.reg_out[29],top.PIPELINE.REG_FILE.reg_out[30],top.PIPELINE.REG_FILE.reg_out[31]
+    );
 
    #0 clock=0; reset=0; 
    #2 reset=0;
    #2 reset=1;
 
-   #35000; 
+   #400; 
    $finish;
 end
 

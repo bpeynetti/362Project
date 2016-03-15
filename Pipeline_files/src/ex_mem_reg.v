@@ -1,9 +1,9 @@
-module ex_mem_reg (in, flush, out,clk, reset);
+module ex_mem_reg (in, flush, out,clk, reset,we);
 
     parameter width=251;
     input [0:(width-1)] in;
     input flush;
-    input clk,reset;
+    input clk,reset,we;
     output [0:(width-1)] out;
     
     wire [0:31] nextPC = in[0:31];
@@ -31,9 +31,10 @@ module ex_mem_reg (in, flush, out,clk, reset);
     // wire flush;
     // assign flush = 1'b0;
     
-    PipeCtlRegN #(width) EX_MEM_REG(
+    PipeCtlRegN1 #(width) EX_MEM_REG(
         .in(in),
         .ctl(flush),
+        .we(~we),
         .clk(clk),
         .reset(reset),
         .out(out)

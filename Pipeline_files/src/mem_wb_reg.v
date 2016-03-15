@@ -1,9 +1,9 @@
-module mem_wb_reg (in, flush, out,clk,reset);
+module mem_wb_reg (in, flush, out,clk,reset,we);
     
     parameter width=179;
     input [0:width-1] in;
     input flush;
-    input clk, reset;
+    input clk, reset,we;
     output [0:width-1] out;
     
     wire [0:31] nextPC = in[0:31];
@@ -21,9 +21,10 @@ module mem_wb_reg (in, flush, out,clk,reset);
     wire FPRegWrite = in[177];
     wire mul = in[178];
     
-    PipeCtlRegN #(width) MEM_WB_REG(
+    PipeCtlRegN1 #(width) MEM_WB_REG(
         .in(in),
         .ctl(1'b0),
+        .we(~we),
         .clk(clk),
         .reset(reset),
         .out(out)

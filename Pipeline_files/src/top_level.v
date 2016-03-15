@@ -108,10 +108,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
 
     ////STALL SIGNALS (INTO REGISTERS)
 
-    wire [0:63] IF_ID_CORRECT_IN;
-    wire [0:ID_EXEC_WIDTH-1] ID_EXEC_CORRECT_IN;
-    wire [0:EXEC_MEM_WIDTH-1] EXEC_MEM_CORRECT_IN;
-    wire [0:MEM_WB_WIDTH-1] MEM_WB_CORRECT_IN;
+    // wire [0:63] IF_ID_CORRECT_IN;
+    // wire [0:ID_EXEC_WIDTH-1] ID_EXEC_CORRECT_IN;
+    // wire [0:EXEC_MEM_WIDTH-1] EXEC_MEM_CORRECT_IN;
+    // wire [0:MEM_WB_WIDTH-1] MEM_WB_CORRECT_IN;
     wire stall_ex_out;
     //assign stall_ex_out = stall_in_test;
 
@@ -173,10 +173,11 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign if_id_flush = leap_mem_in | load_stall_id_if;
 
     if_id_reg IF_ID_REG(
-        .in(IF_ID_CORRECT_IN),
+        .in(IF_ID_IN),
         .flush(if_id_flush),
         .out(IF_ID_OUT),
         .clk(clk),
+        .we(stall_ex_out),
         .reset(reset)
     );
     
@@ -318,9 +319,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign id_ex_flush = leap_mem_in;
 
     id_ex_reg ID_EX_REG(
-        .in(ID_EXEC_CORRECT_IN),
+        .in(ID_EXEC_IN),
         .clk(clk),
         .reset(reset),
+        .we(stall_ex_out),
         .out(ID_EXEC_OUT),
         .flush(id_ex_flush)
     );
@@ -572,9 +574,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign ex_mem_flush = leap_mem_in;
     
     ex_mem_reg EX_MEM_REGISTER(
-        .in(EXEC_MEM_CORRECT_IN),
+        .in(EXEC_MEM_IN),
         .clk(clk),
         .reset(reset),
+        .we(stall_ex_out),
         .out(EXEC_MEM_OUT),
         .flush(ex_mem_flush)
     );
@@ -744,9 +747,10 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     };
 
     mem_wb_reg MEM_WB_REG(
-        .in(MEM_WB_CORRECT_IN),
+        .in(MEM_WB_IN),
         .clk(clk),
         .reset(reset),
+        .we(stall_ex_out),
         .out(MEM_WB_OUT)
     );
     
@@ -955,33 +959,33 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     
     ////MUXES TO THE CORRECT INPUT AT REGISTERS
 
-    mux2to1_64bit MUX_IF_ID(
-        .X(IF_ID_IN),
-        .Y(IF_ID_OUT),
-        .sel(stall_ex_out),
-        .Z(IF_ID_CORRECT_IN)
-    );
+    // mux2to1_64bit MUX_IF_ID(
+    //     .X(IF_ID_IN),
+    //     .Y(IF_ID_OUT),
+    //     .sel(stall_ex_out),
+    //     .Z(IF_ID_CORRECT_IN)
+    // );
 
-    mux2to1_277bit MUX_ID_EXEC(
-        .X(ID_EXEC_IN),
-        .Y(ID_EXEC_OUT),
-        .sel(stall_ex_out),
-        .Z(ID_EXEC_CORRECT_IN)
-    );
+    // mux2to1_277bit MUX_ID_EXEC(
+    //     .X(ID_EXEC_IN),
+    //     .Y(ID_EXEC_OUT),
+    //     .sel(stall_ex_out),
+    //     .Z(ID_EXEC_CORRECT_IN)
+    // );
 
-    mux2to1_251bit MUX_EXEC_MEM(
-        .X(EXEC_MEM_IN),
-        .Y(EXEC_MEM_OUT),
-        .sel(stall_ex_out),
-        .Z(EXEC_MEM_CORRECT_IN)
-    );
+    // mux2to1_251bit MUX_EXEC_MEM(
+    //     .X(EXEC_MEM_IN),
+    //     .Y(EXEC_MEM_OUT),
+    //     .sel(stall_ex_out),
+    //     .Z(EXEC_MEM_CORRECT_IN)
+    // );
 
-    mux2to1_179bit MUX_MEM_WB(
-        .X(MEM_WB_IN),
-        .Y(MEM_WB_OUT),
-        .sel(stall_ex_out),
-        .Z(MEM_WB_CORRECT_IN)
-    );
+    // mux2to1_179bit MUX_MEM_WB(
+    //     .X(MEM_WB_IN),
+    //     .Y(MEM_WB_OUT),
+    //     .sel(stall_ex_out),
+    //     .Z(MEM_WB_CORRECT_IN)
+    // );
 
 
 endmodule
