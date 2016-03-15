@@ -1,4 +1,6 @@
-module mem_wb_reg #(parameter width=32) (in, flush, out,clk,reset);
+module mem_wb_reg (in, flush, out,clk,reset);
+    
+    parameter width=179;
     input [0:width-1] in;
     input flush;
     input clk, reset;

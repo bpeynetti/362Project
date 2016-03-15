@@ -1,5 +1,5 @@
 module imem(addr, instr);
-    parameter SIZE=4096;
+    parameter SIZE=8192;
     parameter OFFSET=0;
 
     input [0:31] addr;

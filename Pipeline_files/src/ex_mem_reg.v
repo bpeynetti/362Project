@@ -1,5 +1,6 @@
-module ex_mem_reg #(parameter width=32) (in, flush, out,clk, reset);
+module ex_mem_reg (in, flush, out,clk, reset);
 
+    parameter width=251;
     input [0:(width-1)] in;
     input flush;
     input clk,reset;

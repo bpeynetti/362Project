@@ -174,7 +174,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
 
     if_id_reg IF_ID_REG(
         .in(IF_ID_CORRECT_IN),
-        .flush(load_stall_id_if),
+        .flush(if_id_flush),
         .out(IF_ID_OUT),
         .clk(clk),
         .reset(reset)
@@ -296,7 +296,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign ID_EXEC_IN = 
     {
             nextPC_id_in,
-            opA_id,opB_id, offset_16_id, offset_26_id,
+            opA_id,opB_id, offset_26_id, offset_16_id,
             //took out opcode
             destReg_id,
             PCtoReg_id, RegToPC_id,
@@ -317,7 +317,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire id_ex_flush;
     assign id_ex_flush = leap_mem_in;
 
-    id_ex_reg #(ID_EXEC_WIDTH) ID_EX_REG(
+    id_ex_reg ID_EX_REG(
         .in(ID_EXEC_CORRECT_IN),
         .clk(clk),
         .reset(reset),
@@ -571,7 +571,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     wire ex_mem_flush;
     assign ex_mem_flush = leap_mem_in;
     
-    ex_mem_reg #(EXEC_MEM_WIDTH) EX_MEM_REGISTER(
+    ex_mem_reg EX_MEM_REGISTER(
         .in(EXEC_MEM_CORRECT_IN),
         .clk(clk),
         .reset(reset),
@@ -743,7 +743,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         FPRegWrite_mem_out,mul_mem_out
     };
 
-    mem_wb_reg #(MEM_WB_WIDTH) MEM_WB_REG(
+    mem_wb_reg MEM_WB_REG(
         .in(MEM_WB_CORRECT_IN),
         .clk(clk),
         .reset(reset),
@@ -955,28 +955,28 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     
     ////MUXES TO THE CORRECT INPUT AT REGISTERS
 
-    mux2to1_nbit #(64) MUX_IF_ID(
+    mux2to1_64bit MUX_IF_ID(
         .X(IF_ID_IN),
         .Y(IF_ID_OUT),
         .sel(stall_ex_out),
         .Z(IF_ID_CORRECT_IN)
     );
 
-    mux2to1_nbit #(ID_EXEC_WIDTH) MUX_ID_EXEC(
+    mux2to1_277bit MUX_ID_EXEC(
         .X(ID_EXEC_IN),
         .Y(ID_EXEC_OUT),
         .sel(stall_ex_out),
         .Z(ID_EXEC_CORRECT_IN)
     );
 
-    mux2to1_nbit #(EXEC_MEM_WIDTH) MUX_EXEC_MEM(
+    mux2to1_251bit MUX_EXEC_MEM(
         .X(EXEC_MEM_IN),
         .Y(EXEC_MEM_OUT),
         .sel(stall_ex_out),
         .Z(EXEC_MEM_CORRECT_IN)
     );
 
-    mux2to1_nbit #(MEM_WB_WIDTH) MUX_MEM_WB(
+    mux2to1_179bit MUX_MEM_WB(
         .X(MEM_WB_IN),
         .Y(MEM_WB_OUT),
         .sel(stall_ex_out),

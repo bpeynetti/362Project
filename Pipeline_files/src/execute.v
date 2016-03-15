@@ -114,7 +114,7 @@ module execute (
     assign opA_long = {32'd0,opA_in};
     
     //choose to take an input from the i register file (opA) or multiplier result
-    mux2to1_nbit #(64) CHOOSE_MULT_OR_INT(
+    mux2to1_64bit CHOOSE_MULT_OR_INT(
         .X(mul_result_long),
         .Y(opA_long),
         .sel(movi2fp_in),

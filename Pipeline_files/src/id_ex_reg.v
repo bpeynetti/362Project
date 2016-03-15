@@ -1,5 +1,6 @@
-module id_ex_reg #(parameter width=32) (in, flush, out, clk, reset);
+module id_ex_reg (in, flush, out, clk, reset);
 
+    parameter width=277;
     input [0:width-1] in;
     input flush;
     input clk,reset;
