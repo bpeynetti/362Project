@@ -1,38 +1,36 @@
-; Start instrs at address 0
+# MAIN
 .text 0x0000
-; Start data somewhere else
 .data 0x2000
-.global _f
-_f:
-.word 0
-.word 1
+.global _dat
+_dat:
+.word 15
+.word 240
+.word 3840 
+.word 61440
+.word 983040 
+.word 15728640 
+.word 251658240 
+.word 268435456
+.word 536870912 
+.word 3221225472
 
-; Instructions
 .text
+.proc _usum
+.global _usum
+_usum:
+    xor r0, r0, r0      #Remains zero
+    xor r4, r4, r4
+    xor r5, r5, r5
+    xor r6, r6, r6
+    addi r6, r0, 36 
 
-
-; Fibonacci: f[i] = f[i-2] + f[i-1]; f[0]=0, f[1]=1
-.proc _fib
-.global _fib
-_fib:
-    ; Initialize r1-r2
-    lw r1, _f(r0)
-    lw r2, (_f+4)(r0)
-    ; r3 = 'i'
-    xor r3, r3, r3 ; i=0
-    addui r3, r3, #8 ; i=2
-fibr1:
-    addu r1, r1, r2 ; a=(a+b)
-    sw _f(r3), r1   ; f[i] = a
-    addui r3, r3, #4 ; i++
-    addu r2, r1, r2 ; b=(a+b)
-    sw _f(r3), r2   ; f[i] = b
-    addui r3, r3, #4 ; i++
-    sgei r4, r3, #0x14
-    ; 0xb4 = 180 = 45*4
-    ; much higher, and the number runs out of bits
-    beqz r4, fibr1
-    nop ; delay slow
+_loop:
+    lw r4, _dat(r6)
+    addu r5, r5, r4
+    subi r6, r6, 4
+    bnez r6, _loop
+    sw _dat(r0), r5
+    nop
     trap #0x300
+.endproc _usum
 
-.endproc _fib

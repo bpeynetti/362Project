@@ -1,6 +1,6 @@
 module ex_mem_reg (in, flush, out,clk, reset,we);
 
-    parameter width=251;
+    parameter width=283;
     input [0:(width-1)] in;
     input flush;
     input clk,reset,we;
@@ -26,6 +26,7 @@ module ex_mem_reg (in, flush, out,clk, reset,we);
     wire [0:63] fbusW = in[185:248];
     wire FPRegWrite = in[249];
     wire mul = in[250];
+    wire opA = in[251:282];
 
     
     // wire flush;

@@ -24,7 +24,7 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 	
 	reg [0:2] CurrentState,NextState;
 	
-	reg [0:31] H,L,Z,P; 
+	reg [0:31] H,L,Z,P,P1,P2; 
 	reg [0:63] result;
 	reg working,done;
 	

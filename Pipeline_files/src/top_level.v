@@ -63,7 +63,7 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     parameter IMEM_BUS_IN_SIZE = 32;
     
     parameter ID_EXEC_WIDTH = 277;
-    parameter EXEC_MEM_WIDTH = 251;
+    parameter EXEC_MEM_WIDTH = 283;
     parameter MEM_WB_WIDTH = 179;
     
     input clk,reset;
@@ -537,12 +537,12 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
         .fDestReg_out(fDestReg_ex_out),
         .fbusW(fbusW_ex_out),
         .FPRegWrite_out(FPRegWrite_ex_out),
-        .mul_out(mul_ex_out)
-        
+        .mul_out(mul_ex_out)        
     );
     
-    wire [0:31] opB_ex_out;
+    wire [0:31] opB_ex_out,opA_ex_out;
     assign opB_ex_out = opB_ex_in;
+    assign opA_ex_out = opA_ex_in;
     
     /////////////////////////////////////////
     //
@@ -567,7 +567,8 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
            rs2_ex_out,
            trap_ex,
            fDestReg_ex_out,fbusW_ex_out,
-           FPRegWrite_ex_out,mul_ex_out
+           FPRegWrite_ex_out,mul_ex_out,
+           opA_ex_out
     };
 
     wire ex_mem_flush;
@@ -636,7 +637,9 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign MemWrite_mem_in = EXEC_MEM_OUT[105];
     assign loadSign_mem_in = EXEC_MEM_OUT[106];
     assign DSize_mem_in = EXEC_MEM_OUT[107:108];
-    assign leapAddr_mem_in = EXEC_MEM_OUT[109:140];
+    wire [0:31] leapAddr_mem_temp;
+
+    assign leapAddr_mem_temp = EXEC_MEM_OUT[109:140];
     assign leap_mem_in = EXEC_MEM_OUT[141];
     assign memVal_mem_in = EXEC_MEM_OUT[142:173];
     assign rs2_mem_in = EXEC_MEM_OUT[174:178];
@@ -648,27 +651,20 @@ module pipeline_processor(clk,reset,DMEM_BUS_OUT,DMEM_BUS_IN,IMEM_BUS_OUT,IMEM_B
     assign FPRegWrite_mem_in = EXEC_MEM_OUT[249];
     assign mul_mem_in = EXEC_MEM_OUT[250];
 
+    wire[0:31] OpA_mem_in;
+    assign OpA_mem_in = EXEC_MEM_OUT[251:282];
+
     
-    //what we do here:
-    ////    get the signals that go to the Memory (MemBus)
-    ////    and put those all the way out othe top level pipeline processor
-    ////
     
-    //this is directly to the input/output of the module, so not as wire
-    // wire [0:64] DMEM_BUS_OUT;
-    // wire [0:31] DMEM_BUS_IN;
-    
-    // TOOK THIS OUT AND ADDED TO MEM_EX HAZARD
-                //MEM_WB (store) HAZARD
-                // wire [0:31] memVal_correct_in;
-                
-                // mux2to1_32bit STORE_HAZARD_MUX(
-                //     .X(memVal_mem_in),
-                //     .Y(RegWriteVal_wb_out),
-                //     .sel(wb_mem_hazard),
-                //     .Z(memVal_correct_in)
-                // );
     ///////////////
+    ///
+    /// figure out memory stage hazard
+    /// calculate leapAddr_mem_in
+    wire [0:31] pc_nonreg_mem;
+    wire sum_cout,sum_of;
+    fa_nbit ADD_IMM(leapAddr_mem_temp,nextPC_mem_in, 1'b0,pc_nonreg_mem,sum_cout,sum_of);
+    mux2to1_32bit IMM_OR_REG(pc_nonreg_mem, OpA_mem_in, RegToPC_mem_in, leapAddr_mem_in);
+
     
     assign DMEM_BUS_OUT = {aluResult_mem_in,memVal_mem_in,MemWrite_mem_in,DSize_mem_in};
 

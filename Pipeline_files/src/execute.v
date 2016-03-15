@@ -59,6 +59,7 @@ module execute (
     output FPRegWrite_out, mul_out;
     
     wire [0:31] imm16_32, imm26_32, imm_final;
+    
     wire sum_cout, sum_of;
     wire zero, of;
     wire [0:31] not_mul_result;
@@ -66,6 +67,7 @@ module execute (
     wire [0:63] mul_result_long;
     wire [0:31] pc_nonreg;
     wire [0:63] opA_long;
+
     
     
     assign PCtoReg_out = PCtoReg_in;
@@ -148,8 +150,9 @@ module execute (
     extend_26to32 EXTEND_IMM26(offset26_in, 1'b1, imm26_32);
     mux2to1_32bit CHOOSE_IMMEDIATE(imm26_32, imm16_32, branch_in, imm_final);
     
-    fa_nbit ADD_IMM(imm_final, nextPC_in, 1'b0, pc_nonreg, sum_cout, sum_of);
-    mux2to1_32bit IMM_OR_REG(pc_nonreg, opA_in, RegToPC_in, leapAddr_out);
+    assign leapAddr_out = imm_final;
+    // fa_nbit ADD_IMM(imm_final, nextPC_in, 1'b0, pc_nonreg, sum_cout, sum_of);
+    // mux2to1_32bit IMM_OR_REG(pc_nonreg, opA_in, RegToPC_in, leapAddr_out);
         
     // assign stall_out = 1'b0;
         
