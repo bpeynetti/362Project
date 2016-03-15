@@ -8,10 +8,14 @@
 LIB_DIR = ../src/lib/
 SC_DIR = ../src/
 #VERILOG_FILES = ../adder.v ../counter.v
-VERILOG_FILES = ${LIB_DIR}adder.v ${LIB_DIR}alu.v ${LIB_DIR}and.v ${LIB_DIR}check_branch.v ${LIB_DIR}control.v ${LIB_DIR}decoder.v ${LIB_DIR}dff.v ${LIB_DIR}extend_1to32.v ${LIB_DIR}extender.v ${LIB_DIR}mux.v ${LIB_DIR}not.v ${LIB_DIR}or.v ${LIB_DIR}outData.v ${LIB_DIR}pipeline_reg.v ${LIB_DIR}register.v ${LIB_DIR}setter.v ${LIB_DIR}shift.v ${LIB_DIR}xor.v ${LIB_DIR}zero.v  ${SC_DIR}execute.v ${SC_DIR}ex_mem_reg.v ${SC_DIR}id_ex_reg.v ${SC_DIR}if_id_reg.v ${SC_DIR}instruction_decode.v ${SC_DIR}instruction_fetch.v ${SC_DIR}load_stall.v ${SC_DIR}mem_ex_hazard.v ${SC_DIR}memory_stage.v ${SC_DIR}mem_wb_reg.v ${SC_DIR}register_file.v ${SC_DIR}top_level.v ${SC_DIR}wb_ex_hazard.v ${SC_DIR}wb_id_hazard.v ${SC_DIR}wb_mem_hazard.v ${SC_DIR}write_back.v 
+#VERILOG_FILES = ${SC_DIR}memory_stage.v
+VERILOG_FILES = ${LIB_DIR}adder.v ${LIB_DIR}alu.v ${LIB_DIR}and.v ${LIB_DIR}check_branch.v ${LIB_DIR}control.v ${LIB_DIR}decoder.v ${LIB_DIR}dff.v ${LIB_DIR}extend_1to32.v ${LIB_DIR}extender.v ${LIB_DIR}mux.v ${LIB_DIR}not.v ${LIB_DIR}or.v ${LIB_DIR}outData.v ${LIB_DIR}pipeline_reg.v ${LIB_DIR}register.v ${LIB_DIR}setter.v ${LIB_DIR}shift.v ${LIB_DIR}xor.v ${LIB_DIR}zero.v ${LIB_DIR}multiplier.v ${SC_DIR}register_file_fp.v ${SC_DIR}execute.v ${SC_DIR}ex_mem_reg.v ${SC_DIR}id_ex_reg.v ${SC_DIR}if_id_reg.v ${SC_DIR}instruction_decode.v ${SC_DIR}instruction_fetch.v ${SC_DIR}load_stall.v ${SC_DIR}mem_ex_hazard.v ${SC_DIR}memory_stage.v ${SC_DIR}mem_wb_reg.v ${SC_DIR}register_file.v ${SC_DIR}top_level.v ${SC_DIR}wb_ex_hazard.v ${SC_DIR}wb_id_hazard.v ${SC_DIR}wb_mem_hazard.v ${SC_DIR}write_back.v 
 #VERILOG_FILES = ${ALU_DIR}adder.v ${ALU_DIR}and.v ${ALU_DIR}alu.v ${ALU_DIR}extend_1to32.v ${ALU_DIR}mux.v ${ALU_DIR}not.v ${ALU_DIR}or.v ${ALU_DIR}setter.v ${ALU_DIR}shift.v ${ALU_DIR}xor.v ${ALU_DIR}zero.v ${ALU_DIR}alu.v ${SC_DIR}check_branch.v ${SC_DIR}control.v ${SC_DIR}decoder.v ${SC_DIR}dff.v ${SC_DIR}extender.v  ${SC_DIR}multiplier.v ${SC_DIR}outData.v ${SC_DIR}pc_logic.v ${SC_DIR}register_file.v ${SC_DIR}register.v ${SC_DIR}single_cycle.v 
 #VERILOG_FILES = ${SC_DIR}control.v
-TOPLEVEL = pipeline_processor
+#VERILOG_FILES = ${LIB_DIR}multiplier.v
+#VERILOG_FILES = ${LIB_DIR}mux.v ${LIB_DIR}dff.v ${LIB_DIR}decoder.v ${LIB_DIR}register.v ${SC_DIR}register_file.v
+#VERILOG_FILES = ${LIB_DIR}or.v ${LIB_DIR}zero.v ${LIB_DIR}control.v ${LIB_DIR}decoder.v
+TOPLEVEL = mem_ex_hazard
 # Freq in MHz
 CLKFREQ = 1000
 

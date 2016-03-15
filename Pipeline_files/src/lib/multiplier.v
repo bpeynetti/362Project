@@ -94,7 +94,7 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 			end 
 			STATE_4 : begin 
 				result <= (Z<<32)+(Z<<16)+(L);
-				working = 1'b0;
+				working <= 1'b0;
 				done <= 1'b1;
 			end 
 		endcase

@@ -1,0 +1,54 @@
+Information: Updating graph... (UID-83)
+ 
+****************************************
+Report : area
+Design : memory_stage
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 11:21:40 2016
+****************************************
+
+Information: Updating design information... (UID-85)
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/NangateOpenCellLibrary.db)
+
+Number of ports:              392
+Number of nets:               356
+Number of cells:              178
+Number of references:           2
+
+Combinational area:        389.424008
+Noncombinational area:       0.000000
+Net Interconnect area:      50.714711  
+
+Total cell area:           389.424008
+Total area:                440.138719
+1
+ 
+****************************************
+Report : reference
+Design : memory_stage
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 11:21:40 2016
+****************************************
+
+Attributes:
+    b - black box (unknown)
+   bo - allows boundary optimization
+    d - dont_touch
+   mo - map_only
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    s - synthetic operator
+    u - contains unmapped logic
+
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+BUF_X4             NangateOpenCellLibrary
+                                  0.798000      23     18.353999  
+BUF_X32            NangateOpenCellLibrary
+                                  2.394000     155    371.070008  
+-----------------------------------------------------------------------------
+Total 2 references                                    389.424008
+1

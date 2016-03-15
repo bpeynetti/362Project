@@ -71,7 +71,7 @@ initial begin
    #2 reset=0;
    #2 reset=1;
 
-   #400; 
+   #4000; 
    $finish;
 end
 
