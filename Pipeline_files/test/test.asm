@@ -28,7 +28,7 @@ fibr1:
     addu r2, r1, r2 ; b=(a+b)
     sw _f(r3), r2   ; f[i] = b
     addui r3, r3, #4 ; i++
-    sgei r4, r3, #0xb4
+    sgei r4, r3, #0x14
     ; 0xb4 = 180 = 45*4
     ; much higher, and the number runs out of bits
     beqz r4, fibr1

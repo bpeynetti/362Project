@@ -29,7 +29,7 @@ _loop:
     addu r5, r5, r4
     subi r6, r6, 4
     bnez r6, _loop
-    sw _dat(r0), 5
+    sw _dat(r0), r5
     nop
     trap #0x300
 .endproc _usum
