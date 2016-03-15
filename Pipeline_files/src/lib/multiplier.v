@@ -36,15 +36,6 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 			CurrentState <= NextState;
 	end
 
-	always @ (*) begin
-		if (~reset) begin
-			result <= 0;
-			H <= 0;
-			L <= 0;
-			Z <= 0;
-			P <= 0;
-		end
-	end
 	
 	always @ (*) begin
 		NextState = CurrentState;
@@ -83,6 +74,9 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 		case (CurrentState)
 			STATE_Initial: begin 
 				H <= a_h * b_h;
+				L <= 0;
+				Z <= 0;
+				P <= 0;
 				working <= mul;
 				done <= 1'b0;
 			end 
@@ -106,6 +100,7 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 		endcase
 		
 	end
+
 
 endmodule
 			
