@@ -1,7 +1,0 @@
-
-Useful information
-
-- Single Cycle 
-
-    - DLX ISA : http://www.diit.unict.it/users/mpalesi/COURSES/CE_06-07/DOWNLOAD/19_dlx_isa.pdf
-    - Data Path : https://www.lucidchart.com/invitations/accept/265482b4-4597-4a23-b2bc-f6c8a77bed08

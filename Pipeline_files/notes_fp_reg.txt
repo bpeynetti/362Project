@@ -1,0 +1,27 @@
+new signals
+
+out of control:
+	FPRegWrite = mul | movi2fp
+	FPRType (that' just an opcode 000001)
+	movi2fp, movfp2i and output 
+	
+	changed RegWrite to be movfp2i or normal RType and ~movi2fp 
+	wired these all to outputs of the ID stage directly
+	
+----
+top level 
+	added signals for FPRType, FPRegWrite for id stage and wired into the ID_EX_REG
+	added signals for movfp2i,movi2fp out of id stage, into ID_EX REG
+	
+	new ID_EX_REG: f1_id (32), f2_id(32), destFReg_id (5), control signals for the floating point (FPRType,FPRegWrite,movfp2i,movi2fp)
+		total: 64 + 5 + 4 = 73 more bits
+		
+	added to all pipeline registers, the parameter that is iset in lines 67 of the top_level.v
+	
+exec stage
+	wired from the top level to the execution stage. 
+	wired outputs of the execution stage to top level
+		TODO: wire signals into EX_MEM register, then to the MEM_WB register and in the WB stage to the FPRegFile 
+---
+FPRegFile:
+	mul = 64bit_ctrl
