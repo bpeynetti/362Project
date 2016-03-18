@@ -46,11 +46,11 @@ Initializing...
 # 
 # ========== Copyright Header End ============================================
 sh date
-Tue Mar 15 11:54:44 CDT 2016
+Wed Mar 16 12:29:05 CDT 2016
 sh hostname
-freeze.ece.northwestern.edu
+batman.ece.northwestern.edu
 sh uptime
- 11:54:44 up 23:33,  2 users,  load average: 0.53, 0.35, 0.22
+ 12:29:05 up 18:15,  1 user,  load average: 0.72, 0.42, 0.25
 remove_design -all
 1
 if {[file exists template]} {
@@ -199,8 +199,8 @@ set compile_flatten_all 0
 set rtl_files { /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/adder.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/alu.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/and.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/check_branch.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/control.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/decoder.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/dff.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/extend_1to32.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/extender.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/mux.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/not.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/or.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/outData.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/pipeline_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/register.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/setter.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/shift.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/xor.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/zero.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/multiplier.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/register_file_fp.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/execute.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/ex_mem_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/id_ex_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/if_id_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/instruction_decode.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/instruction_fetch.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/load_stall.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/mem_ex_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/memory_stage.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/mem_wb_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/register_file.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/top_level.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/wb_ex_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/wb_id_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/wb_mem_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/write_back.v }
  /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/adder.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/alu.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/and.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/check_branch.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/control.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/decoder.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/dff.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/extend_1to32.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/extender.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/mux.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/not.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/or.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/outData.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/pipeline_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/register.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/setter.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/shift.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/xor.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/zero.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/multiplier.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/register_file_fp.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/execute.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/ex_mem_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/id_ex_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/if_id_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/instruction_decode.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/instruction_fetch.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/load_stall.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/mem_ex_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/memory_stage.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/mem_wb_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/register_file.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/top_level.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/wb_ex_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/wb_id_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/wb_mem_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/write_back.v 
 set mix_files {}
-set top_module mem_ex_hazard
-mem_ex_hazard
+set top_module control
+control
 set include_paths { design/sys/iop/include }
  design/sys/iop/include 
 set black_box_libs {}
@@ -216,16 +216,16 @@ set compile_no_new_cells_at_top_level false
 false
 set default_clk clk
 clk
-set default_clk_freq 1000
-1000
+set default_clk_freq 800
+800
 set default_setup_skew  0.00
 0.00
 set default_hold_skew  0.00
 0.00
 set default_clk_transition  0.00
 0.00
-set clk_list {                                {clk     1000.0    0.0    0.0    0.0}        }
-                                {clk     1000.0    0.0    0.0    0.0}        
+set clk_list {                                {clk     800.0    0.0    0.0    0.0}        }
+                                {clk     800.0    0.0    0.0    0.0}        
 set ideal_net_list {}
 set false_path_list {}
 set enforce_input_fanout_one     0
@@ -269,7 +269,7 @@ foreach include_path $include_paths {
    set search_path [concat $search_path $dv_root/$include_path]
 }
 sh date
-Tue Mar 15 11:54:44 CDT 2016
+Wed Mar 16 12:29:05 CDT 2016
 set link_library [concat $link_library                          $mem_libs                          $black_box_designs 		      NangateOpenCellLibrary.db]
 * your_library.db NangateOpenCellLibrary.db
 #/homes/gho705/fault/synthesis-stuff/lib/FreePDK45/osu_soc/lib/files/gscl45nm.db]
@@ -302,7 +302,7 @@ foreach rtl_file $rtl_files {
     #read_file -format verilog -define RUNDC $dv_root/$rtl_file
     read_file -format verilog -define RUNDC $rtl_file
 }
-Loading db file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/NangateOpenCellLibrary.db'
+Loading db file '/home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/NangateOpenCellLibrary.db'
 Loading db file '/vol/eecs362/synopsys/dc/libraries/syn/gtech.db'
 Loading db file '/vol/eecs362/synopsys/dc/libraries/syn/standard.sldb'
   Loading link library 'NangateOpenCellLibrary'
@@ -536,8 +536,6 @@ Reading with Presto HDL Compiler (equivalent to -rtl option).
 Running PRESTO HDLC
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Compiling source file /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/zero.v
-Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
-Warning:  Starting with the 2000.11-1 release, the Presto Verilog reader treats Verilog 'integer' types as signed; synthesized result may not match earlier versions of HDL Compiler. (VER-314)
 Presto compilation completed successfully.
 Current design is now '/home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/zero.db:zero'
 Loaded 2 designs.
@@ -581,13 +579,15 @@ Inferred memory devices in process
 ===========================================================================
 |    Register Name    | Type  | Width | Bus | MB | AR | AS | SR | SS | ST |
 ===========================================================================
-|        Z_reg        | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
-|        P_reg        | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
-|     result_reg      | Latch |  64   |  Y  | N  | N  | N  | -  | -  | -  |
-|     working_reg     | Latch |   1   |  N  | N  | N  | N  | -  | -  | -  |
+|       P2_reg        | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
 |      done_reg       | Latch |   1   |  N  | N  | N  | N  | -  | -  | -  |
-|        H_reg        | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
+|        P_reg        | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
+|       P1_reg        | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
+|     working_reg     | Latch |   1   |  N  | N  | N  | N  | -  | -  | -  |
 |        L_reg        | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
+|        Z_reg        | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
+|     result_reg      | Latch |  64   |  Y  | N  | N  | N  | -  | -  | -  |
+|        H_reg        | Latch |  32   |  Y  | N  | N  | N  | -  | -  | -  |
 ===========================================================================
 Presto compilation completed successfully.
 Current design is now '/home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/multiplier.db:multiplier'
@@ -612,7 +612,7 @@ Reading with Presto HDL Compiler (equivalent to -rtl option).
 Running PRESTO HDLC
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Compiling source file /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/execute.v
-Warning:  /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/execute.v:110: the undeclared symbol 'mul_done' assumed to have the default net type, which is 'wire'. (VER-936)
+Warning:  /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/execute.v:112: the undeclared symbol 'mul_done' assumed to have the default net type, which is 'wire'. (VER-936)
 Presto compilation completed successfully.
 Current design is now '/home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/execute.db:execute'
 Loaded 1 design.
@@ -793,23 +793,23 @@ foreach_in_collection design_object [get_designs] {
    lappend design_list $design_name
 }
 sh date
-Tue Mar 15 11:54:48 CDT 2016
+Wed Mar 16 12:29:09 CDT 2016
 current_design $top_module
-Current design is 'mem_ex_hazard'.
-{mem_ex_hazard}
+Current design is 'control'.
+{control}
 echo $top_module
-mem_ex_hazard
+control
 # if {[get_designs -hier $dont_touch_modules] != {}} {
 #    set_dont_touch $dont_touch_modules
 # }
 set dc_shell_status [ link ]
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 
-  Linking design 'mem_ex_hazard'
+  Linking design 'control'
   Using the following designs and libraries:
   --------------------------------------------------------------------------
-  * (61 designs)              /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/mem_ex_hazard.db, etc
-  NangateOpenCellLibrary (library) /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/NangateOpenCellLibrary.db
+  * (61 designs)              /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/control.db, etc
+  NangateOpenCellLibrary (library) /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/NangateOpenCellLibrary.db
 
 1
 if {$dc_shell_status == 0} {
@@ -819,15 +819,15 @@ if {$dc_shell_status == 0} {
    quit
 }
 current_design $top_module
-Current design is 'mem_ex_hazard'.
-{mem_ex_hazard}
+Current design is 'control'.
+{control}
 echo $top_module
-mem_ex_hazard
+control
 current_design $top_module
-Current design is 'mem_ex_hazard'.
-{mem_ex_hazard}
+Current design is 'control'.
+{control}
 echo $top_module
-mem_ex_hazard
+control
 set clk_name_list [list]
 set ideal_inputs [list]
 foreach clk_spec $clk_list {
@@ -883,7 +883,7 @@ foreach clk_spec $clk_list {
    }
 }
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
-Warning: Can't find port 'clk' in design 'mem_ex_hazard'. (UID-95)
+Warning: Can't find port 'clk' in design 'control'. (UID-95)
 if {$clk_name_list == {} } {
    echo "\[WARNING\] No clock is defined,create a virtual one -- $default_clk..."
    set clk_name $default_clk
@@ -913,7 +913,7 @@ foreach_in_collection input_object [all_inputs] {
 echo $ideal_inputs
 
 echo $non_ideal_inputs
-regWrite_mem {rd_mem[0]} {rd_mem[1]} {rd_mem[2]} {rd_mem[3]} {rd_mem[4]} load_mem jumpNonReg_ex RType_ex store_ex {rs1_ex[0]} {rs1_ex[1]} {rs1_ex[2]} {rs1_ex[3]} {rs1_ex[4]} {rs2_ex[0]} {rs2_ex[1]} {rs2_ex[2]} {rs2_ex[3]} {rs2_ex[4]}
+{instruction[0]} {instruction[1]} {instruction[2]} {instruction[3]} {instruction[4]} {instruction[5]} {instruction[6]} {instruction[7]} {instruction[8]} {instruction[9]} {instruction[10]} {instruction[11]} {instruction[12]} {instruction[13]} {instruction[14]} {instruction[15]} {instruction[16]} {instruction[17]} {instruction[18]} {instruction[19]} {instruction[20]} {instruction[21]} {instruction[22]} {instruction[23]} {instruction[24]} {instruction[25]} {instruction[26]} {instruction[27]} {instruction[28]} {instruction[29]} {instruction[30]} {instruction[31]}
 set_input_delay $default_input_delay -clock $default_clk $non_ideal_inputs
 1
 set_output_delay $default_output_delay -clock $default_clk [all_outputs]
@@ -961,9 +961,9 @@ if {$dont_use_cells != 0} {
    }
 }
 sh date
-Tue Mar 15 11:54:48 CDT 2016
+Wed Mar 16 12:29:09 CDT 2016
 sh uptime
- 11:54:48 up 23:33,  2 users,  load average: 0.57, 0.36, 0.23
+ 12:29:09 up 18:15,  1 user,  load average: 0.72, 0.42, 0.25
 # Switch off the dont_touch attribute globally for set_size_only cells
 set dont_touch_nets_with_size_only_cells false
 false
@@ -998,7 +998,7 @@ Information: Evaluating DesignWare library utilization. (UISN-27)
 
   Beginning Pass 1 Mapping
   ------------------------
-  Processing 'mem_ex_hazard'
+  Processing 'control'
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 
   Updating timing information
@@ -1013,9 +1013,9 @@ Information: Updating design information... (UID-85)
    ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
     TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
   --------- --------- --------- --------- --------- -------------------------
-    0:00:01      34.9      0.00       0.0       0.0                          
-    0:00:01      34.9      0.00       0.0       0.0                          
-    0:00:01      34.9      0.00       0.0       0.0                          
+    0:00:00     199.6      0.00       0.0       0.0                          
+    0:00:01     199.6      0.00       0.0       0.0                          
+    0:00:01     199.6      0.00       0.0       0.0                          
 
 
   Beginning Area-Recovery Phase  (cleanup)
@@ -1024,21 +1024,22 @@ Information: Updating design information... (UID-85)
    ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
     TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
   --------- --------- --------- --------- --------- -------------------------
-    0:00:01      34.9      0.00       0.0       0.0                          
-    0:00:01      34.9      0.00       0.0       0.0                          
-    0:00:01      34.9      0.00       0.0       0.0                          
-    0:00:01      34.9      0.00       0.0       0.0                          
-    0:00:01      34.9      0.00       0.0       0.0                          
-    0:00:01      34.9      0.00       0.0       0.0                          
-    0:00:01      34.4      0.00       0.0       0.0                          
-    0:00:01      33.6      0.00       0.0       0.0                          
-    0:00:01      33.6      0.00       0.0       0.0                          
-    0:00:01      33.6      0.00       0.0       0.0                          
-    0:00:01      33.6      0.00       0.0       0.0                          
-    0:00:01      33.6      0.00       0.0       0.0                          
-    0:00:01      33.6      0.00       0.0       0.0                          
-    0:00:01      33.6      0.00       0.0       0.0                          
-Loading db file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/NangateOpenCellLibrary.db'
+    0:00:01     199.6      0.00       0.0       0.0                          
+    0:00:01     199.6      0.00       0.0       0.0                          
+    0:00:01     199.6      0.00       0.0       0.0                          
+    0:00:01     199.6      0.00       0.0       0.0                          
+    0:00:01     199.6      0.00       0.0       0.0                          
+    0:00:01     199.6      0.00       0.0       0.0                          
+    0:00:01     184.2      0.00       0.0       0.0                          
+    0:00:01     172.5      0.00       0.0       0.0                          
+    0:00:01     168.0      0.00       0.0       0.0                          
+    0:00:01     166.9      0.00       0.0       0.0                          
+    0:00:01     166.9      0.00       0.0       0.0                          
+    0:00:01     166.9      0.00       0.0       0.0                          
+    0:00:01     166.9      0.00       0.0       0.0                          
+    0:00:01     166.9      0.00       0.0       0.0                          
+    0:00:01     166.9      0.00       0.0       0.0                          
+Loading db file '/home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/NangateOpenCellLibrary.db'
 
   Optimization Complete
   ---------------------
@@ -1050,7 +1051,7 @@ if {$dc_shell_status == 0} {
       quit
    }
 sh date
-Tue Mar 15 11:54:50 CDT 2016
+Wed Mar 16 12:29:11 CDT 2016
 ###########################################################################
 # 5e. Insert Scan - Hook up the scan chain.
 ###########################################################################
@@ -1115,7 +1116,7 @@ if {[info exists project_sparc_cfg] && ($project_sparc_cfg == 1) } {
 
 ### section 5e. will be skipped if user want to use PC flow
 }
-Current design is 'mem_ex_hazard'.
+Current design is 'control'.
 Current design is 'fa'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Information: Updating graph... (UID-83)
@@ -1267,7 +1268,7 @@ Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Information: Updating graph... (UID-83)
 Warning: Design 'multiplier' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
-Information: Attribute 'scanned_by_test_compiler' is set on 197 objects. (UID-186)
+Information: Attribute 'scanned_by_test_compiler' is set on 261 objects. (UID-186)
 Current design is 'register_file_fp'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
@@ -1294,26 +1295,26 @@ Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Information: Updating graph... (UID-83)
 Warning: Design 'execute' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
-Information: Attribute 'scanned_by_test_compiler' is set on 197 objects. (UID-186)
+Information: Attribute 'scanned_by_test_compiler' is set on 261 objects. (UID-186)
 Current design is 'ex_mem_reg'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Information: Building the design 'PipeCtlRegN1' instantiated from design 'ex_mem_reg' with
-	the parameters "251". (HDL-193)
+	the parameters "283". (HDL-193)
 
 Inferred memory devices in process
-	in routine PipeCtlRegN1_WIDTH251 line 29 in file
+	in routine PipeCtlRegN1_WIDTH283 line 29 in file
 		'/home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/pipeline_reg.v'.
 ===============================================================================
 |    Register Name    |   Type    | Width | Bus | MB | AR | AS | SR | SS | ST |
 ===============================================================================
-|       out_reg       | Flip-flop |  53   |  Y  | N  | Y  | N  | N  | N  | N  |
+|       out_reg       | Flip-flop |  85   |  Y  | N  | Y  | N  | N  | N  | N  |
 |       out_reg       | Flip-flop |  198  |  Y  | N  | Y  | N  | N  | N  | N  |
 ===============================================================================
 Presto compilation completed successfully.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Information: Updating graph... (UID-83)
 Warning: Design 'ex_mem_reg' contains 1 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
-Information: Attribute 'scanned_by_test_compiler' is set on 251 objects. (UID-186)
+Information: Attribute 'scanned_by_test_compiler' is set on 283 objects. (UID-186)
 Current design is 'id_ex_reg'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Information: Building the design 'PipeCtlRegN1' instantiated from design 'id_ex_reg' with
@@ -1421,7 +1422,7 @@ Information: Updating graph... (UID-83)
 Warning: Design 'top_level' contains 10 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
 Warning: Design 'top_level' has '2' unresolved references. For more detailed information, use the "link" command. (UID-341)
 Warning: Design 'top_level' has '2' unresolved references. For more detailed information, use the "link" command. (UID-341)
-Information: Attribute 'scanned_by_test_compiler' is set on 3048 objects. (UID-186)
+Information: Attribute 'scanned_by_test_compiler' is set on 3144 objects. (UID-186)
 Current design is 'pipeline_processor'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
@@ -1442,7 +1443,7 @@ Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Information: Updating graph... (UID-83)
 Warning: Design 'pipeline_processor' contains 10 high-fanout nets. A fanout number of 1000 will be used for delay calculations involving these nets. (TIM-134)
-Information: Attribute 'scanned_by_test_compiler' is set on 3048 objects. (UID-186)
+Information: Attribute 'scanned_by_test_compiler' is set on 3144 objects. (UID-186)
 Current design is 'wb_ex_hazard'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Information: Updating graph... (UID-83)
@@ -1455,7 +1456,7 @@ Information: Updating graph... (UID-83)
 Current design is 'write_back'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Information: Updating graph... (UID-83)
-Current design is 'mem_ex_hazard'.
+Current design is 'control'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Accepted scan configuration for modes: all_dft
 Current design is 'fa'.
@@ -1585,13 +1586,13 @@ Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Current design is 'wb_mem_hazard'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 Current design is 'write_back'.
-Current design is 'PipeCtlRegN1_WIDTH251'.
+Current design is 'PipeCtlRegN1_WIDTH283'.
 Current design is 'PipeCtlRegN1_WIDTH277'.
 Current design is 'PipeCtlRegN1_WIDTH64'.
 Current design is 'PipeCtlRegN1_WIDTH179'.
-Current design is 'mem_ex_hazard'.
+Current design is 'control'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
-Current design is 'mem_ex_hazard'.
+Current design is 'control'.
 Warning: Can't read link_library file 'your_library.db'. (UID-3)
 
 
@@ -1614,11 +1615,11 @@ Information: Updating design information... (UID-85)
    ELAPSED            WORST NEG TOTAL NEG  DESIGN                            
     TIME      AREA      SLACK     SLACK   RULE COST         ENDPOINT         
   --------- --------- --------- --------- --------- -------------------------
-    0:00:00      33.6      0.00       0.0       0.0                          
-    0:00:00      33.6      0.00       0.0       0.0                          
-    0:00:00      33.6      0.00       0.0       0.0                          
-    0:00:00      33.6      0.00       0.0       0.0                          
-Loading db file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/NangateOpenCellLibrary.db'
+    0:00:00     166.9      0.00       0.0       0.0                          
+    0:00:00     166.9      0.00       0.0       0.0                          
+    0:00:00     166.9      0.00       0.0       0.0                          
+    0:00:00     166.9      0.00       0.0       0.0                          
+Loading db file '/home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/NangateOpenCellLibrary.db'
 
   Optimization Complete
   ---------------------
@@ -1632,13 +1633,13 @@ define_name_rules afara_rules -map {{ {"\\*cell\\*", "UDW_"}}}
 change_names -rule afara_rules -hierarchy
 1
 sh date
-Tue Mar 15 11:55:43 CDT 2016
+Wed Mar 16 12:30:02 CDT 2016
 if {[info exists use_physopt] && ($use_physopt == 1)} {
    write -format verilog -hier -output [format "%s%s%s" gate/ $top_module _hier_fromdc.v]
 } else {
    write -format verilog -hier -output [format "%s%s%s" gate/ $top_module _hier.v]
 }
-Writing verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/gate/mem_ex_hazard_hier.v'.
+Writing verilog file '/home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/gate/control_hier.v'.
 1
 ###########################################################################
 # 7. Write Reports
@@ -1650,14 +1651,14 @@ redirect [format "%s%s%s" log/ $top_module _hier_timing.rep] { report_timing -ma
 # 8. Flatten hierarchy for backend tools
 ###########################################################################
 sh date
-Tue Mar 15 11:55:43 CDT 2016
+Wed Mar 16 12:30:02 CDT 2016
 # remove dont_touch attribute before flattening the design
 if { [get_designs -hier $dont_touch_modules] != {} } {
    set_dont_touch $dont_touch_modules false
 }
 current_design $top_module
-Current design is 'mem_ex_hazard'.
-{mem_ex_hazard}
+Current design is 'control'.
+{control}
 ungroup -all -flatten
 Warning: Design has no hierarchy.  No cells can be ungrouped. (UID-228)
 0
@@ -1678,7 +1679,7 @@ if {[info exists project_io_cfg] && ($project_io_cfg == 1) } {
 } else {
    write -format verilog -output [format "%s%s%s"  gate/ $top_module _flat.v]
 }
-Writing verilog file '/home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/gate/mem_ex_hazard_flat.v'.
+Writing verilog file '/home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/gate/control_flat.v'.
 1
 # Report flattened results
 redirect [format "%s%s%s" log/ $top_module _area.rep] { report_area }
@@ -1712,7 +1713,7 @@ if {  [sizeof_collection $unmapped_designs] != 0 } {
 # 11. Done
 ###########################################################################
 sh date
-Tue Mar 15 11:55:43 CDT 2016
+Wed Mar 16 12:30:03 CDT 2016
 echo "run.scr completed successfully"
 run.scr completed successfully
 quit

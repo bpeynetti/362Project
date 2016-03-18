@@ -1,0 +1,64 @@
+Information: Updating graph... (UID-83)
+ 
+****************************************
+Report : area
+Design : execute
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 16:16:56 2016
+****************************************
+
+Information: Updating design information... (UID-85)
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/NangateOpenCellLibrary.db)
+
+Number of ports:              481
+Number of nets:               644
+Number of cells:               94
+Number of references:          11
+
+Combinational area:       8510.936054
+Noncombinational area:     677.768026
+Net Interconnect area:    2390.142125  
+
+Total cell area:          9188.704081
+Total area:               11578.846205
+1
+ 
+****************************************
+Report : reference
+Design : execute
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 16:16:56 2016
+****************************************
+
+Attributes:
+    b - black box (unknown)
+   bo - allows boundary optimization
+    d - dont_touch
+   mo - map_only
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    s - synthetic operator
+    u - contains unmapped logic
+
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+BUF_X32            NangateOpenCellLibrary
+                                  2.394000      84    201.096004  
+INV_X4             NangateOpenCellLibrary
+                                  0.532000       1      0.532000  
+NOR2_X2            NangateOpenCellLibrary
+                                  0.798000       1      0.798000  
+alu                            2643.508033       1   2643.508033  h
+check_branch                     17.290000       1     17.290000  h
+extend_16to32                    74.746001       1     74.746001  h
+extend_26to32                    75.012002       1     75.012002  h
+multiplier                     5894.028035       1   5894.028035  h, n
+mux2to1_32bit_0                  70.490000       1     70.490000  h
+mux2to1_32bit_28                 78.204002       1     78.204002  h
+mux2to1_64bit                   133.000002       1    133.000002  h
+-----------------------------------------------------------------------------
+Total 11 references                                  9188.704081
+1

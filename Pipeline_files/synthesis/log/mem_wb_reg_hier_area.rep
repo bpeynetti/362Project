@@ -1,0 +1,58 @@
+Information: Updating graph... (UID-83)
+ 
+****************************************
+Report : area
+Design : mem_wb_reg
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 20:43:27 2016
+****************************************
+
+Information: Updating design information... (UID-85)
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/NangateOpenCellLibrary.db)
+
+Number of ports:              362
+Number of nets:               756
+Number of cells:              574
+Number of references:           4
+
+Combinational area:        352.982009
+Noncombinational area:     999.893994
+Net Interconnect area:     363.772959  
+
+Total cell area:          1352.876003
+Total area:               1716.648962
+1
+ 
+****************************************
+Report : reference
+Design : mem_wb_reg
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 20:43:27 2016
+****************************************
+
+Attributes:
+    b - black box (unknown)
+   bo - allows boundary optimization
+    d - dont_touch
+   mo - map_only
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    s - synthetic operator
+    u - contains unmapped logic
+
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+AOI22_X1           NangateOpenCellLibrary
+                                  1.330000     179    238.070008  
+DFFR_X1            NangateOpenCellLibrary
+                                  5.586000     179    999.893994  n
+INV_X1             NangateOpenCellLibrary
+                                  0.532000     179     95.228001  
+INV_X4             NangateOpenCellLibrary
+                                  0.532000      37     19.684000  
+-----------------------------------------------------------------------------
+Total 4 references                                   1352.876003
+1

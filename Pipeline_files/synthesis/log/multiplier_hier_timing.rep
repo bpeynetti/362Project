@@ -1,0 +1,219 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 100
+Design : multiplier
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 15:33:16 2016
+****************************************
+
+Operating Conditions: typical   Library: NangateOpenCellLibrary
+Wire Load Model Mode: top
+
+  Startpoint: mul (input port clocked by clk)
+  Endpoint: CurrentState_reg[2]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: in2reg
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  multiplier         5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 r
+  mul (in)                                 0.00       0.00 r
+  U131/ZN (NAND3_X2)                       0.02       0.02 f
+  U130/ZN (AOI21_X2)                       0.05       0.07 r
+  CurrentState_reg[2]/D (DFF_X1)           0.00       0.07 r
+  data arrival time                                   0.07
+
+  clock clk (rise edge)                    1.25       1.25
+  clock network delay (ideal)              0.00       1.25
+  CurrentState_reg[2]/CK (DFF_X1)          0.00       1.25 r
+  library setup time                      -0.05       1.20
+  data required time                                  1.20
+  -----------------------------------------------------------
+  data required time                                  1.20
+  data arrival time                                  -0.07
+  -----------------------------------------------------------
+  slack (MET)                                         1.14
+
+
+  Startpoint: reset (input port clocked by clk)
+  Endpoint: CurrentState_reg[0]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: in2reg
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  multiplier         5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 r
+  reset (in)                               0.00       0.00 r
+  U187/ZN (INV_X4)                         0.01       0.01 f
+  U129/ZN (NOR2_X2)                        0.03       0.04 r
+  CurrentState_reg[0]/D (DFF_X2)           0.00       0.04 r
+  data arrival time                                   0.04
+
+  clock clk (rise edge)                    1.25       1.25
+  clock network delay (ideal)              0.00       1.25
+  CurrentState_reg[0]/CK (DFF_X2)          0.00       1.25 r
+  library setup time                      -0.05       1.20
+  data required time                                  1.20
+  -----------------------------------------------------------
+  data required time                                  1.20
+  data arrival time                                  -0.04
+  -----------------------------------------------------------
+  slack (MET)                                         1.16
+
+
+  Startpoint: reset (input port clocked by clk)
+  Endpoint: CurrentState_reg[1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: in2reg
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  multiplier         5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  input external delay                     0.00       0.00 r
+  reset (in)                               0.00       0.00 r
+  U187/ZN (INV_X4)                         0.01       0.01 f
+  U128/ZN (NOR2_X2)                        0.03       0.04 r
+  CurrentState_reg[1]/D (DFF_X1)           0.00       0.04 r
+  data arrival time                                   0.04
+
+  clock clk (rise edge)                    1.25       1.25
+  clock network delay (ideal)              0.00       1.25
+  CurrentState_reg[1]/CK (DFF_X1)          0.00       1.25 r
+  library setup time                      -0.04       1.21
+  data required time                                  1.21
+  -----------------------------------------------------------
+  data required time                                  1.21
+  data arrival time                                  -0.04
+  -----------------------------------------------------------
+  slack (MET)                                         1.16
+
+
+  Startpoint: CurrentState_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: CurrentState_reg[1]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: reg2reg
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  multiplier         5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  CurrentState_reg[1]/CK (DFF_X1)          0.00       0.00 r
+  CurrentState_reg[1]/Q (DFF_X1)           0.20       0.20 f
+  U134/ZN (NOR3_X2)                        0.39       0.59 r
+  U132/ZN (INV_X4)                         0.01       0.60 f
+  U133/ZN (INV_X4)                         0.12       0.72 r
+  U126/ZN (NOR2_X2)                        0.04       0.76 f
+  U128/ZN (NOR2_X2)                        0.04       0.80 r
+  CurrentState_reg[1]/D (DFF_X1)           0.00       0.80 r
+  data arrival time                                   0.80
+
+  clock clk (rise edge)                    1.25       1.25
+  clock network delay (ideal)              0.00       1.25
+  CurrentState_reg[1]/CK (DFF_X1)          0.00       1.25 r
+  library setup time                      -0.04       1.21
+  data required time                                  1.21
+  -----------------------------------------------------------
+  data required time                                  1.21
+  data arrival time                                  -0.80
+  -----------------------------------------------------------
+  slack (MET)                                         0.41
+
+
+  Startpoint: CurrentState_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: CurrentState_reg[0]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: reg2reg
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  multiplier         5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  CurrentState_reg[1]/CK (DFF_X1)          0.00       0.00 r
+  CurrentState_reg[1]/Q (DFF_X1)           0.20       0.20 f
+  U142/ZN (NAND3_X2)                       0.12       0.32 r
+  U129/ZN (NOR2_X2)                        0.02       0.34 f
+  CurrentState_reg[0]/D (DFF_X2)           0.00       0.34 f
+  data arrival time                                   0.34
+
+  clock clk (rise edge)                    1.25       1.25
+  clock network delay (ideal)              0.00       1.25
+  CurrentState_reg[0]/CK (DFF_X2)          0.00       1.25 r
+  library setup time                      -0.05       1.20
+  data required time                                  1.20
+  -----------------------------------------------------------
+  data required time                                  1.20
+  data arrival time                                  -0.34
+  -----------------------------------------------------------
+  slack (MET)                                         0.86
+
+
+  Startpoint: CurrentState_reg[1]
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: CurrentState_reg[2]
+            (rising edge-triggered flip-flop clocked by clk)
+  Path Group: reg2reg
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  multiplier         5K_hvratio_1_1        NangateOpenCellLibrary
+
+  Point                                    Incr       Path
+  -----------------------------------------------------------
+  clock clk (rise edge)                    0.00       0.00
+  clock network delay (ideal)              0.00       0.00
+  CurrentState_reg[1]/CK (DFF_X1)          0.00       0.00 r
+  CurrentState_reg[1]/Q (DFF_X1)           0.20       0.20 f
+  U139/ZN (NAND3_X2)                       0.09       0.29 r
+  U130/ZN (AOI21_X2)                       0.03       0.32 f
+  CurrentState_reg[2]/D (DFF_X1)           0.00       0.32 f
+  data arrival time                                   0.32
+
+  clock clk (rise edge)                    1.25       1.25
+  clock network delay (ideal)              0.00       1.25
+  CurrentState_reg[2]/CK (DFF_X1)          0.00       1.25 r
+  library setup time                      -0.05       1.20
+  data required time                                  1.20
+  -----------------------------------------------------------
+  data required time                                  1.20
+  data arrival time                                  -0.32
+  -----------------------------------------------------------
+  slack (MET)                                         0.89
+
+
+1

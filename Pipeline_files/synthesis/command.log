@@ -1,7 +1,7 @@
 #@ # 
 #@ # Running dc_shell Version D-2010.03-SP5 for amd64 -- Oct 18, 2010
-#@ # Date:   %sTue Mar 15 11:54:43 2016
-#@ # Run by: bpv512@freeze.ece.northwestern.edu
+#@ # Date:   %sWed Mar 16 12:29:03 2016
+#@ # Run by: bpv512@batman.ece.northwestern.edu
 #@ 
 
 source /vol/eecs362/synopsys/dc/admin/setup/.synopsys_dc.setup
@@ -4681,7 +4681,7 @@ source /vol/eecs362/synopsys/dc/admin/setup/.synopsys_dc.setup
 #@ 
 #@ # -- End source /vol/eecs362/synopsys/dc/admin/setup/.synopsys_dc.setup
 
-source -echo -verbose /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/run.tcl
+source -echo -verbose /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/run.tcl
 #@ # ========== Copyright Header Begin ==========================================
 #@ # 
 #@ # OpenSPARC T1 Processor File: run.scr
@@ -4851,7 +4851,7 @@ source -echo -verbose /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/ru
 #@ set rtl_files { /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/adder.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/alu.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/and.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/check_branch.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/control.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/decoder.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/dff.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/extend_1to32.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/extender.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/mux.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/not.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/or.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/outData.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/pipeline_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/register.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/setter.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/shift.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/xor.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/zero.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/lib/multiplier.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/register_file_fp.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/execute.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/ex_mem_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/id_ex_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/if_id_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/instruction_decode.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/instruction_fetch.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/load_stall.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/mem_ex_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/memory_stage.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/mem_wb_reg.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/register_file.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/top_level.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/wb_ex_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/wb_id_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/wb_mem_hazard.v /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/src/write_back.v }
 #@ 
 #@ set mix_files {}
-#@ set top_module mem_ex_hazard
+#@ set top_module control
 #@ set include_paths { design/sys/iop/include }
 #@ 
 #@ set black_box_libs {}
@@ -4866,11 +4866,11 @@ source -echo -verbose /home/bpv512/EECS362/SYNTH_ALU/Pipeline_files/synthesis/ru
 #@ set compile_no_new_cells_at_top_level false
 #@ 
 #@ set default_clk clk
-#@ set default_clk_freq 1000
+#@ set default_clk_freq 800
 #@ set default_setup_skew  0.00
 #@ set default_hold_skew  0.00
 #@ set default_clk_transition  0.00
-#@ set clk_list {                                {clk     1000.0    0.0    0.0    0.0}        }
+#@ set clk_list {                                {clk     800.0    0.0    0.0    0.0}        }
 #@ set ideal_net_list {}
 #@ set false_path_list {}
 #@ set enforce_input_fanout_one     0

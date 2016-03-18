@@ -15,9 +15,9 @@ VERILOG_FILES = ${LIB_DIR}adder.v ${LIB_DIR}alu.v ${LIB_DIR}and.v ${LIB_DIR}chec
 #VERILOG_FILES = ${LIB_DIR}multiplier.v
 #VERILOG_FILES = ${LIB_DIR}mux.v ${LIB_DIR}dff.v ${LIB_DIR}decoder.v ${LIB_DIR}register.v ${SC_DIR}register_file.v
 #VERILOG_FILES = ${LIB_DIR}or.v ${LIB_DIR}zero.v ${LIB_DIR}control.v ${LIB_DIR}decoder.v
-TOPLEVEL = mem_ex_hazard
+TOPLEVEL = pipeline_processor
 # Freq in MHz
-CLKFREQ = 1000
+CLKFREQ = 800
 
 # Constants
 SYNTHESIS_DIR = /vol/eecs362/synthesis/

@@ -1,0 +1,58 @@
+ 
+****************************************
+Report : area
+Design : id_ex_reg
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 20:38:51 2016
+****************************************
+
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/NangateOpenCellLibrary.db)
+
+Number of ports:              558
+Number of nets:              1181
+Number of cells:              900
+Number of references:           5
+
+Combinational area:        570.836012
+Noncombinational area:    1547.321990
+Net Interconnect area:     530.837572  
+
+Total cell area:          2118.158002
+Total area:               2648.995575
+1
+ 
+****************************************
+Report : reference
+Design : id_ex_reg
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 20:38:51 2016
+****************************************
+
+Attributes:
+    b - black box (unknown)
+   bo - allows boundary optimization
+    d - dont_touch
+   mo - map_only
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    s - synthetic operator
+    u - contains unmapped logic
+
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+AOI22_X1           NangateOpenCellLibrary
+                                  1.330000     277    368.410012  
+BUF_X4             NangateOpenCellLibrary
+                                  0.798000      68     54.263999  
+DFFR_X1            NangateOpenCellLibrary
+                                  5.586000     277   1547.321990  n
+INV_X1             NangateOpenCellLibrary
+                                  0.532000     277    147.364001  
+NOR2_X2            NangateOpenCellLibrary
+                                  0.798000       1      0.798000  
+-----------------------------------------------------------------------------
+Total 5 references                                   2118.158002
+1

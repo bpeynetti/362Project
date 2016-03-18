@@ -1,0 +1,83 @@
+Information: Updating graph... (UID-83)
+ 
+****************************************
+Report : area
+Design : multiplier
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 15:33:16 2016
+****************************************
+
+Information: Updating design information... (UID-85)
+Library(s) Used:
+
+    NangateOpenCellLibrary (File: /home/bpv512/EECS362/PROJECT/362Project/Pipeline_files/synthesis/NangateOpenCellLibrary.db)
+
+Number of ports:              133
+Number of nets:               799
+Number of cells:              377
+Number of references:          21
+
+Combinational area:       5197.108007
+Noncombinational area:     680.694026
+Net Interconnect area:    1186.953732  
+
+Total cell area:          5877.802034
+Total area:               7064.755766
+1
+ 
+****************************************
+Report : reference
+Design : multiplier
+Version: D-2010.03-SP5
+Date   : Tue Mar 15 15:33:16 2016
+****************************************
+
+Attributes:
+    b - black box (unknown)
+   bo - allows boundary optimization
+    d - dont_touch
+   mo - map_only
+    h - hierarchical
+    n - noncombinational
+    r - removable
+    s - synthetic operator
+    u - contains unmapped logic
+
+Reference          Library       Unit Area   Count    Total Area   Attributes
+-----------------------------------------------------------------------------
+AND2_X2            NangateOpenCellLibrary
+                                  1.064000      96    102.144001  
+AOI21_X2           NangateOpenCellLibrary
+                                  1.064000       1      1.064000  
+DFF_X1             NangateOpenCellLibrary
+                                  4.522000       2      9.044000  n
+DFF_X2             NangateOpenCellLibrary
+                                  4.522000       1      4.522000  n
+DLH_X2             NangateOpenCellLibrary
+                                  2.926000     228    667.128027  n
+INV_X4             NangateOpenCellLibrary
+                                  0.532000      25     13.300000  
+NAND2_X2           NangateOpenCellLibrary
+                                  0.798000       2      1.596000  
+NAND3_X2           NangateOpenCellLibrary
+                                  1.064000       4      4.256000  
+NOR2_X2            NangateOpenCellLibrary
+                                  0.798000       4      3.192000  
+NOR3_X2            NangateOpenCellLibrary
+                                  1.064000       3      3.192000  
+OAI211_X2          NangateOpenCellLibrary
+                                  1.330000       1      1.330000  
+OR2_X2             NangateOpenCellLibrary
+                                  1.064000       1      1.064000  
+multiplier_DW01_add_0            66.500001       1     66.500001  h
+multiplier_DW01_add_1            66.500001       1     66.500001  h
+multiplier_DW01_add_4           175.028001       1    175.028001  h
+multiplier_DW01_add_5           121.828000       1    121.828000  h
+multiplier_DW01_sub_0           151.886001       1    151.886001  h
+multiplier_DW01_sub_1           151.886001       1    151.886001  h
+multiplier_DW02_mult_0         1310.848002       1   1310.848002  h
+multiplier_DW02_mult_1         1310.848002       1   1310.848002  h
+multiplier_DW02_mult_2         1710.645997       1   1710.645997  h
+-----------------------------------------------------------------------------
+Total 21 references                                  5877.802034
+1
