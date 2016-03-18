@@ -1,4 +1,7 @@
 SRC = ./test/test.asm
+UNSIGNED_SUM = ./test/unsigned_sum.asm
+FIB = ./test/fib.asm
+MULT = ./test/mult.asm
 IVERILOG = iverilog
 DLXASM = ../dlxasm
 
@@ -31,3 +34,14 @@ pipeline_stall:
 	$(DLXASM) -C ./test/instr.hex -D ./test/data.hex $(SRC)
 	$(IVERILOG) -o ./bin/test_pipe_stall -s testbench src/lib/*.v src/*.v test/pipeline_test_stall_in.v 
 
+unsigned_sum:
+	$(DLXASM) -C ./test/instr.hex -D ./test/data.hex $(UNSIGNED_SUM)
+	$(IVERILOG) -o ./bin/test_pipe_unsigned_sum -s testbench src/lib/*.v src/*.v test/pipeline_test.v 
+
+fib:
+	$(DLXASM) -C ./test/instr.hex -D ./test/data.hex $(FIB)
+	$(IVERILOG) -o ./bin/test_pipe_fib -s testbench src/lib/*.v src/*.v test/pipeline_test.v 
+
+mult:
+	$(DLXASM) -C ./test/instr.hex -D ./test/data.hex $(MULT)
+	$(IVERILOG) -o ./bin/test_pipe_mult -s testbench src/lib/*.v src/*.v test/pipeline_test.v 

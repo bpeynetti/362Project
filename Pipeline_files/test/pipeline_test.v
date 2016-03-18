@@ -7,8 +7,6 @@ wire [0:31]busWout,instructionOut;
 
 top_level top(clock,reset);
 
-// assign PC = {top.instructionfetch.PCout,2'b00};
-
 always begin
    #1 clock = ~clock;
 end
@@ -46,26 +44,16 @@ initial begin
     //         top.imm16,top.aluOut,top.aluOrMultOut,top.busW);
 
 
-    // $monitor("\n clk=%b reset=%b instruction=%h pc=%h r0=%x r1=%x r2=%x r3=%x r4=%x imm16=%h aluout=%h aluOrMultOut=%h busW=%h,dmem_addr=%h dmem_dout=%h dmem_write=%h",
-    //         clock,reset,top.instruction,top.instructionAddr,
-    //         top.SINGLE_CYCLE.REGFILE.reg_out[0],top.SINGLE_CYCLE.REGFILE.reg_out[1],top.SINGLE_CYCLE.REGFILE.reg_out[2],top.SINGLE_CYCLE.REGFILE.reg_out[3],
-    //         top.SINGLE_CYCLE.REGFILE.reg_out[4],
-    //         top.SINGLE_CYCLE.imm16,top.SINGLE_CYCLE.aluOut,top.SINGLE_CYCLE.aluOrMultOut,top.SINGLE_CYCLE.busW,
-    //         top.dmem_addr,top.dmem_read,top.dmem_write);
-
-//$monitor("Clock = %b; Instruction = %h PC = %h imm=%h addrout=%h target=%h rs=%d rt=%d rd = %d busA=%d busB=%d bIN=%d ALUSrc=%b ALUOut=(hex)%h (dec)%d ALUCtr=%b \n MemOut=%h busWr=%h WrAddr=%d RegWr=%b Mem2Reg=%b Branch=%b Jump=%b Branch_instruction = %h Zero =%b \n Jump_Link=%b WrAddr = %h JALcheck=%b Reg[1] = %h Reg[31] = %h\n", top.clk, top.instruction, top.instructionfetch.PCout, top.instructionfetch.immediate26, top.instructionfetch.jumpMUXout,  top.instructionfetch.PCin, top.RS, top.RT, top.RD, top.busA, top.busB, top.bIN, top.ALUSrc, top.ALUOut, top.ALUOut, top.ALUCtr, top.MemOut, top.busWr, top.WrAddr, top.RegWr, top.Mem2Reg, top.instructionfetch.andBranch, top.Jump, top.branch_instruction, top.Zero, top.Jump_Link, top.WrAddr, top.instructionfetch.JALcheck, top.rFile.reg_file[1], top.rFile.reg_file[31]); 
-	
-// iter=0;
-    $monitor("clk=%b rst=%b Instruction=%h PC=%h r1=%h r2=%h r3=%h r4=%h r5=%h r6=%h f1=%h f2=%h f3=%h f4=%h f5=%h r29=%h f30=%h r31=%h",
-      top.clk,top.reset,top.imem_out,top.imem_addr,
-      top.PIPELINE.REG_FILE.reg_out[1],top.PIPELINE.REG_FILE.reg_out[2],
-      top.PIPELINE.REG_FILE.reg_out[3],top.PIPELINE.REG_FILE.reg_out[4],
-      top.PIPELINE.REG_FILE.reg_out[5],top.PIPELINE.REG_FILE.reg_out[6],
-      top.PIPELINE.FP_REG_FILE.reg_out[1],top.PIPELINE.FP_REG_FILE.reg_out[2],
-      top.PIPELINE.FP_REG_FILE.reg_out[3],top.PIPELINE.FP_REG_FILE.reg_out[4],
-      top.PIPELINE.FP_REG_FILE.reg_out[5],
-      top.PIPELINE.REG_FILE.reg_out[29],top.PIPELINE.REG_FILE.reg_out[30],top.PIPELINE.REG_FILE.reg_out[31]
-    );
+    // $monitor("clk=%b rst=%b Instruction=%h PC=%h r1=%h r2=%h r3=%h r4=%h r5=%h r6=%h f1=%h f2=%h f3=%h f4=%h f5=%h r29=%h f30=%h r31=%h",
+    //   top.clk,top.reset,top.imem_out,top.imem_addr,
+    //   top.PIPELINE.REG_FILE.reg_out[1],top.PIPELINE.REG_FILE.reg_out[2],
+    //   top.PIPELINE.REG_FILE.reg_out[3],top.PIPELINE.REG_FILE.reg_out[4],
+    //   top.PIPELINE.REG_FILE.reg_out[5],top.PIPELINE.REG_FILE.reg_out[6],
+    //   top.PIPELINE.FP_REG_FILE.reg_out[1],top.PIPELINE.FP_REG_FILE.reg_out[2],
+    //   top.PIPELINE.FP_REG_FILE.reg_out[3],top.PIPELINE.FP_REG_FILE.reg_out[4],
+    //   top.PIPELINE.FP_REG_FILE.reg_out[5],
+    //   top.PIPELINE.REG_FILE.reg_out[29],top.PIPELINE.REG_FILE.reg_out[30],top.PIPELINE.REG_FILE.reg_out[31]
+    // );
 
    #0 clock=0; reset=0; 
    #2 reset=0;
@@ -83,11 +71,14 @@ always @(posedge clock) begin
   //This checks for a trap 0x300 (signifying the end of the file)
 
   // if (top.PIPELINE.)
-
+  if (top.PIPELINE.mul_ex_in == 1'b1) begin
+    $display("MULTIPLICATION  \n");
+  end
   if (top.PIPELINE.trap_mem == 1'b1) begin	
    
 	$display("Hitting a trap, end, waiting 1 clock cycle and finishing");
-	#20;
+  $display("Writing final data memory to datamem_end file")
+	#2;
   $writememh("datamem_end",top.DATA_MEM.mem);
 	$finish;
 	

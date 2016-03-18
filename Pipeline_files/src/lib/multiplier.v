@@ -24,7 +24,7 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 	
 	reg [0:2] CurrentState,NextState;
 	
-	reg [0:31] H,L,Z,P,P1,P2; 
+	reg [0:31] H,L,Z,P,P1,P2,H_L; 
 	reg [0:63] result;
 	reg working,done;
 	
@@ -78,6 +78,7 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 				L <= 0;
 				Z <= 0;
 				P <= 0;
+				H_L <= 0;
 				working <= mul;
 				done <= 1'b0;
 			end 
@@ -88,14 +89,15 @@ module multiplier(clk,reset,mul,a,b,done,working,result);
 			end 
 			STATE_2 : begin 
 				P <= (P1)*(P2);
+				H_L <= H + L;
 				working <= 1'b1;
 			end
 			STATE_3 : begin 
-				Z <= P - H - L;
+				Z <= P - H_L;
 				working <= 1'b1;
 			end 
 			STATE_4 : begin 
-				result <= (Z<<32)+(Z<<16)+(L);
+				result <= (H<<32)+(Z<<16)+(L);
 				working <= 1'b0;
 				done <= 1'b1;
 			end 
